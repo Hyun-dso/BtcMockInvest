@@ -3,7 +3,7 @@
 	xmlns="https://jakarta.ee/xml/ns/jakartaee" 
 	xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee 
 	https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd" version="6.0">
-  <display-name>mysite</display-name>
+  <display-name>BtcMockInvest</display-name>
   
   <servlet>
   	<servlet-name>dispatcher</servlet-name>

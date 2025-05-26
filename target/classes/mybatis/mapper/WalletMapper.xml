@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kim.donghyun.repository.WalletRepository">
+
+    <resultMap id="walletMap" type="kim.donghyun.model.entity.Wallet">
+        <id property="walletId" column="wallet_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="btcBalance" column="btc_balance"/>
+        <result property="usdtBalance" column="usdt_balance"/>
+        <result property="createdAt" column="created_at"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="kim.donghyun.model.entity.Wallet">
+        INSERT INTO wallet (user_id, btc_balance, usdt_balance, created_at)
+        VALUES (#{userId}, #{btcBalance}, #{usdtBalance}, NOW())
+    </insert>
+
+    <select id="findByUserId" parameterType="long" resultMap="walletMap">
+        SELECT * FROM wallet WHERE user_id = #{userId}
+    </select>
+
+    <update id="updateBalance" parameterType="kim.donghyun.model.entity.Wallet">
+        UPDATE wallet
+        SET btc_balance = #{btcBalance},
+            usdt_balance = #{usdtBalance}
+        WHERE user_id = #{userId}
+    </update>
+
+</mapper>

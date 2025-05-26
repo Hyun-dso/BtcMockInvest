@@ -1,0 +1,11 @@
+<resultMap id="orderMap" type="kim.donghyun.model.entity.TradeOrder">
+    <id property="orderId" column="order_id"/>
+    <result property="userId" column="user_id"/>
+    <result property="type" column="type" javaType="kim.donghyun.model.enums.OrderType"/>
+    <result property="amount" column="amount"/>
+    <result property="price" column="price"/>
+    <result property="total" column="total"/>
+    <result property="orderMode" column="order_mode" javaType="kim.donghyun.model.enums.OrderMode"/>
+    <result property="status" column="status" javaType="kim.donghyun.model.enums.OrderStatus"/>
+    <result property="createdAt" column="created_at"/>
+</resultMap>
