@@ -11,7 +11,7 @@ public interface UserRepository {
     void insert(User user);
 
     // (선택) 닉네임 중복 조회
-    User findByNickname(String nickname);
+    User findByUsername(String username);
 
     // (선택) 모든 유저 조회
     // List<User> findAll();
