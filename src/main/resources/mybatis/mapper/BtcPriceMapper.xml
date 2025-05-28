@@ -13,9 +13,8 @@
 
 	<insert id="insertPrice"
 		parameterType="kim.donghyun.model.entity.BtcPrice">
-		INSERT INTO btc_price (price, created_at)
-		VALUES
-		(#{price}, NOW())
+		INSERT IGNORE INTO btc_price (price, created_at)
+		VALUES (#{price}, NOW())
 	</insert>
 
 	<select id="findLatest" resultMap="priceMap">

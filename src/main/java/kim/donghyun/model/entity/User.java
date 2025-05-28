@@ -9,7 +9,7 @@ public class User {
     private Long id;
     private String email;
     private String password;
-    private String nickname;
+    private String username;
     private LocalDateTime createdAt;
     private LocalDateTime lastLoginAt;
 
