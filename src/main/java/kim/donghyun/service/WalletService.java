@@ -33,4 +33,9 @@ public class WalletService {
         walletRepository.updateBalance(wallet);
         return true;
     }
+    
+    public Wallet getWalletByUserId(Long userId) {
+        return walletRepository.findByUserId(userId);
+    }
+    
 }
