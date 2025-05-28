@@ -1,6 +1,7 @@
 package kim.donghyun.service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import org.springframework.stereotype.Service;
 
@@ -26,7 +27,7 @@ public class PositionService {
 
         // 수익률 계산
         BigDecimal pnl = currentPrice.subtract(position.getEntryPrice())
-                                     .divide(position.getEntryPrice(), 4, BigDecimal.ROUND_HALF_UP)
+                                     .divide(position.getEntryPrice(), 4, RoundingMode.HALF_UP)
                                      .multiply(BigDecimal.valueOf(100));
 
         position.setPnlPercent(pnl);

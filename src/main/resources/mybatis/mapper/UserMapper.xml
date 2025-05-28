@@ -9,7 +9,7 @@
 		<id property="id" column="id" />
 		<result property="email" column="email" />
 		<result property="password" column="password" />
-		<result property="nickname" column="nickname" />
+		<result property="username" column="username" />
 		<result property="createdAt" column="created_at"
 			jdbcType="TIMESTAMP" />
 		<result property="lastLoginAt" column="last_login_at"
@@ -23,16 +23,16 @@
 	</select>
 
 	<!-- 닉네임으로 조회 -->
-	<select id="findByNickname" resultMap="userMap"
+	<select id="findByUsername" resultMap="userMap"
 		parameterType="String">
-		SELECT * FROM user WHERE nickname = #{nickname}
+		SELECT * FROM user WHERE username = #{username}
 	</select>
 
 	<!-- 유저 등록 -->
 	<insert id="insert"
 		parameterType="kim.donghyun.model.entity.User">
-		INSERT INTO user (email, password, nickname, created_at)
-		VALUES (#{email}, #{password}, #{nickname}, NOW())
+		INSERT INTO user (email, password, username, created_at)
+		VALUES (#{email}, #{password}, #{username}, NOW())
 	</insert>
 
 </mapper>

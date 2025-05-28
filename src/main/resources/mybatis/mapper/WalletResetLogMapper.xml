@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kim.donghyun.repository.WalletResetLogRepository">
+
+    <insert id="insertLog">
+        INSERT INTO wallet_reset_log (user_id, before_btc, before_usdt, reset_time)
+        VALUES (#{userId}, #{beforeBtc}, #{beforeUsdt}, NOW())
+    </insert>
+
+</mapper>

@@ -18,7 +18,7 @@
 
 	<insert id="insertCandle"
 		parameterType="kim.donghyun.model.entity.BtcCandle1Min">
-		INSERT INTO btc_candle_1min (open, high, low, close, volume, candle_time)
+		INSERT IGNORE INTO btc_candle_1min (open, high, low, close, volume, candle_time)
 		VALUES (#{open}, #{high}, #{low}, #{close}, #{volume}, #{candleTime})
 	</insert>
 
