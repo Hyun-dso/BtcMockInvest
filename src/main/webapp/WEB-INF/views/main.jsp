@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<jsp:include page="common/header.jsp" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,94 +9,54 @@
         body {
             margin: 0;
             font-family: sans-serif;
-            background-color: #f8f9fa;
-            text-align: center;
         }
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 30px;
-            background-color: #343a40;
-            color: white;
-        }
-        .logo-nav {
-            display: flex;
-            align-items: center;
-        }
-        .logo-nav img {
-            height: 40px;
-            margin-right: 15px;
-        }
-        nav {
-            position: relative;
-        }
-        nav:hover .dropdown {
-            display: block;
-        }
-        .nav-link {
-            cursor: pointer;
-            color: white;
-            margin-right: 20px;
-        }
-        .dropdown {
-            display: none;
-            position: absolute;
-            top: 25px;
-            background-color: white;
-            color: black;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            z-index: 999;
-        }
-        .dropdown a {
-            display: block;
-            padding: 8px 12px;
-            text-decoration: none;
-            color: black;
-        }
-        .dropdown a:hover {
-            background-color: #f1f1f1;
-        }
-        .auth-buttons a {
-            color: white;
-            text-decoration: none;
-            margin-left: 15px;
-            padding: 6px 12px;
-            border: 1px solid white;
-            border-radius: 4px;
-        }
-        .auth-buttons a:hover {
-            background-color: #495057;
-        }
+
         main {
-            margin-top: 100px;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(to right, #000000, #2c003e); /* 검정 + 어두운보라 */
+            padding-top: 80px;
         }
-        h1 {
-            font-size: 48px;
-            color: #343a40;
+
+        .hero {
+            text-align: center;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        .hero h1 {
+            font-size: 64px;
+            font-weight: bold;
+            color: #f2a900; /* BTC 컬러 */
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 20px;
+            color: #ccc;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
 <body>
 
-<header>
-    <div class="logo-nav">
-        <img src="<%= request.getContextPath() %>/resources/img/btc-logo.png" alt="Logo">
-        <nav>
-            <span class="nav-link">거래하기 ▾</span>
-            <div class="dropdown">
-                <a href="HOME.jsp">BTC</a>
-            </div>
-        </nav>
-    </div>
-    <div class="auth-buttons">
-        <a href="signin.jsp">SIGNIN</a>
-        <a href="regist.jsp">REGIST</a>
-    </div>
-</header>
-
 <main>
-    <h1>BTC MOCK INVEST</h1>
+    <div class="hero">
+        <h1>BTC MOCK INVEST</h1>
+        <p>비트코인 가상투자를 경험해보세요.</p>
+    </div>
 </main>
 
 </body>
