@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import kim.donghyun.model.entity.Wallet;
 import kim.donghyun.repository.WalletRepository;
+import kim.donghyun.repository.WalletResetLogRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 public class WalletService {
 
     private final WalletRepository walletRepository;
+    private final WalletResetLogRepository walletResetLogRepository;
 
     @Transactional
     public boolean applyTrade(Long userId, BigDecimal price, BigDecimal amount, String type) {
@@ -38,4 +40,27 @@ public class WalletService {
         return walletRepository.findByUserId(userId);
     }
     
+    @Transactional
+    public void initializeWallet(Long userId) {
+        // ✅ 1. DB에서 현재 지갑 상태 불러오기
+        Wallet wallet = walletRepository.findByUserId(userId);
+
+        // ✅ 2. 로그 저장 (초기화 전 잔고 기준)
+        walletResetLogRepository.insertLog(
+            userId,
+            wallet.getBtcBalance(),
+            wallet.getUsdtBalance()
+        );
+
+        // ✅ 3. 잔고 0으로 초기화
+        wallet.setBtcBalance(BigDecimal.ZERO);
+        wallet.setUsdtBalance(BigDecimal.ZERO);
+        walletRepository.updateBalance(wallet);
+    }
+
+    public void depositUsdt(Long userId, BigDecimal amount) {
+        Wallet wallet = walletRepository.findByUserId(userId);
+        wallet.setUsdtBalance(wallet.getUsdtBalance().add(amount));
+        walletRepository.updateBalance(wallet);
+    }
 }
