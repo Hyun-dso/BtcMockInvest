@@ -4,7 +4,6 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kim.donghyun.repository.BtcCandle1HRepository">
-
     <resultMap id="candleMap" type="kim.donghyun.model.entity.BtcCandle1H">
         <id property="id" column="id"/>
         <result property="open" column="open"/>

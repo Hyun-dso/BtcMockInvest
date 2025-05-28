@@ -4,46 +4,53 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kim.donghyun.repository.TradeOrderRepository">
+	<resultMap id="orderMap"
+		type="kim.donghyun.model.entity.TradeOrder">
+		<id property="orderId" column="order_id" />
+		<result property="userId" column="user_id" />
+		<result property="type" column="type"
+			javaType="kim.donghyun.model.enums.OrderType" />
+		<result property="amount" column="amount" />
+		<result property="price" column="price" />
+		<result property="total" column="total" />
+		<result property="orderMode" column="order_mode"
+			javaType="kim.donghyun.model.enums.OrderMode" />
+		<result property="status" column="status"
+			javaType="kim.donghyun.model.enums.OrderStatus" />
+		<result property="createdAt" column="created_at" />
+	</resultMap>
 
-<resultMap id="orderMap" type="kim.donghyun.model.entity.TradeOrder">
-    <id property="orderId" column="order_id"/>
-    <result property="userId" column="user_id"/>
-    <result property="type" column="type" javaType="kim.donghyun.model.enums.OrderType"/>
-    <result property="amount" column="amount"/>
-    <result property="price" column="price"/>
-    <result property="total" column="total"/>
-    <result property="orderMode" column="order_mode" javaType="kim.donghyun.model.enums.OrderMode"/>
-    <result property="status" column="status" javaType="kim.donghyun.model.enums.OrderStatus"/>
-    <result property="createdAt" column="created_at"/>
-</resultMap>
+	<!-- ✅ INSERT -->
+	<insert id="insert"
+		parameterType="kim.donghyun.model.entity.TradeOrder"
+		useGeneratedKeys="true" keyProperty="orderId">
+		INSERT INTO trade_order (
+		user_id, type, amount, price, total, order_mode, status, created_at
+		) VALUES (
+		#{userId}, #{type}, #{amount}, #{price}, #{total},
+		#{orderMode}, #{status}, NOW()
+		)
+	</insert>
 
-  <!-- ✅ INSERT -->
-    <insert id="insert" parameterType="kim.donghyun.model.entity.TradeOrder" useGeneratedKeys="true" keyProperty="orderId">
-        INSERT INTO trade_order (
-            user_id, type, amount, price, total, order_mode, status, created_at
-        ) VALUES (
-            #{userId}, #{type}, #{amount}, #{price}, #{total},
-            #{orderMode}, #{status}, NOW()
-        )
-    </insert>
+	<!-- ✅ 단건 조회 -->
+	<select id="findById" parameterType="long" resultMap="orderMap">
+		SELECT * FROM trade_order WHERE order_id = #{orderId}
+	</select>
 
-    <!-- ✅ 단건 조회 -->
-    <select id="findById" parameterType="long" resultMap="orderMap">
-        SELECT * FROM trade_order WHERE order_id = #{orderId}
-    </select>
+	<!-- ✅ 유저별 주문 내역 조회 -->
+	<select id="findByUserId" parameterType="long"
+		resultMap="orderMap">
+		SELECT * FROM trade_order
+		WHERE user_id = #{userId}
+		ORDER BY created_at DESC
+	</select>
 
-    <!-- ✅ 유저별 주문 내역 조회 -->
-    <select id="findByUserId" parameterType="long" resultMap="orderMap">
-        SELECT * FROM trade_order
-        WHERE user_id = #{userId}
-        ORDER BY created_at DESC
-    </select>
-
-    <!-- ✅ 상태 업데이트 -->
-    <update id="updateStatus" parameterType="kim.donghyun.model.entity.TradeOrder">
-        UPDATE trade_order
-        SET status = #{status}
-        WHERE order_id = #{orderId}
-    </update>
+	<!-- ✅ 상태 업데이트 -->
+	<update id="updateStatus"
+		parameterType="kim.donghyun.model.entity.TradeOrder">
+		UPDATE trade_order
+		SET status = #{status}
+		WHERE order_id = #{orderId}
+	</update>
 
 </mapper>
