@@ -59,6 +59,13 @@ public class WalletService {
     }
 
     public void depositUsdt(Long userId, BigDecimal amount) {
+        // 1. 유효 범위 체크
+        if (amount.compareTo(BigDecimal.valueOf(100)) < 0 ||
+            amount.compareTo(BigDecimal.valueOf(1_000_000)) > 0) {
+            throw new IllegalArgumentException("충전 금액은 $100 이상 $1,000,000 이하로만 가능합니다.");
+        }
+
+        // 2. 기존 지갑 조회 및 충전
         Wallet wallet = walletRepository.findByUserId(userId);
         wallet.setUsdtBalance(wallet.getUsdtBalance().add(amount));
         walletRepository.updateBalance(wallet);
