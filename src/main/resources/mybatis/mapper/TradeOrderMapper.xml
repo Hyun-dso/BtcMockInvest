@@ -1,3 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kim.donghyun.repository.TradeOrderRepository">
+
 <resultMap id="orderMap" type="kim.donghyun.model.entity.TradeOrder">
     <id property="orderId" column="order_id"/>
     <result property="userId" column="user_id"/>
@@ -9,3 +16,34 @@
     <result property="status" column="status" javaType="kim.donghyun.model.enums.OrderStatus"/>
     <result property="createdAt" column="created_at"/>
 </resultMap>
+
+  <!-- ✅ INSERT -->
+    <insert id="insert" parameterType="kim.donghyun.model.entity.TradeOrder" useGeneratedKeys="true" keyProperty="orderId">
+        INSERT INTO trade_order (
+            user_id, type, amount, price, total, order_mode, status, created_at
+        ) VALUES (
+            #{userId}, #{type}, #{amount}, #{price}, #{total},
+            #{orderMode}, #{status}, NOW()
+        )
+    </insert>
+
+    <!-- ✅ 단건 조회 -->
+    <select id="findById" parameterType="long" resultMap="orderMap">
+        SELECT * FROM trade_order WHERE order_id = #{orderId}
+    </select>
+
+    <!-- ✅ 유저별 주문 내역 조회 -->
+    <select id="findByUserId" parameterType="long" resultMap="orderMap">
+        SELECT * FROM trade_order
+        WHERE user_id = #{userId}
+        ORDER BY created_at DESC
+    </select>
+
+    <!-- ✅ 상태 업데이트 -->
+    <update id="updateStatus" parameterType="kim.donghyun.model.entity.TradeOrder">
+        UPDATE trade_order
+        SET status = #{status}
+        WHERE order_id = #{orderId}
+    </update>
+
+</mapper>

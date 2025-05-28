@@ -1,10 +1,12 @@
 package kim.donghyun.model.entity;
 
-import kim.donghyun.model.enums.OrderType;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
 import kim.donghyun.model.enums.OrderMode;
 import kim.donghyun.model.enums.OrderStatus;
+import kim.donghyun.model.enums.OrderType;
 import lombok.Data;
-import java.math.BigDecimal;
 
 @Data
 public class TradeOrder {
@@ -16,5 +18,5 @@ public class TradeOrder {
     private BigDecimal total;
     private OrderMode orderMode;
     private OrderStatus status;
-    private String createdAt;
+    private LocalDateTime createdAt;
 }

@@ -1,0 +1,16 @@
+<mapper namespace="kim.donghyun.repository.UserPositionRepository">
+
+    <select id="findSpotPositionByUserId" resultType="kim.donghyun.model.entity.UserPosition">
+        SELECT 
+            user_id,
+            'SPOT' AS positionType,
+            SUM(price * amount) / SUM(amount) AS entryPrice,
+            SUM(amount) AS amount
+        FROM order_trade
+        WHERE buy_order_id IN (
+            SELECT order_id FROM trade_order WHERE user_id = #{userId} AND type = 'BUY'
+        )
+        GROUP BY user_id
+    </select>
+
+</mapper>

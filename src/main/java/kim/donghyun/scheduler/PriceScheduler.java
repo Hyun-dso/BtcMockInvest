@@ -6,8 +6,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import kim.donghyun.service.BtcPriceService;
+import kim.donghyun.util.PriceCache;
 import kim.donghyun.util.PriceFetcher;
-import kim.donghyun.websocket.PriceWebSocketHandler;
+import kim.donghyun.websocket.PriceWebSocketSender;
 import lombok.RequiredArgsConstructor;
 
 @Component
@@ -16,18 +17,22 @@ public class PriceScheduler {
 
     private final PriceFetcher priceFetcher;
     private final BtcPriceService btcPriceService;
-    private final PriceWebSocketHandler priceWebSocketHandler; // 추가
+    private final PriceWebSocketSender priceWebSocketSender;
+    private final PriceCache priceCache;
 
     private static final Logger log = LoggerFactory.getLogger(PriceScheduler.class);
 
     @Scheduled(fixedDelay = 1000)
-    public void fetchAndSave() {
+    public void fetchAndBroadcast() {
         try {
             double price = priceFetcher.fetchPrice();
             btcPriceService.savePrice(price);
-            priceWebSocketHandler.broadcast(String.valueOf(price)); // 실시간 전송
+            
+            double cachedPrice = priceCache.getLatestPrice(); // ✅ 반드시 캐시된 값 사용
+            priceWebSocketSender.broadcast(cachedPrice);
+
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("가격 수집 및 브로드캐스트 중 오류 발생", e);
         }
     }
 }

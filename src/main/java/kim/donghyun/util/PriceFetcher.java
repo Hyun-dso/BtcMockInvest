@@ -1,17 +1,33 @@
 package kim.donghyun.util;
 
-import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.math.BigDecimal;
+import java.util.Map;
 
 @Component
 public class PriceFetcher {
-    private final RestTemplate restTemplate = new RestTemplate();
-    private final String url = "https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT";
+
+    private static final String SYMBOL = "BTCUSDT";
 
     public double fetchPrice() {
-        String response = restTemplate.getForObject(url, String.class);
-        JSONObject json = new JSONObject(response);
-        return Double.parseDouble(json.getString("price"));
+        String url = UriComponentsBuilder.newInstance()
+                .scheme("https")
+                .host("api.binance.com")
+                .path("/api/v3/ticker/price")
+                .queryParam("symbol", SYMBOL)
+                .build()
+                .toUriString();
+
+        RestTemplate restTemplate = new RestTemplate();
+        Map<String, String> response = restTemplate.getForObject(url, Map.class);
+
+        if (response != null && response.containsKey("price")) {
+            return new BigDecimal(response.get("price")).doubleValue();
+        } else {
+            throw new RuntimeException("Binance API로부터 가격 정보를 받아오지 못했습니다.");
+        }
     }
 }

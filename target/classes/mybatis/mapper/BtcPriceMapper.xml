@@ -1,27 +1,33 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper
-  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kim.donghyun.repository.BtcPriceRepository">
 
-    <resultMap id="priceMap" type="kim.donghyun.model.entity.BtcPrice">
-        <id property="id" column="id"/>
-        <result property="price" column="price"/>
-        <result property="createdAt" column="created_at"/>
-    </resultMap>
+	<resultMap id="priceMap" type="kim.donghyun.model.entity.BtcPrice">
+		<id property="id" column="id" />
+		<result property="price" column="price" />
+		<result property="createdAt" column="created_at" />
+	</resultMap>
 
-    <insert id="insertPrice" parameterType="kim.donghyun.model.entity.BtcPrice">
-        INSERT INTO btc_price (price, created_at)
-        VALUES (#{price}, NOW())
-    </insert>
+	<insert id="insertPrice" parameterType="kim.donghyun.model.entity.BtcPrice">
+		INSERT INTO btc_price (price, created_at)
+		VALUES (#{price}, NOW())
+	</insert>
 
-    <select id="findLatest" resultMap="priceMap">
-        SELECT * FROM btc_price ORDER BY id DESC LIMIT 1
-    </select>
+	<select id="findLatest" resultMap="priceMap">
+		SELECT * FROM btc_price ORDER BY id DESC LIMIT 1
+	</select>
 
-    <select id="findRecentPrices" resultMap="priceMap" parameterType="int">
-        SELECT * FROM btc_price ORDER BY id DESC LIMIT #{limit}
-    </select>
+	<select id="findRecentPrices" resultMap="priceMap" parameterType="int">
+		SELECT * FROM btc_price ORDER BY id DESC LIMIT #{limit}
+	</select>
+
+	<select id="findPricesBetween"
+		resultType="kim.donghyun.model.entity.BtcPrice">
+		SELECT * FROM btc_price
+		WHERE created_at &gt;= #{start} AND created_at &lt; #{end}
+		ORDER BY created_at ASC
+	</select>
+
 
 </mapper>

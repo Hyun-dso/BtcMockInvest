@@ -1,22 +1,33 @@
 package kim.donghyun.config;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.*;
 
-import kim.donghyun.websocket.PriceWebSocketHandler;
-
 @Configuration
-@EnableWebSocket
-public class WebSocketConfig implements WebSocketConfigurer {
+@EnableWebSocketMessageBroker
+public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
-    private final PriceWebSocketHandler priceWebSocketHandler;
-
-    public WebSocketConfig(PriceWebSocketHandler priceWebSocketHandler) {
-        this.priceWebSocketHandler = priceWebSocketHandler;
+    @Override
+    public void configureMessageBroker(MessageBrokerRegistry config) {
+        config.enableSimpleBroker("/topic"); // 구독 경로
+        config.setApplicationDestinationPrefixes("/app"); // 메시지 보낼 때 prefix
     }
 
     @Override
-    public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(priceWebSocketHandler, "/price-channel").setAllowedOrigins("*");
+    public void registerStompEndpoints(StompEndpointRegistry registry) {
+        registry.addEndpoint("/ws-endpoint").setAllowedOrigins("*").withSockJS(); // 클라이언트 접속 경로
     }
 }
+
+
+// 프론트 시세 불러오기
+//const socket = new SockJS("/ws-endpoint");
+//const client = Stomp.over(socket);
+//
+//client.connect({}, () => {
+//    client.subscribe("/topic/price", (message) => {
+//        const price = message.body;
+//        document.getElementById("btc-price").innerText = price;
+//    });
+//});

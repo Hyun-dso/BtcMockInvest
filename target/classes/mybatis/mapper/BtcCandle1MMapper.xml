@@ -20,7 +20,7 @@
         VALUES (#{open}, #{high}, #{low}, #{close}, #{volume}, #{candleTime})
     </insert>
 
-    <select id="findByCandleTime" parameterType="String" resultMap="candleMap">
+    <select id="findByCandleTime" parameterType="java.time.LocalDateTime" resultMap="candleMap">
         SELECT * FROM btc_candle_1m WHERE candle_time = #{candleTime}
     </select>
 

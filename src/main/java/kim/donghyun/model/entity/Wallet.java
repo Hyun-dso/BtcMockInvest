@@ -1,7 +1,9 @@
 package kim.donghyun.model.entity;
 
-import lombok.Data;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
+import lombok.Data;
 
 @Data
 public class Wallet {
@@ -9,5 +11,5 @@ public class Wallet {
     private Long userId;
     private BigDecimal btcBalance;
     private BigDecimal usdtBalance;
-    private String createdAt;
+    private LocalDateTime createdAt;
 }

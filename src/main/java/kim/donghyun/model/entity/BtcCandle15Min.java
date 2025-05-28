@@ -1,7 +1,9 @@
 package kim.donghyun.model.entity;
 
-import lombok.Data;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
+import lombok.Data;
 
 @Data
 public class BtcCandle15Min {
@@ -11,5 +13,5 @@ public class BtcCandle15Min {
     private BigDecimal low;
     private BigDecimal close;
     private BigDecimal volume;
-    private String candleTime;
+    private LocalDateTime candleTime;
 }
