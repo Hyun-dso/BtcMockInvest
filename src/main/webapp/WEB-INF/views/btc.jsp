@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <jsp:include page="common/header.jsp" />
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -151,26 +152,90 @@ body {
 			<div class="trade-ui">
 				<h3>실시간 거래 / 호가</h3>
 
-				<!-- 호가창 -->
-				<div class="orderbook"
-					style="border: 1px solid #ccc; padding: 10px; border-radius: 5px;">
-					<h4 style="color: red;">매도 가격</h4>
-					<ul style="list-style-type: none; padding: 0;">
-						<li style="color: rgba(255, 0, 0, 0.6)">43,201 USDT</li>
-						<li style="color: rgba(255, 0, 0, 0.6)">43,198 USDT</li>
-						<li style="color: rgba(255, 0, 0, 0.6)">43,196 USDT</li>
-						<li style="color: rgba(255, 0, 0, 0.6)">43,190 USDT</li>
-						<li style="color: rgba(255, 0, 0, 0.6)">43,185 USDT</li>
-					</ul>
-					<h4 style="color: blue;">매수 가격</h4>
-					<ul style="list-style-type: none; padding: 0;">
-						<li style="color: rgba(0, 0, 255, 0.6)">43,178 USDT</li>
-						<li style="color: rgba(0, 0, 255, 0.6)">43,175 USDT</li>
-						<li style="color: rgba(0, 0, 255, 0.6)">43,170 USDT</li>
-						<li style="color: rgba(0, 0, 255, 0.6)">43,168 USDT</li>
-						<li style="color: rgba(0, 0, 255, 0.6)">43,165 USDT</li>
-					</ul>
-				</div>
+<!-- 🔷 실시간 BTC 시세 -->
+
+  <!-- 현재가 -->
+  <div id="mid-price" style="margin: 0.5rem 0; font-weight: bold; color: #333;">가격: -</div>
+<!-- 호가창 -->
+<div id="orderbook" style="display: flex; flex-direction: column; align-items: center; font-family: monospace;">
+  <!-- 매도호가 -->
+  <div>
+<!--     <div style="color: red; font-weight: bold;">🔺 매도호가 (ASK)</div> -->
+    <ul id="asks" style="color:red; list-style: none; padding: 0; margin: 0;"></ul>
+  </div>
+
+
+<!-- 시세 표시 -->
+<div id="btc-price" style="font-size: 2rem; font-weight: bold; text-align: center; margin: 1rem 0;">
+  $-
+</div>
+  <!-- 매수호가 -->
+  <div>
+   <!--  <div style="color: green; font-weight: bold;">▼ 매수호가 (BID)</div> -->
+    <ul id="bids" style="color:blue; list-style: none; padding: 0; margin: 0;"></ul>
+  </div>
+</div>
+
+<!-- 🔌 WebSocket & STOMP 연결 -->
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+
+<script>
+  // 컨텍스트 경로 자동 추출
+  const contextPath = window.location.pathname.split("/")[1]; // 예: "BtcMockInvest"
+  const socket = new SockJS("/" + contextPath + "/ws-endpoint");
+  const stompClient = Stomp.over(socket);
+
+  // 연결 및 구독
+  stompClient.connect({}, () => {
+    console.log("✅ WebSocket 연결 성공");
+
+    stompClient.subscribe("/topic/orderbook", (message) => {
+      try {
+        const data = JSON.parse(message.body);
+        const price = parseFloat(data.price);
+        const asks = data.asks || {};
+        const bids = data.bids || {};
+
+        // 🔸 시세 출력
+        document.getElementById("btc-price").textContent = price.toLocaleString("en-US", {
+          style: "currency",
+          currency: "USD"
+        });
+
+        // 🔸 중앙 현재가 표시
+        document.getElementById("mid-price").textContent = `가격: ${price.toFixed(2)} USDT`;
+
+        // 🔺 매도호가: 가격 오름차순 정렬 후 reverse → 고가부터
+        const asksList = document.getElementById("asks");
+        asksList.innerHTML = "";
+        Object.entries(asks)
+          .sort((a, b) => parseFloat(a[0]) - parseFloat(b[0]))
+          .reverse()
+          .forEach(([p, qty]) => {
+            const li = document.createElement("li");
+            li.textContent = `\${parseFloat(p).toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2})} | \${parseFloat(qty).toLocaleString("en-US", {minimumFractionDigits: 5, maximumFractionDigits: 5})} BTC`;
+            asksList.appendChild(li);
+          });
+
+        // 🔻 매수호가: 고가부터 보여주기 위해 정렬 후 reverse
+        const bidsList = document.getElementById("bids");
+        bidsList.innerHTML = "";
+        Object.entries(bids)
+          .sort((a, b) => parseFloat(a[0]) - parseFloat(b[0]))
+          .reverse()
+          .forEach(([p, qty]) => {
+            const li = document.createElement("li");
+            li.textContent = `\${parseFloat(p).toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2})} | \${parseFloat(qty).toLocaleString("en-US", {minimumFractionDigits: 5, maximumFractionDigits: 5})} BTC`;
+            bidsList.appendChild(li);
+          });
+
+      } catch (e) {
+        console.error("📛 호가창 처리 중 에러:", e);
+      }
+    });
+  });
+</script>
 
 				<!-- 매수/매도 버튼 -->
 				<div class="action-buttons"

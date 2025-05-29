@@ -24,8 +24,10 @@ public class OrderBookBroadcaster {
     public void broadcastOrderBook() {
         BigDecimal currentPrice = BigDecimal.valueOf(priceCache.getLatestPrice());
 
-        BigDecimal tickSize = new BigDecimal("10"); // 호가 간격
-        int depth = 10; // 위/아래 각각 10단계
+        BigDecimal tickSize = currentPrice.compareTo(new BigDecimal("100000")) >= 0
+                ? new BigDecimal("0.1")
+                : new BigDecimal("0.01");
+        int depth = 12; // 위/아래 각각 10단계
 
         Map<String, Object> orderbook = new HashMap<>();
         orderbook.put("asks", orderBookService.getAsks(currentPrice, tickSize, depth));
