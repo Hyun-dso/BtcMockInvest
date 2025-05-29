@@ -6,46 +6,65 @@
     <meta charset="UTF-8">
     <title>Main</title>
     <style>
-        body {
+        body, html {
             margin: 0;
+            padding: 0;
             font-family: sans-serif;
+            background: linear-gradient(to bottom, #000000, #2c2c2c); /* ✅ 어두운 그라데이션 배경 */
+            color: white;
         }
 
         main {
-            height: 100vh;
+            width: 100%;
+            padding: 80px 0 40px;
             display: flex;
-            align-items: center;
             justify-content: center;
-            background: linear-gradient(to right, #000000, #2c003e); /* 검정 + 어두운보라 */
-            padding-top: 80px;
+            align-items: center;
         }
 
-        .hero {
+        .video-box {
+            width: 80vw;
+            max-width: 960px;
+            aspect-ratio: 16/9;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+        }
+
+        .video-box video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .content {
+            padding: 80px 20px 120px;
             text-align: center;
-            animation: fadeIn 2s ease-in-out;
         }
 
-        .hero h1 {
-            font-size: 64px;
-            font-weight: bold;
-            color: #f2a900; /* BTC 컬러 */
-            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+        .content h2 {
             margin-bottom: 20px;
+            font-size: 2rem;
         }
 
-        .hero p {
-            font-size: 20px;
-            color: #ccc;
+        .content p {
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+            font-size: 1.1rem;
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
+        @media (max-width: 768px) {
+            .video-box {
+                width: 95vw;
             }
-            to {
-                opacity: 1;
-                transform: translateY(0);
+
+            .content h2 {
+                font-size: 1.5rem;
+            }
+
+            .content p {
+                font-size: 1rem;
             }
         }
     </style>
@@ -53,11 +72,21 @@
 <body>
 
 <main>
-    <div class="hero">
-        <h1>BTC MOCK INVEST</h1>
-        <p>비트코인 가상투자를 경험해보세요.</p>
+    <div class="video-box">
+        <video autoplay muted loop>
+            <source src="${pageContext.request.contextPath}/resources/video/background01.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
     </div>
 </main>
+
+<div class="content">
+    <h2>비트코인 모의투자 플랫폼</h2>
+    <p>
+        실시간 시세, 매수/매도 체험,<br>
+        쉽고 빠르게 시작하세요.
+    </p>
+</div>
 
 </body>
 </html>

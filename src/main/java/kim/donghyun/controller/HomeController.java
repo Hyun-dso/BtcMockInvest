@@ -16,9 +16,9 @@ public class HomeController {
         return "main";
     }
 
-    @RequestMapping("/home")
+    @RequestMapping("/btc")
     public String home() {
-        return "home";
+        return "btc";
     }
 
     @RequestMapping("/signin")

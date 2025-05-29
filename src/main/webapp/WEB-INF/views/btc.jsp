@@ -14,48 +14,14 @@
 }
 
 body {
-	font-family: sans-serif;
-}
-
-/* 상단바 */
-.top-bar {
-	height: 60px;
-	width: 100%;
-	background-color: #f4f4f4;
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding: 0 20px;
-	border-bottom: 1px solid #ccc;
-}
-
-.top-left {
-	display: flex;
-	align-items: center;
-}
-
-.logo {
-	width: 40px;
-	height: 40px;
-	border: 2px solid black;
-	border-radius: 50%;
-	margin-right: 10px;
-}
-
-.nav {
-	margin-left: 20px;
-	font-weight: bold;
-}
-
-.top-right {
-	display: flex;
-	align-items: center;
-	gap: 10px;
+  font-family: sans-serif;
+  padding-top: 80px; /* ✅ 헤더 높이만큼 본문 전체를 아래로 */
+  box-sizing: border-box;
 }
 
 .main-container {
-	display: flex;
-	height: calc(100vh - 60px); /* 상단바 제외 전체 높이 */
+  display: flex;
+  height: calc(100vh - 80px); /* 헤더 빼고 꽉 차도록 */
 }
 
 .chat-area {
@@ -84,23 +50,6 @@ body {
 </style>
 </head>
 <body>
-
-	<!-- 상단바 -->
-	<div class="top-bar">
-		<div class="top-left">
-			<div class="logo"></div>
-			<div>
-				<strong>사이트명</strong>
-			</div>
-			<div class="nav">&nbsp;&nbsp;&nbsp;&lt; 거래하기 BTC &gt;</div>
-		</div>
-		<div class="top-right">
-			<span>(닉네임) 님 환영합니다</span>
-			<button class="btn">SIGN IN</button>
-			<button class="btn">REGIST</button>
-		</div>
-	</div>
-
 	<!-- 본문 3분할 -->
 	<div class="main-container">
 		<div class="chat-area">
