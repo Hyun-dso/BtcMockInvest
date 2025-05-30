@@ -70,7 +70,21 @@
     </style>
 </head>
 <body>
-
+<header>
+    <div class="logo-nav">
+        <img src="<%= request.getContextPath() %>/resources/img/btc-logo.png" alt="Logo">
+        <nav>
+            <span class="nav-link">거래하기 ▾</span>
+            <div class="dropdown">
+                <a href="home">BTC</a>
+            </div>
+        </nav>
+    </div>
+    <div class="auth-buttons">
+        <a href="signin">SIGNIN</a>
+        <a href="regist">REGIST</a>
+    </div>
+</header>
 <main>
     <div class="video-box">
         <video autoplay muted loop>

@@ -13,5 +13,4 @@ public interface BtcPriceRepository {
     List<BtcPrice> findRecentPrices(int limit); // (optional)
     List<BtcPrice> findPricesBetween(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
     
-
 }

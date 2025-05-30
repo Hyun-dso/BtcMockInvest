@@ -23,6 +23,9 @@ public class PriceFetcher {
 
         RestTemplate restTemplate = new RestTemplate();
         Map<String, String> response = restTemplate.getForObject(url, Map.class);
+        
+//        System.out.println("🌐 호출 URL: " + url);
+//        System.out.println("📦 API 응답: " + response);
 
         if (response != null && response.containsKey("price")) {
             return new BigDecimal(response.get("price")).doubleValue();

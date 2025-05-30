@@ -15,6 +15,7 @@
 
 	<!-- ✅ 정적 리소스 처리 (이미지, CSS 등) -->
 	<mvc:resources mapping="/resources/**" location="/resources/" />
+	
 	<!-- servlet-context.xml 안에 추가 -->
 	<mvc:interceptors>
 		<bean class="kim.donghyun.config.AlreadySignedInterceptor" />

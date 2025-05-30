@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <jsp:include page="common/header.jsp" />
+<%@ page isELIgnored="true"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -151,26 +153,31 @@ body {
 			<div class="trade-ui">
 				<h3>실시간 거래 / 호가</h3>
 
-				<!-- 호가창 -->
-				<div class="orderbook"
-					style="border: 1px solid #ccc; padding: 10px; border-radius: 5px;">
-					<h4 style="color: red;">매도 가격</h4>
-					<ul style="list-style-type: none; padding: 0;">
-						<li style="color: rgba(255, 0, 0, 0.6)">43,201 USDT</li>
-						<li style="color: rgba(255, 0, 0, 0.6)">43,198 USDT</li>
-						<li style="color: rgba(255, 0, 0, 0.6)">43,196 USDT</li>
-						<li style="color: rgba(255, 0, 0, 0.6)">43,190 USDT</li>
-						<li style="color: rgba(255, 0, 0, 0.6)">43,185 USDT</li>
-					</ul>
-					<h4 style="color: blue;">매수 가격</h4>
-					<ul style="list-style-type: none; padding: 0;">
-						<li style="color: rgba(0, 0, 255, 0.6)">43,178 USDT</li>
-						<li style="color: rgba(0, 0, 255, 0.6)">43,175 USDT</li>
-						<li style="color: rgba(0, 0, 255, 0.6)">43,170 USDT</li>
-						<li style="color: rgba(0, 0, 255, 0.6)">43,168 USDT</li>
-						<li style="color: rgba(0, 0, 255, 0.6)">43,165 USDT</li>
-					</ul>
-				</div>
+<!-- 호가창 + 시세 표시 -->
+<div id="btc-price" style="font-size: 2rem; font-weight: bold;">-</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+
+<script>
+  const contextPath = window.location.pathname.split("/")[1]; // "BtcMockInvest"
+  const socket = new SockJS("/" + contextPath + "/ws-endpoint");
+  const stompClient = Stomp.over(socket);
+
+  stompClient.connect({}, () => {
+    console.log("✅ WebSocket 연결 성공");
+
+    stompClient.subscribe("/topic/orderbook", (message) => {
+      const data = JSON.parse(message.body);
+      const price = data.price;
+
+      document.getElementById("btc-price").textContent = price.toLocaleString("en-US", {
+        style: "currency",
+        currency: "USD"
+      });
+    });
+  });
+</script>
 
 				<!-- 매수/매도 버튼 -->
 				<div class="action-buttons"

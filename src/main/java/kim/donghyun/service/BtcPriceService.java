@@ -19,12 +19,13 @@ public class BtcPriceService {
     private final PriceWebSocketSender webSocketSender;
 
     public void savePrice(double price) {
+    	// DB 저장
         BtcPrice btcPrice = new BtcPrice();
         btcPrice.setPrice(BigDecimal.valueOf(price)); // ✅ 타입 맞춤	
         btcPriceRepository.insertPrice(btcPrice); // DB 저장
-        priceCache.setLatestPrice(price);         // 캐싱
         
-        priceCache.setLatestPrice(price);
+        priceCache.setLatestPrice(price); // 캐싱
+        
         webSocketSender.broadcast(price); // 웹소켓으로 전송
     }
 }

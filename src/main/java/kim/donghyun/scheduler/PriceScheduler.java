@@ -2,6 +2,7 @@ package kim.donghyun.scheduler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
+@EnableScheduling
 public class PriceScheduler {
 
     private final PriceFetcher priceFetcher;
@@ -24,9 +26,11 @@ public class PriceScheduler {
 
     @Scheduled(fixedDelay = 1000)
     public void fetchAndBroadcast() {
+    	System.out.println("실행");
         try {
             double price = priceFetcher.fetchPrice();
-            btcPriceService.savePrice(price);
+            
+            btcPriceService.savePrice(price); // db 저장 + 캐싱
             
             double cachedPrice = priceCache.getLatestPrice(); // ✅ 반드시 캐시된 값 사용
             priceWebSocketSender.broadcast(cachedPrice);

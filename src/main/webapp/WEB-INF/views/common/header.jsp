@@ -126,9 +126,8 @@
 			</div>
 		</div>
 	</div>
-
 	<div class="nav-links">
 		<a href="${pageContext.request.contextPath}/signin">SIGNIN</a>
-		<a href="${pageContext.request.contextPath}/signup">REGIST</a>
+		<a href="${pageContext.request.contextPath}/signup">SIGNUP</a>
 	</div>
 </div>

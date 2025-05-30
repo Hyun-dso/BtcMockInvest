@@ -1,0 +1,25 @@
+<!-- 호가창 + 시세 표시 -->
+<div id="btc-price" style="font-size: 2rem; font-weight: bold;">-</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+
+<script>
+  const contextPath = window.location.pathname.split("/")[1]; // "BtcMockInvest"
+  const socket = new SockJS("/" + contextPath + "/ws-endpoint");
+  const stompClient = Stomp.over(socket);
+
+  stompClient.connect({}, () => {
+    console.log("✅ WebSocket 연결 성공");
+
+    stompClient.subscribe("/topic/orderbook", (message) => {
+      const data = JSON.parse(message.body);
+      const price = data.price;
+
+      document.getElementById("btc-price").textContent = price.toLocaleString("en-US", {
+        style: "currency",
+        currency: "USD"
+      });
+    });
+  });
+</script>

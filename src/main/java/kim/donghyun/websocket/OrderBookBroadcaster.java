@@ -23,6 +23,7 @@ public class OrderBookBroadcaster {
     @Scheduled(fixedDelay = 1000)
     public void broadcastOrderBook() {
         BigDecimal currentPrice = BigDecimal.valueOf(priceCache.getLatestPrice());
+        System.out.println("📡 브로드캐스트 직전 가격: " + currentPrice);
 
         BigDecimal tickSize = new BigDecimal("10"); // 호가 간격
         int depth = 10; // 위/아래 각각 10단계
