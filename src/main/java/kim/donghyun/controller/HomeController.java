@@ -30,4 +30,18 @@ public class HomeController {
     public String regist() {
         return "regist";
     }
+    @RequestMapping("/mypage")
+    public String mypage() {
+        return "mypage";  // /WEB-INF/views/mypage.jsp
+    }
+    
+    @RequestMapping("/mywallet")
+    public String mywallet() {
+        return "mywallet";  // /WEB-INF/views/wallet.jsp
+    }
+    @RequestMapping("/history")
+    public String history() {
+        return "history"; // /WEB-INF/views/history.jsp
+    }
+    
 }
