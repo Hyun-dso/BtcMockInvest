@@ -120,7 +120,6 @@ body {
 					</div>
 				</div>
 			</div>
-
 			<script>
   // 슬라이드 토글 (왼쪽 영역 내부 슬라이드)
   const communityBtn = document.getElementById("communityChatToggle");
@@ -189,10 +188,9 @@ body {
 
 				<script>
   // 컨텍스트 경로 자동 추출
-  const contextPath = window.location.pathname.split("/")[1]; // 예: "BtcMockInvest"
-  const socket = new SockJS("/" + contextPath + "/ws-endpoint");
+  const contextPath = "${pageContext.request.contextPath}";
+  const socket = new SockJS(contextPath + "/ws-endpoint");
   const stompClient = Stomp.over(socket);
-
   // 연결 및 구독
   stompClient.connect({}, () => {
     console.log("✅ WebSocket 연결 성공");
@@ -400,5 +398,6 @@ body {
 		</div>
 	</div>
 
+	<p>contextPath: ${pageContext.request.contextPath}</p>
 </body>
 </html>
