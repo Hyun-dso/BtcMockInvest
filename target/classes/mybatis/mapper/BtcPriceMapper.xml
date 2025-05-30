@@ -14,7 +14,8 @@
 	<insert id="insertPrice"
 		parameterType="kim.donghyun.model.entity.BtcPrice">
 		INSERT IGNORE INTO btc_price (price, created_at)
-		VALUES (#{price}, NOW())
+		VALUES
+		(#{price}, NOW())
 	</insert>
 
 	<select id="findLatest" resultMap="priceMap">
@@ -33,6 +34,24 @@
 		WHERE created_at &gt;= #{start} AND
 		created_at &lt; #{end}
 		ORDER BY created_at ASC
+	</select>
+
+	<select id="findUtcClosePrice" resultType="map">
+		SELECT price,
+		DATE_FORMAT(created_at, '%Y-%m-%d %H:%i:%s') AS time
+		FROM btc_price
+		WHERE created_at >= DATE_ADD(CURDATE(), INTERVAL 9 HOUR)
+		ORDER BY
+		created_at ASC
+		LIMIT 1
+	</select>
+
+	<select id="findClosestAfter" resultMap="priceMap">
+		SELECT id, price, created_at
+		FROM btc_price
+		WHERE created_at >= #{referenceTime}
+		ORDER BY created_at ASC
+		LIMIT 1
 	</select>
 
 

@@ -24,12 +24,12 @@ public class OrderBookService {
         return asks;
     }
 
-    // 매수 호가 (현재가 기준 아래로)
+    // 매수 호가 (위에서 아래로 높은 가격 -> 낮은 가격 순)
     public Map<BigDecimal, BigDecimal> getBids(BigDecimal currentPrice, BigDecimal tickSize, int depth) {
         Map<BigDecimal, BigDecimal> bids = new LinkedHashMap<>();
-        for (int i = depth; i > 0; i--) {
+        for (int i = 1; i <= depth; i++) {
             BigDecimal price = currentPrice.subtract(tickSize.multiply(BigDecimal.valueOf(i))).setScale(2, RoundingMode.HALF_UP);
-            BigDecimal quantity = randomQuantity(); // 랜덤 더미 수량
+            BigDecimal quantity = randomQuantity();
             bids.put(price, quantity);
         }
         return bids;
@@ -38,6 +38,6 @@ public class OrderBookService {
     // 더미 수량 생성기 (0.01 ~ 0.5 BTC)
     private BigDecimal randomQuantity() {
         double amount = 0.01 + (0.49 * random.nextDouble());
-        return BigDecimal.valueOf(amount).setScale(4, RoundingMode.HALF_UP);
+        return BigDecimal.valueOf(amount).setScale(5, RoundingMode.HALF_UP);
     }
 }
