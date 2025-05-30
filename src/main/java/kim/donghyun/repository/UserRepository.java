@@ -11,6 +11,8 @@ public interface UserRepository {
 	// 이메일로 회원 조회
 	User findByEmail(@Param("email") String email);
 
+	User findByUsername(@Param("username") String username);
+
 	// 회원 등록
 	void insert(User user);
 
