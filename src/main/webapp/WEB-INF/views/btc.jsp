@@ -15,14 +15,14 @@
 }
 
 body {
-  font-family: sans-serif;
-  padding-top: 80px; /* ✅ 헤더 높이만큼 본문 전체를 아래로 */
-  box-sizing: border-box;
+	font-family: sans-serif;
+	padding-top: 80px; /* ✅ 헤더 높이만큼 본문 전체를 아래로 */
+	box-sizing: border-box;
 }
 
 .main-container {
-  display: flex;
-  height: calc(100vh - 80px); /* 헤더 빼고 꽉 차도록 */
+	display: flex;
+	height: calc(100vh - 80px); /* 헤더 빼고 꽉 차도록 */
 }
 
 .chat-area {
@@ -150,37 +150,44 @@ body {
 		<div class="trade-area">
 			<!-- 거래 UI 영역 (오른쪽 영역) -->
 			<div class="trade-ui">
-				<h3>실시간 거래 / 호가</h3>
+				<h3>주문 / 호가</h3>
 
-<!-- 🔷 실시간 BTC 시세 -->
+				<!-- 🔷 실시간 BTC 시세 -->
 
-  <!-- 현재가 -->
-  <div id="mid-price" style="margin: 0.5rem 0; font-weight: bold; color: #333;">가격: -</div>
-<!-- 호가창 -->
-<div id="orderbook" style="display: flex; flex-direction: column; align-items: center; font-family: monospace;">
-  <!-- 매도호가 -->
-  <div>
-<!--     <div style="color: red; font-weight: bold;">🔺 매도호가 (ASK)</div> -->
-    <ul id="asks" style="color:red; list-style: none; padding: 0; margin: 0;"></ul>
-  </div>
+				<!-- 현재가 -->
+				<div id="mid-price"
+					style="margin: 0.5rem 0; font-weight: bold; color: #333;">가격:
+					-</div>
+				<!-- 호가창 -->
+				<div id="orderbook"
+					style="display: flex; flex-direction: column; align-items: center; font-family: monospace;">
+					<!-- 매도호가 -->
+					<div>
+						<!--     <div style="color: red; font-weight: bold;">🔺 매도호가 (ASK)</div> -->
+						<ul id="asks"
+							style="color: red; list-style: none; padding: 0; margin: 0;"></ul>
+					</div>
 
 
-<!-- 시세 표시 -->
-<div id="btc-price" style="font-size: 2rem; font-weight: bold; text-align: center; margin: 1rem 0;">
-  $-
-</div>
-  <!-- 매수호가 -->
-  <div>
-   <!--  <div style="color: green; font-weight: bold;">▼ 매수호가 (BID)</div> -->
-    <ul id="bids" style="color:blue; list-style: none; padding: 0; margin: 0;"></ul>
-  </div>
-</div>
+					<!-- 시세 표시 -->
+					<div id="btc-price"
+						style="font-size: 2rem; font-weight: bold; text-align: center; margin: 1rem 0;">
+						$-</div>
+					<!-- 매수호가 -->
+					<div>
+						<!--  <div style="color: green; font-weight: bold;">▼ 매수호가 (BID)</div> -->
+						<ul id="bids"
+							style="color: blue; list-style: none; padding: 0; margin: 0;"></ul>
+					</div>
+				</div>
 
-<!-- 🔌 WebSocket & STOMP 연결 -->
-<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+				<!-- 🔌 WebSocket & STOMP 연결 -->
+				<script
+					src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+				<script
+					src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
 
-<script>
+				<script>
   // 컨텍스트 경로 자동 추출
   const contextPath = window.location.pathname.split("/")[1]; // 예: "BtcMockInvest"
   const socket = new SockJS("/" + contextPath + "/ws-endpoint");
@@ -191,49 +198,77 @@ body {
     console.log("✅ WebSocket 연결 성공");
 
     stompClient.subscribe("/topic/orderbook", (message) => {
-      try {
-        const data = JSON.parse(message.body);
-        const price = parseFloat(data.price);
-        const asks = data.asks || {};
-        const bids = data.bids || {};
+    	  try {
+    	    const data = JSON.parse(message.body);
+    	    const price = parseFloat(data.price);
+    	    const asks = data.asks || {};
+    	    const bids = data.bids || {};
 
-        // 🔸 시세 출력
-        document.getElementById("btc-price").textContent = price.toLocaleString("en-US", {
-          style: "currency",
-          currency: "USD"
-        });
+    	    // ⏬ ✅ 등락률 비교용 데이터 받기 (백엔드에서 같이 보내줘야 함!)
+    	    const prevClose = parseFloat(data.prevClose);
+    	    const prevCloseTime = data.prevCloseTime;
 
-        // 🔸 중앙 현재가 표시
-        document.getElementById("mid-price").textContent = `가격: ${price.toFixed(2)} USDT`;
+    	    // ✅ 등락률 계산 및 색상 결정
+    	    const changeRate = ((price - prevClose) / prevClose * 100).toFixed(2);
+    	    const color = changeRate > 0 ? "red" : changeRate < 0 ? "blue" : "gray";
+    	    const icon = changeRate > 0 ? "▲" : changeRate < 0 ? "▼" : "-";
 
-        // 🔺 매도호가: 가격 오름차순 정렬 후 reverse → 고가부터
-        const asksList = document.getElementById("asks");
-        asksList.innerHTML = "";
-        Object.entries(asks)
-          .sort((a, b) => parseFloat(a[0]) - parseFloat(b[0]))
-          .reverse()
-          .forEach(([p, qty]) => {
-            const li = document.createElement("li");
-            li.textContent = `\${parseFloat(p).toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2})} | \${parseFloat(qty).toLocaleString("en-US", {minimumFractionDigits: 5, maximumFractionDigits: 5})} BTC`;
-            asksList.appendChild(li);
-          });
+    	    // 🔸 시세 출력 + 색상 + 툴팁
+    	    const priceEl = document.getElementById("btc-price");
+    	    priceEl.textContent = price.toLocaleString("en-US", {
+    	      style: "currency",
+    	      currency: "USD"
+    	    });
 
-        // 🔻 매수호가: 고가부터 보여주기 위해 정렬 후 reverse
-        const bidsList = document.getElementById("bids");
-        bidsList.innerHTML = "";
-        Object.entries(bids)
-          .sort((a, b) => parseFloat(a[0]) - parseFloat(b[0]))
-          .reverse()
-          .forEach(([p, qty]) => {
-            const li = document.createElement("li");
-            li.textContent = `\${parseFloat(p).toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2})} | \${parseFloat(qty).toLocaleString("en-US", {minimumFractionDigits: 5, maximumFractionDigits: 5})} BTC`;
-            bidsList.appendChild(li);
-          });
 
-      } catch (e) {
-        console.error("📛 호가창 처리 중 에러:", e);
-      }
-    });
+    	    priceEl.style.color = color;
+    	    priceEl.title = `기준가: ${'$'}{parseFloat(prevClose).toLocaleString("en-US", {
+    	    	  minimumFractionDigits: 2
+    	    	})} (${'$'}{prevCloseTime})\n등락률: ${'$'}{icon} ${'$'}{Math.abs(changeRate)}%`;
+
+    	    // 🔸 중앙 현재가 표시
+    	    document.getElementById("mid-price").textContent = `가격: ${price.toFixed(2)} USDT`;
+
+    	    // 🔺 매도호가
+    	    const asksList = document.getElementById("asks");
+    	    asksList.innerHTML = "";
+    	    Object.entries(asks)
+    	      .sort((a, b) => parseFloat(a[0]) - parseFloat(b[0]))
+    	      .reverse()
+    	      .forEach(([p, qty]) => {
+    	        const li = document.createElement("li");
+    	        li.textContent = `${'$'}{parseFloat(p).toLocaleString("en-US", {
+    	        	  minimumFractionDigits: 2,
+    	        	  maximumFractionDigits: 2
+    	        	})} | ${'$'}{parseFloat(qty).toLocaleString("en-US", {
+    	        	  minimumFractionDigits: 5,
+    	        	  maximumFractionDigits: 5
+    	        	})} BTC`;
+    	        asksList.appendChild(li);
+    	      });
+
+    	    // 🔻 매수호가
+    	    const bidsList = document.getElementById("bids");
+    	    bidsList.innerHTML = "";
+    	    Object.entries(bids)
+    	      .sort((a, b) => parseFloat(a[0]) - parseFloat(b[0]))
+    	      .reverse()
+    	      .forEach(([p, qty]) => {
+    	        const li = document.createElement("li");
+    	        li.textContent = `${'$'}{parseFloat(p).toLocaleString("en-US", {
+    	        	  minimumFractionDigits: 2,
+    	        	  maximumFractionDigits: 2
+    	        	})} | ${'$'}{parseFloat(qty).toLocaleString("en-US", {
+    	        	  minimumFractionDigits: 5,
+    	        	  maximumFractionDigits: 5
+    	        	})} BTC`;
+    	        bidsList.appendChild(li);
+    	      });
+
+    	  } catch (e) {
+    	    console.error("📛 호가창 처리 중 에러:", e);
+    	  }
+    	});
   });
 </script>
 
@@ -241,9 +276,9 @@ body {
 				<div class="action-buttons"
 					style="display: flex; gap: 10px; margin: 10px 0;">
 					<button class="btn" id="buyBtn"
-						style="color: white; background-color: rgba(0, 123, 255, 0.9); border: 2px solid transparent;">매수</button>
+						style="color: white; background-color: rgba(255, 0, 0, 0.8); border: 2px solid transparent;">매수</button>
 					<button class="btn" id="sellBtn"
-						style="color: white; background-color: rgba(255, 0, 0, 0.8); border: 2px solid transparent;">매도</button>
+						style="color: white; background-color: rgba(0, 123, 255, 0.9); border: 2px solid transparent;">매도</button>
 				</div>
 
 				<!-- 수량 선택 -->

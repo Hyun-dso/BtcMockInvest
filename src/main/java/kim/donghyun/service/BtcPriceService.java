@@ -1,6 +1,8 @@
 package kim.donghyun.service;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -26,5 +28,19 @@ public class BtcPriceService {
         
         priceCache.setLatestPrice(price);
         webSocketSender.broadcast(price); // 웹소켓으로 전송
+    }
+    
+    public Map<String, Object> getPriceWithUtcClose() {
+        double currentPrice = priceCache.getLatestPrice();
+
+        Map<String, Object> close = btcPriceRepository.findUtcClosePrice();
+        BigDecimal prevClose = (BigDecimal) close.get("price");
+        String time = (String) close.get("time");
+
+        Map<String, Object> payload = new HashMap<>();
+        payload.put("price", currentPrice);
+        payload.put("prevClose", prevClose);
+        payload.put("prevCloseTime", time);
+        return payload;
     }
 }

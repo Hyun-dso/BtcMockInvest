@@ -1,6 +1,7 @@
 package kim.donghyun.service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -72,7 +73,8 @@ public class CandleAggregator {
         LocalDateTime fifteenMinAgo = now.minusMinutes(15);
 
         // 최근 15개 1분봉 조회 (캔들 시간 오름차순 정렬이 필요)
-        List<BtcCandle1Min> candles = btcCandle1MinRepository.findRecentCandles(15);
+//        List<BtcCandle1Min> candles = btcCandle1MinRepository.findRecentCandles(15);
+        List<BtcCandle1Min> candles = btcCandle1MinRepository.findByTimeRange(fifteenMinAgo, now);
 
         if (candles == null || candles.size() < 15) return;
 
@@ -171,19 +173,20 @@ public class CandleAggregator {
     }
 
     public void generate1MonthCandle() {
-        LocalDateTime thisMonth = LocalDateTime.now().withDayOfMonth(1)
-                .withHour(0).withMinute(0).withSecond(0).withNano(0);
-        LocalDateTime lastMonth = thisMonth.minusMonths(1);
+        LocalDateTime thisMonthStart = LocalDate.now().withDayOfMonth(1).atStartOfDay();
+        LocalDateTime lastMonthStart = thisMonthStart.minusMonths(1);
+        LocalDateTime lastMonthEnd = thisMonthStart;
 
-        List<BtcCandle1D> candles = btcCandle1DRepository.findRecentCandles(30);
-        if (candles == null || candles.size() < 30) return;
+        List<BtcCandle1D> candles = btcCandle1DRepository.findCandlesBetween(lastMonthStart, lastMonthEnd);
+        if (candles == null || candles.isEmpty()) return;
 
         BigDecimal open = candles.get(0).getOpen();
         BigDecimal high = candles.stream().map(BtcCandle1D::getHigh).max(BigDecimal::compareTo).orElse(open);
         BigDecimal low  = candles.stream().map(BtcCandle1D::getLow).min(BigDecimal::compareTo).orElse(open);
         BigDecimal close = candles.get(candles.size() - 1).getClose();
-        BigDecimal volume = candles.stream().map(BtcCandle1D::getVolume)
-                                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal volume = candles.stream()
+                .map(BtcCandle1D::getVolume)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         BtcCandle1M candle = new BtcCandle1M();
         candle.setOpen(open);
@@ -191,9 +194,36 @@ public class CandleAggregator {
         candle.setLow(low);
         candle.setClose(close);
         candle.setVolume(volume);
-        candle.setCandleTime(lastMonth);
+        candle.setCandleTime(lastMonthStart); // 기준 시각 = 지난달 1일 00:00
 
         btcCandle1MRepository.insertCandle(candle);
     }
+
+    
+//    public void generate1MonthCandle() {
+//        LocalDateTime thisMonth = LocalDateTime.now().withDayOfMonth(1)
+//                .withHour(0).withMinute(0).withSecond(0).withNano(0);
+//        LocalDateTime lastMonth = thisMonth.minusMonths(1);
+//
+//        List<BtcCandle1D> candles = btcCandle1DRepository.findRecentCandles(30);
+//        if (candles == null || candles.size() < 30) return;
+//
+//        BigDecimal open = candles.get(0).getOpen();
+//        BigDecimal high = candles.stream().map(BtcCandle1D::getHigh).max(BigDecimal::compareTo).orElse(open);
+//        BigDecimal low  = candles.stream().map(BtcCandle1D::getLow).min(BigDecimal::compareTo).orElse(open);
+//        BigDecimal close = candles.get(candles.size() - 1).getClose();
+//        BigDecimal volume = candles.stream().map(BtcCandle1D::getVolume)
+//                                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+//
+//        BtcCandle1M candle = new BtcCandle1M();
+//        candle.setOpen(open);
+//        candle.setHigh(high);
+//        candle.setLow(low);
+//        candle.setClose(close);
+//        candle.setVolume(volume);
+//        candle.setCandleTime(lastMonth);
+//
+//        btcCandle1MRepository.insertCandle(candle);
+//    }
 
 }
