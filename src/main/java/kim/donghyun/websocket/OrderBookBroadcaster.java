@@ -29,7 +29,7 @@ public class OrderBookBroadcaster {
     @Scheduled(fixedDelay = 1000)
     public void broadcastOrderBook() {
         BigDecimal currentPrice = BigDecimal.valueOf(priceCache.getLatestPrice());
-        System.out.println("📡 브로드캐스트 직전 가격: " + currentPrice);
+//        System.out.println("📡 브로드캐스트 직전 가격: " + currentPrice);
 
         BigDecimal tickSize = currentPrice.compareTo(new BigDecimal("100000")) >= 0
                 ? new BigDecimal("0.1")

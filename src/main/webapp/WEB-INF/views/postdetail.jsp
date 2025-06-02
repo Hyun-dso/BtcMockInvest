@@ -3,26 +3,9 @@
 
 <html>
 <head>
+    <meta charset="UTF-8">
     <title>${post.title}</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 40px;
-        }
-        .post-box {
-            border: 1px solid #ccc;
-            padding: 20px;
-            margin-bottom: 30px;
-        }
-        .comment-box {
-            margin-bottom: 10px;
-            padding: 10px;
-            border-bottom: 1px solid #eee;
-        }
-        .comment-author {
-            font-weight: bold;
-        }
-    </style>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/postDetail.css">
 </head>
 <body>
 
