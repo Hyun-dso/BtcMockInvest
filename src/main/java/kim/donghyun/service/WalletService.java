@@ -1,9 +1,7 @@
 package kim.donghyun.service;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,7 +9,6 @@ import kim.donghyun.model.entity.Wallet;
 import kim.donghyun.repository.WalletDepositLogRepository;
 import kim.donghyun.repository.WalletRepository;
 import kim.donghyun.repository.WalletResetLogRepository;
-import kim.donghyun.util.PriceCache;
 import lombok.RequiredArgsConstructor;
 
 @Service
