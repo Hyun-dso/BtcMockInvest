@@ -1,0 +1,90 @@
+@charset "UTF-8";
+
+.mypage-container {
+	max-width: 600px;
+	margin: 100px auto;
+	padding: 30px;
+	background: #f9f9f9;
+	border-radius: 10px;
+	border: 1px solid #ccc;
+}
+
+h2 {
+	text-align: center;
+	margin-bottom: 30px;
+}
+
+.form-group {
+	margin-bottom: 20px;
+}
+
+.form-inline {
+	display: flex;
+	gap: 10px;
+	align-items: center;
+}
+
+label {
+	font-weight: bold;
+	margin-bottom: 5px;
+	display: block;
+}
+
+input[type="text"],
+input[type="password"] {
+	padding: 8px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+}
+
+input.nickname {
+	width: 60%;
+}
+
+.btn {
+	padding: 8px 12px;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	font-weight: bold;
+}
+
+.btn-check {
+	background-color: #ccc;
+}
+
+.btn-submit {
+	width: 100%;
+	background-color: #333;
+	color: white;
+	margin-top: 30px;
+}
+
+.btn-submit:hover {
+	background-color: #555;
+}
+
+.btn-wallet {
+	display: inline-block;
+	margin-top: 10px;
+	background-color: #4CAF50;
+	color: white;
+	text-align: center;
+	padding: 8px 14px;
+	text-decoration: none;
+	border-radius: 5px;
+	font-size: 14px;
+}
+
+.btn-delete {
+	background-color: red;
+	color: white;
+	width: 100%;
+	margin-top: 30px;
+}
+
+#pwMatch {
+	color: red;
+	font-size: 13px;
+	margin-top: 5px;
+}

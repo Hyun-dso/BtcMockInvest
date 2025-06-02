@@ -1,54 +1,12 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <jsp:include page="common/header.jsp" />
-
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <title>내 거래내역</title>
-    <style>
-        .history-container {
-            max-width: 900px;
-            margin: 100px auto;
-            padding: 30px;
-            background: #f4f4f4;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-        }
-
-        h2 {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background: white;
-            box-shadow: 0 0 5px rgba(0,0,0,0.1);
-        }
-
-        th, td {
-            padding: 12px;
-            text-align: center;
-            border-bottom: 1px solid #ddd;
-        }
-
-        th {
-            background-color: #f0f0f0;
-        }
-
-        tr:hover {
-            background-color: #fafafa;
-        }
-
-        .no-data {
-            text-align: center;
-            padding: 20px;
-            color: #999;
-        }
-    </style>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/history.css">
 </head>
 <body>
 <div class="history-container">

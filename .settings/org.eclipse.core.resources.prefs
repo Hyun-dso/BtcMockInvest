@@ -1,0 +1,14 @@
+eclipse.preferences.version=1
+encoding//src/main/resources/messages_en_US.properties=UTF-8
+encoding//src/main/resources/messages_ja_JP.properties=UTF-8
+encoding//src/main/resources/messages_ko_KR.properties=UTF-8
+encoding//src/main/webapp/WEB-INF/views/btc.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/common/header.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/history.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/main.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/mypage.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/postdetail.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/signin.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/signup.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/test.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/wallet.jsp=UTF-8

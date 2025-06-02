@@ -1,0 +1,106 @@
+@charset "UTF-8";
+/* 헤더 전체 영역 */
+.header {
+	position: fixed;
+	top: 0;
+	width: 100%;
+	height: 80px;
+	background: linear-gradient(90deg, #1a1a1a, #333);
+	color: white;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0 30px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+	z-index: 1000;
+	box-sizing: border-box;
+	overflow: visible;
+}
+
+.left-section {
+	display: flex;
+	align-items: center;
+	gap: 30px;
+}
+
+.logo {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	cursor: pointer;
+}
+
+.logo img {
+	height: 80px;
+	transition: transform 2s ease;
+	transform-style: preserve-3d;
+	backface-visibility: hidden;
+}
+
+.logo:hover .coin {
+	transform: rotateY(360deg);
+}
+
+.dropdown {
+	position: relative;
+}
+
+.dropdown-btn {
+	color: #ddd;
+	background: none;
+	border: none;
+	cursor: pointer;
+	font-size: 16px;
+}
+
+.dropdown-content {
+	display: none;
+	position: absolute;
+	top: 100%;
+	left: 0;
+	background-color: #fff;
+	color: black;
+	box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+	border-radius: 5px;
+	min-width: 120px;
+	z-index: 1100;
+}
+
+.dropdown-content a {
+	color: black;
+	text-decoration: none;
+	display: block;
+	padding: 10px 15px;
+}
+
+.dropdown-content a:hover {
+	background-color: #f1f1f1;
+}
+
+.dropdown:hover .dropdown-content {
+	display: block;
+}
+
+.nav-links {
+	display: flex;
+	align-items: center;
+	gap: 20px;
+	white-space: nowrap;
+	max-width: 100%;
+	overflow: hidden;
+}
+
+.nav-links a {
+	color: white !important;
+	text-decoration: none;
+	font-size: 14px;
+	padding: 6px 12px;
+	border: 1px solid #aaa;
+	border-radius: 5px;
+	white-space: nowrap;
+}
+
+.nav-links a:hover {
+	background-color: #495057;
+	color: white !important;
+}
