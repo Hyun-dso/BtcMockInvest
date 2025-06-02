@@ -35,7 +35,7 @@
 
 		<form action="withdraw" method="post" onsubmit="return confirm('정말 탈퇴하시겠습니까?');">
 			<button type="submit" class="btn btn-delete">회원 탈퇴</button>
-			<a href="wallet" class="btn-wallet">← 내 지갑 보기</a>
+			<a href="${pageContext.request.contextPath}/wallet" class="btn-wallet">← 내 지갑 보기</a>
 		</form>
 	</div>
 </body>
