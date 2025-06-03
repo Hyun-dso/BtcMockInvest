@@ -1,15 +1,31 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<jsp:include page="common/header.jsp" />
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8">
   <title>BTC 거래 홈</title>
-  <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/btc.css">
+  
+  <jsp:include page="common/header.jsp" />
+  
+  <script src="https://unpkg.com/lightweight-charts@4.1.1/dist/lightweight-charts.standalone.production.js"></script>
+  
+
+  <!-- ✅ WebSocket 관련 -->
   <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+
+  <!-- ✅ 기능별 스크립트 -->
+  <script src="${pageContext.request.contextPath}/resources/js/websocket.js" defer></script>
+  <script src="${pageContext.request.contextPath}/resources/js/price.js" defer></script>
+  <script src="${pageContext.request.contextPath}/resources/js/tvchart.js" defer></script>
   <script src="${pageContext.request.contextPath}/resources/js/btc.js" defer></script>
+
+  <!-- ✅ CSS -->
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/btc.css">
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/tvchart.css">
+  
 </head>
+
 <body data-context="${pageContext.request.contextPath}" data-logged-in="<%= session.getAttribute("user") != null %>">
 
   <div class="main-container">
@@ -53,10 +69,21 @@
       </div>
     </div>
 
-    <!-- 가운데: 차트 영역 -->
-    <div class="chart-area">
-      <p>차트 영역</p>
-    </div>
+<!-- 가운데 차트 영역 -->
+ <div class="chart-area">
+  <p>차트 영역</p>
+  <div id="tv-chart" style="width: 100%; height: 400px;"></div>
+
+  <!-- ⬇️ 차트 바로 아래, 버튼 작게 -->
+  <div id="timeframe-selector">
+    <button data-timeframe="1m">1m</button>
+    <button data-timeframe="15m">15m</button>
+    <button data-timeframe="1h">1h</button>
+    <button data-timeframe="1d">1d</button>
+    <button data-timeframe="1w">1w</button>
+    <button data-timeframe="1M">1M</button>
+  </div>
+</div>
 
     <!-- 오른쪽: 거래 UI 영역 -->
     <div class="trade-area">
@@ -108,6 +135,7 @@
       </div>
     </div>
   </div>
-
+  
+</body>
 </body>
 </html>

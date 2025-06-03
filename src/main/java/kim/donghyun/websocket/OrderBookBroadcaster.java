@@ -56,5 +56,7 @@ public class OrderBookBroadcaster {
         }
 
         messagingTemplate.convertAndSend("/topic/orderbook", orderbook);
+        
+        messagingTemplate.convertAndSend("/topic/price", currentPrice);
     }
 }

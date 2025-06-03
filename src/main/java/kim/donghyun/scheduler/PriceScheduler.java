@@ -26,7 +26,7 @@ public class PriceScheduler {
 
     @Scheduled(fixedDelay = 1000)
     public void fetchAndBroadcast() {
-    	System.out.println("실행");
+//    	System.out.println("실행");
         try {
             double price = priceFetcher.fetchPrice();
             
