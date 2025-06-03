@@ -4,8 +4,6 @@
 
 <!--  세션 유지 확인용 jsp입니다!! -->
 
-
-
 <html>
 <body>
 	<c:if test="${not empty sessionScope.loginUser}">

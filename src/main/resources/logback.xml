@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<configuration>
+<!-- <configuration>
 	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
 			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n</pattern>
@@ -13,4 +13,24 @@
 		<appender-ref ref="STDOUT"/>
 	</root>
 	
+</configuration> -->
+
+<configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Spring 전체 로그는 INFO로 -->
+    <logger name="org.springframework" level="INFO"/>
+
+    <!-- 너무 시끄러운 로거들만 OFF 처리 -->
+    <logger name="org.springframework.web.client.RestTemplate" level="OFF"/>
+    <logger name="org.springframework.messaging.simp.broker.SimpleBrokerMessageHandler" level="OFF"/>
+    <logger name="org.springframework.jdbc.datasource.DataSourceUtils" level="OFF"/>
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+    </root>
 </configuration>
