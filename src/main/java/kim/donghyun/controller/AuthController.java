@@ -48,7 +48,7 @@ public class AuthController {
 		}
 
 		session.setAttribute("loginUser", user); // 세션에 사용자 저장
-		return "redirect:/test"; // 로그인 성공 시 메인으로 이동
+		return "redirect:/"; // 로그인 성공 시 메인으로 이동
 	}
 
 	@GetMapping("/logout")
