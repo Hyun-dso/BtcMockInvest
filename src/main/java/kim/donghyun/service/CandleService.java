@@ -3,7 +3,9 @@ package kim.donghyun.service;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -54,10 +56,17 @@ public class CandleService {
         } else {
             throw new IllegalArgumentException("❌ Unknown candle type: " + candle.getClass());
         }
+        
+        // ✅ null 방어 필수!
+        if (time == null || open == null || high == null || low == null || close == null) {
+            System.out.println("❌ CandleDTO 변환 중 null 필드 존재. 변환 제외됨.");
+            return null;
+        }
+
 
         return new CandleDTO(
-            time.toEpochSecond(ZoneOffset.UTC),
-            time.toString().replace("T", " ").substring(0, 16),
+        	time.toEpochSecond(ZoneOffset.UTC), // ✅ 반드시 long 타입으로
+        	time.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")), // ✅ 보기용 문자열
             open, high, low, close
         );
     }
@@ -90,6 +99,7 @@ public class CandleService {
         return btcCandle1MinRepository.findRecentCandles(limit)
                 .stream()
                 .map(this::mapToDTO)
+                .filter(Objects::nonNull) // ✅ null 제거
                 .collect(Collectors.toList());
     }
     
@@ -97,6 +107,7 @@ public class CandleService {
         return btcCandle15MinRepository.findRecentCandles(limit)
                 .stream()
                 .map(this::mapToDTO)
+                .filter(Objects::nonNull) // ✅ null 제거
                 .collect(Collectors.toList());
     }
     
@@ -104,6 +115,7 @@ public class CandleService {
         return btcCandle1HRepository.findRecentCandles(limit)
                 .stream()
                 .map(this::mapToDTO)
+                .filter(Objects::nonNull) // ✅ null 제거
                 .collect(Collectors.toList());
     }
     
@@ -111,6 +123,7 @@ public class CandleService {
         List<CandleDTO> raw = btcCandle1DRepository.findRecentCandles(limit)
             .stream()
             .map(this::mapToDTO)
+            .filter(Objects::nonNull) // ✅ null 제거
             .sorted(java.util.Comparator.comparingLong(CandleDTO::getTime)) // 시간 오름차순 정렬
             .collect(Collectors.toList());
 
@@ -121,6 +134,7 @@ public class CandleService {
         List<CandleDTO> raw = btcCandle1WRepository.findRecentCandles(limit)
             .stream()
             .map(this::mapToDTO)
+            .filter(Objects::nonNull) // ✅ null 제거
             .sorted(java.util.Comparator.comparingLong(CandleDTO::getTime)) // 시간 오름차순 정렬
             .collect(Collectors.toList());
 
@@ -133,6 +147,7 @@ public class CandleService {
         List<CandleDTO> raw = btcCandle1MRepository.findRecentCandles(limit)
             .stream()
             .map(this::mapToDTO)
+            .filter(Objects::nonNull) // ✅ null 제거
             .sorted(java.util.Comparator.comparingLong(CandleDTO::getTime)) // 시간 오름차순 정렬
             .collect(Collectors.toList());
 
@@ -150,8 +165,15 @@ public class CandleService {
             CandleDTO current = originalList.get(i);
             long expectedTime = prev.getTime() + intervalSeconds;
 
-            // 누락된 구간 채움
+            // 누락된 구간 보간 처리
             while (expectedTime < current.getTime()) {
+
+                if (prev == null || prev.getClose() == null) {
+                    System.out.println("❌ 보간 불가: close 값이 null, 시간: " + (prev != null ? prev.getTime() : "null"));
+                    expectedTime += intervalSeconds;
+                    continue; // skip 보간
+                }
+
                 CandleDTO interpolated = new CandleDTO(
                     expectedTime,
                     formatTimeLabel(expectedTime),
@@ -160,6 +182,7 @@ public class CandleService {
                     prev.getClose(), // low
                     prev.getClose()  // close
                 );
+
                 filled.add(interpolated);
                 expectedTime += intervalSeconds;
             }
@@ -171,8 +194,54 @@ public class CandleService {
         return filled;
     }
 
+
     private String formatTimeLabel(long unixTime) {
         LocalDateTime dateTime = LocalDateTime.ofEpochSecond(unixTime, 0, ZoneOffset.UTC);
         return dateTime.toString().replace("T", " ").substring(0, 16);
     }
+    
+ // ✅ 실시간 임시 15분 캔들 생성
+    public CandleDTO generateTemp15MinCandle() {
+        LocalDateTime now = LocalDateTime.now().withSecond(0).withNano(0);
+        LocalDateTime start = now.minusMinutes(15);
+
+        System.out.println("🧪 임시 15분봉 생성 시도: " + start + " ~ " + now);
+
+        List<BtcCandle1Min> candles = btcCandle1MinRepository.findByTimeRange(start, now);
+        System.out.println("🧪 포함된 1분봉 개수: " + (candles != null ? candles.size() : "null"));
+
+        if (candles == null || candles.isEmpty()) return null;
+
+        // ✅ DB에 저장된 가장 최근 15분봉과 시간 차이 확인
+        List<CandleDTO> latest = get15MinCandleDTO(1); // 최근 1개
+        if (!latest.isEmpty()) {
+            long latestDbTime = latest.get(0).getTime(); // 초 단위
+            long tempCandleTime = start.toEpochSecond(ZoneOffset.UTC);
+            long diff = Math.abs(tempCandleTime - latestDbTime);
+
+            if (diff > 3600) { // 1시간 이상 차이나면 생성하지 않음
+                System.out.println("⚠️ DB 마지막 봉과 시간 차이 너무 큼 (" + diff + "초) → 임시 캔들 생략");
+                return null;
+            }
+        }
+
+        BigDecimal open = candles.get(0).getOpen();
+        BigDecimal high = candles.stream().map(BtcCandle1Min::getHigh).max(BigDecimal::compareTo).orElse(open);
+        BigDecimal low  = candles.stream().map(BtcCandle1Min::getLow).min(BigDecimal::compareTo).orElse(open);
+        BigDecimal close = candles.get(candles.size() - 1).getClose();
+
+        LocalDateTime candleTime = start;
+
+        CandleDTO dto = new CandleDTO(
+            candleTime.toEpochSecond(ZoneOffset.UTC),
+            candleTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
+            open, high, low, close
+        );
+
+        System.out.println("✅ 임시 15분봉 생성됨: " + dto);
+        return dto;
+    }
+    
 }
+
+

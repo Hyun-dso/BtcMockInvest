@@ -26,7 +26,16 @@ public class CandleApiController {
 
 		return switch (interval) {
 		case "1m" -> candleService.get1MinCandleDTO(limit);
-		case "15m" -> candleService.get15MinCandleDTO(limit);
+		case "15m" -> {
+		    List<CandleDTO> candles = candleService.get15MinCandleDTO(limit);
+
+		    CandleDTO tempCandle = candleService.generateTemp15MinCandle();
+		    if (tempCandle != null) {
+		        candles.add(tempCandle); // 마지막에 임시 캔들 추가
+		    }
+
+		    yield candles;
+		}
 		case "1h" -> candleService.get1HCandleDTO(limit);
 		case "1d" -> candleService.get1DCandleDTO(limit);
 		case "1w" -> candleService.get1WCandleDTO(limit);

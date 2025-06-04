@@ -3,11 +3,14 @@ package kim.donghyun.service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import kim.donghyun.model.dto.CandleDTO;
 import kim.donghyun.model.entity.BtcCandle15Min;
 import kim.donghyun.model.entity.BtcCandle1D;
 import kim.donghyun.model.entity.BtcCandle1H;
@@ -22,6 +25,7 @@ import kim.donghyun.repository.BtcCandle1MRepository;
 import kim.donghyun.repository.BtcCandle1MinRepository;
 import kim.donghyun.repository.BtcCandle1WRepository;
 import kim.donghyun.repository.BtcPriceRepository;
+import kim.donghyun.websocket.CandleBroadcaster;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -35,6 +39,7 @@ public class CandleAggregator {
     private final BtcCandle1DRepository btcCandle1DRepository;
     private final BtcCandle1WRepository btcCandle1WRepository;
     private final BtcCandle1MRepository btcCandle1MRepository;
+    private final CandleBroadcaster candleBroadcaster;
 
     public void generate1MinCandle() {
         // 현재 시간에서 가장 가까운 지난 분 단위로 기준 시간 생성
@@ -65,6 +70,11 @@ public class CandleAggregator {
         candle.setCandleTime(oneMinuteAgo); // 기준 시각은 1분 전
 
         btcCandle1MinRepository.insertCandle(candle);
+        
+        CandleDTO dto = CandleDTO.fromUTC(oneMinuteAgo, open, high, low, close);
+        
+        candleBroadcaster.broadcastCandle("1m", dto);
+
     }
     
     public void generate15MinCandle() {
