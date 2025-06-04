@@ -76,7 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		if (
 		  !lastKnown ||
 		  (window.lastCandle.time > lastKnown.time &&
-		   window.lastCandle.time <= lastKnown.time + 60)
+		   window.lastCandle.time <= lastKnown.time + 120)
 		) {
 		  candleSeries.update({ ...window.lastCandle });
 		} else {

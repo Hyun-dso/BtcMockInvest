@@ -22,14 +22,11 @@ public class CandleDTO {
     
     // ✅ UTC 기준으로 CandleDTO 만들기 위한 팩토리 메서드
     public static CandleDTO fromUTC(LocalDateTime candleTime, BigDecimal open, BigDecimal high, BigDecimal low, BigDecimal close) {
-        // 🎯 LocalDateTime이 UTC 기준임을 가정하고, 정확하게 Epoch 초로 변환
-        long time = candleTime.atOffset(ZoneOffset.UTC).toEpochSecond();
+        // ⚠️ UTC로 착각하지 말고, KST 기준으로 처리
+        ZonedDateTime kstTime = candleTime.atZone(ZoneId.of("Asia/Seoul"));
+        long time = kstTime.toEpochSecond(); // 이게 진짜 시간
 
-        // 🕒 사용자 표시용: KST로 변환하여 라벨 처리
-        String label = candleTime
-                .atOffset(ZoneOffset.UTC)                       // UTC로 고정
-                .atZoneSameInstant(ZoneId.of("Asia/Seoul"))     // 한국 시간대 적용
-                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        String label = kstTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
 
         return new CandleDTO(time, label, open, high, low, close);
     }

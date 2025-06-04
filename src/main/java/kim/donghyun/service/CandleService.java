@@ -197,7 +197,7 @@ public class CandleService {
     
  // ✅ 실시간 임시 15분 캔들 생성
     public CandleDTO generateTemp15MinCandle() {
-        LocalDateTime now = LocalDateTime.now().withSecond(0).withNano(0);
+        LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC).withSecond(0).withNano(0);
         LocalDateTime start = now.minusMinutes(15);
 
         System.out.println("🧪 임시 15분봉 생성 시도: " + start + " ~ " + now);
