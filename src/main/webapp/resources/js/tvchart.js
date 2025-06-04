@@ -45,36 +45,43 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // ✅ 실시간 시세 → 임시 캔들
     client.subscribe("/topic/price", (message) => {
-      const { price, timestamp } = JSON.parse(message.body);
-      const nowSec = Number(timestamp);
+		const { price, timestamp } = JSON.parse(message.body);
+		const nowSec = Number(timestamp);
 
-      if (!window.lastCandle || window.lastCandle.time !== nowSec) {
-        window.lastCandle = {
-          time: nowSec,
-          open: price,
-          high: price,
-          low: price,
-          close: price
-        };
-      } else {
-        window.lastCandle.close = price;
-        window.lastCandle.high = Math.max(window.lastCandle.high, price);
-        window.lastCandle.low = Math.min(window.lastCandle.low, price);
-      }
+		// 실시간 임시 캔들 생성 로직...
+		if (!window.lastCandle || window.lastCandle.time !== nowSec) {
+		  window.lastCandle = {
+		    time: nowSec,
+		    open: price,
+		    high: price,
+		    low: price,
+		    close: price
+		  };
+		} else {
+		  window.lastCandle.close = price;
+		  window.lastCandle.high = Math.max(window.lastCandle.high, price);
+		  window.lastCandle.low = Math.min(window.lastCandle.low, price);
+		}
 
-      const lastKnown = window.candleSeries._lastBar;
-      console.log("⏱️ 정식봉 마지막:", lastKnown?.time, "| 실시간:", window.lastCandle.time);
+		const lastKnown = window.candleSeries._lastBar;
 
-      // ✅ 스마트한 update 조건: 정식 봉 시간 범위 내일 때만 update
-      if (
-        !lastKnown ||
-        (window.lastCandle.time > lastKnown.time &&
-         window.lastCandle.time <= lastKnown.time + 60)
-      ) {
-        candleSeries.update({ ...window.lastCandle });
-      } else {
-        console.warn("⚠️ 실시간 캔들이 정식 봉 범위를 벗어났습니다 → update 생략");
-      }
+		const toKST = (sec) => new Date(sec * 1000).toLocaleString("ko-KR", { timeZone: "Asia/Seoul" });
+		const toUTC = (sec) => new Date(sec * 1000).toISOString();
+
+		console.log("⏱️ 정식봉 마지막:",
+		  lastKnown?.time, `(${toUTC(lastKnown?.time)} | ${toKST(lastKnown?.time)})`,
+		  "| 실시간:", window.lastCandle.time, `(${toUTC(window.lastCandle.time)} | ${toKST(window.lastCandle.time)})`
+		);
+		// ✅ 스마트한 update 조건
+		if (
+		  !lastKnown ||
+		  (window.lastCandle.time > lastKnown.time &&
+		   window.lastCandle.time <= lastKnown.time + 60)
+		) {
+		  candleSeries.update({ ...window.lastCandle });
+		} else {
+		  console.warn("⚠️ 실시간 캔들이 정식 봉 범위를 벗어났습니다 → update 생략");
+		}
     });
 
     // ✅ 정식 봉 구독

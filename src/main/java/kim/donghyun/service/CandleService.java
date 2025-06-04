@@ -64,11 +64,7 @@ public class CandleService {
         }
 
 
-        return new CandleDTO(
-        	time.toEpochSecond(ZoneOffset.UTC), // ✅ 반드시 long 타입으로
-        	time.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")), // ✅ 보기용 문자열
-            open, high, low, close
-        );
+        return CandleDTO.fromUTC(time, open, high, low, close);
     }
     
     public List<BtcCandle1Min> get1MinCandles(int limit) {
@@ -174,13 +170,12 @@ public class CandleService {
                     continue; // skip 보간
                 }
 
-                CandleDTO interpolated = new CandleDTO(
-                    expectedTime,
-                    formatTimeLabel(expectedTime),
-                    prev.getClose(), // open
-                    prev.getClose(), // high
-                    prev.getClose(), // low
-                    prev.getClose()  // close
+                CandleDTO interpolated = CandleDTO.fromUTC(
+                	    LocalDateTime.ofEpochSecond(expectedTime, 0, ZoneOffset.UTC), // ✅ UTC 기준 시간
+                	    prev.getClose(), // open
+                	    prev.getClose(), // high
+                	    prev.getClose(), // low
+                	    prev.getClose()  // close
                 );
 
                 filled.add(interpolated);
@@ -232,11 +227,10 @@ public class CandleService {
 
         LocalDateTime candleTime = start;
 
-        CandleDTO dto = new CandleDTO(
-            candleTime.toEpochSecond(ZoneOffset.UTC),
-            candleTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")),
-            open, high, low, close
-        );
+        CandleDTO dto = CandleDTO.fromUTC(
+        	    candleTime,
+        	    open, high, low, close
+        	);
 
         System.out.println("✅ 임시 15분봉 생성됨: " + dto);
         return dto;

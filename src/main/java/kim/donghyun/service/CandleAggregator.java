@@ -48,6 +48,10 @@ public class CandleAggregator {
         LocalDateTime oneMinuteAgo = oneMinuteAgoUtc.toLocalDateTime(); // ✅ UTC 기준 LocalDateTime
         LocalDateTime now = nowUtc.toLocalDateTime(); // 현재 시각도 UTC 기준으로 조회
 
+        // ✅ 디버깅: ZonedDateTime 값과 Epoch 확인
+        System.out.println("✅ [DEBUG] 정식봉 기준 시간 (ZonedDateTime): " + oneMinuteAgoUtc);
+        System.out.println("🧠 [DEBUG] toEpochSecond(): " + oneMinuteAgoUtc.toEpochSecond());
+
         // 1분간의 가격 데이터 조회
         List<BtcPrice> prices = btcPriceRepository.findPricesBetween(oneMinuteAgo, now);
 
@@ -61,7 +65,7 @@ public class CandleAggregator {
         BigDecimal high = priceList.stream().max(BigDecimal::compareTo).get();
         BigDecimal low = priceList.stream().min(BigDecimal::compareTo).get();
         BigDecimal close = priceList.get(priceList.size() - 1);
-        BigDecimal volume = BigDecimal.ZERO; // 추후 거래량 집계 시 사용
+        BigDecimal volume = BigDecimal.ZERO;
 
         BtcCandle1Min candle = new BtcCandle1Min();
         candle.setOpen(open);
@@ -72,186 +76,197 @@ public class CandleAggregator {
         candle.setCandleTime(oneMinuteAgo); // 기준 시각은 1분 전
 
         btcCandle1MinRepository.insertCandle(candle);
-        
-        CandleDTO dto = CandleDTO.fromUTC(oneMinuteAgo, open, high, low, close);
-        
-        candleBroadcaster.broadcastCandle("1m", dto);
 
+        CandleDTO dto = CandleDTO.fromZonedUTC(oneMinuteAgoUtc, open, high, low, close);
+        candleBroadcaster.broadcastCandle("1m", dto);
     }
     
     public void generate15MinCandle() {
-        // 현재 시간에서 가장 가까운 지난 15분 단위로 기준 시간 생성
-        LocalDateTime now = LocalDateTime.now().withSecond(0).withNano(0);
+        // ⏱️ UTC 기준 현재 시간 정리 (초/나노 제거)
+        ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC).withSecond(0).withNano(0);
+
+        // 📌 기준 시각: 가장 가까운 지난 정각 15분
         int minute = now.getMinute();
-        int mod = minute % 15;
-        LocalDateTime fifteenMinAgo = now.minusMinutes(mod).minusMinutes(15); // 정각 15분 전 기준
+        ZonedDateTime start = now.minusMinutes(minute % 15).minusMinutes(15);
+        ZonedDateTime end = start.plusMinutes(15);
 
-        LocalDateTime end = fifteenMinAgo.plusMinutes(15);
-
-        // 15분간의 1분봉 조회
-        List<BtcCandle1Min> candles = btcCandle1MinRepository.findByTimeRange(fifteenMinAgo, end);
+        // 🔍 15분 구간의 1분봉 조회
+        List<BtcCandle1Min> candles = btcCandle1MinRepository.findByTimeRange(
+            start.toLocalDateTime(),
+            end.toLocalDateTime()
+        );
 
         if (candles == null || candles.isEmpty()) return;
 
-        List<BigDecimal> openCloseList = candles.stream()
-                .map(c -> List.of(c.getOpen(), c.getClose()))
-                .flatMap(List::stream)
-                .collect(Collectors.toList());
-
+        // 📊 시가/고가/저가/종가/거래량 계산
         BigDecimal open = candles.get(0).getOpen();
         BigDecimal close = candles.get(candles.size() - 1).getClose();
         BigDecimal high = candles.stream().map(BtcCandle1Min::getHigh).max(BigDecimal::compareTo).orElse(open);
-        BigDecimal low = candles.stream().map(BtcCandle1Min::getLow).min(BigDecimal::compareTo).orElse(open);
-        BigDecimal volume = BigDecimal.ZERO;
+        BigDecimal low  = candles.stream().map(BtcCandle1Min::getLow).min(BigDecimal::compareTo).orElse(open);
+        BigDecimal volume = BigDecimal.ZERO; // 거래량 추후 구현 예정
 
+        // 🧾 DB 저장용 엔티티 생성
         BtcCandle15Min candle = new BtcCandle15Min();
         candle.setOpen(open);
         candle.setHigh(high);
         candle.setLow(low);
         candle.setClose(close);
         candle.setVolume(volume);
-        candle.setCandleTime(fifteenMinAgo);
+        candle.setCandleTime(start.toLocalDateTime());
 
         btcCandle15MinRepository.insertCandle(candle);
 
-        CandleDTO dto = CandleDTO.fromUTC(fifteenMinAgo, open, high, low, close);
-
+        // 📤 클라이언트 전송용 DTO 생성 (UTC 기반)
+        CandleDTO dto = CandleDTO.fromZonedUTC(start, open, high, low, close);
         candleBroadcaster.broadcastCandle("15m", dto);
     }
 
     public void generate1HourCandle() {
-        // 기준 시각: 현재 시각에서 가장 가까운 지난 정각
-        LocalDateTime now = LocalDateTime.now().withMinute(0).withSecond(0).withNano(0);
-        LocalDateTime oneHourAgo = now.minusHours(1);
+        // ⏱️ 현재 시간에서 가장 가까운 지난 정각 (UTC)
+        ZonedDateTime end = ZonedDateTime.now(ZoneOffset.UTC).withMinute(0).withSecond(0).withNano(0);
+        ZonedDateTime start = end.minusHours(1);
 
-        // 1시간 간격의 1분봉 조회
-        List<BtcCandle1Min> candles = btcCandle1MinRepository.findByTimeRange(oneHourAgo, now);
+        // 🔍 1시간 구간의 1분봉 조회
+        List<BtcCandle1Min> candles = btcCandle1MinRepository.findByTimeRange(
+            start.toLocalDateTime(),
+            end.toLocalDateTime()
+        );
 
         if (candles == null || candles.isEmpty()) return;
 
+        // 📊 시가/고가/저가/종가/거래량 계산
         BigDecimal open = candles.get(0).getOpen();
         BigDecimal close = candles.get(candles.size() - 1).getClose();
         BigDecimal high = candles.stream().map(BtcCandle1Min::getHigh).max(BigDecimal::compareTo).orElse(open);
-        BigDecimal low = candles.stream().map(BtcCandle1Min::getLow).min(BigDecimal::compareTo).orElse(open);
-        BigDecimal volume = BigDecimal.ZERO; // 추후 확장용
+        BigDecimal low  = candles.stream().map(BtcCandle1Min::getLow).min(BigDecimal::compareTo).orElse(open);
+        BigDecimal volume = BigDecimal.ZERO;
 
+        // 🧾 DB 저장용 엔티티 생성
         BtcCandle1H candle = new BtcCandle1H();
         candle.setOpen(open);
         candle.setHigh(high);
         candle.setLow(low);
         candle.setClose(close);
         candle.setVolume(volume);
-        candle.setCandleTime(oneHourAgo);
+        candle.setCandleTime(start.toLocalDateTime());
 
         btcCandle1HRepository.insertCandle(candle);
 
-        CandleDTO dto = CandleDTO.fromUTC(oneHourAgo, open, high, low, close);
+        // 📤 클라이언트 전송용 DTO 생성 (UTC 기준)
+        CandleDTO dto = CandleDTO.fromZonedUTC(start, open, high, low, close);
         candleBroadcaster.broadcastCandle("1h", dto);
     }
 
     public void generate1DayCandle() {
-        LocalDateTime today = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
-        LocalDateTime yesterday = today.minusDays(1);
+        // ⏱️ 오늘 자정 (UTC 기준)
+        ZonedDateTime today = ZonedDateTime.now(ZoneOffset.UTC)
+                                           .withHour(0).withMinute(0).withSecond(0).withNano(0);
+        ZonedDateTime yesterday = today.minusDays(1);
 
+        // 🔍 어제 하루 동안의 1시간봉 24개 가져오기
         List<BtcCandle1H> candles = btcCandle1HRepository.findRecentCandles(24);
         if (candles == null || candles.size() < 24) return;
 
+        // 📊 시가/고가/저가/종가/거래량 계산
         BigDecimal open = candles.get(0).getOpen();
+        BigDecimal close = candles.get(candles.size() - 1).getClose();
         BigDecimal high = candles.stream().map(BtcCandle1H::getHigh).max(BigDecimal::compareTo).orElse(open);
         BigDecimal low  = candles.stream().map(BtcCandle1H::getLow).min(BigDecimal::compareTo).orElse(open);
-        BigDecimal close = candles.get(candles.size() - 1).getClose();
-        BigDecimal volume = candles.stream().map(BtcCandle1H::getVolume)
-                                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal volume = candles.stream().map(BtcCandle1H::getVolume).reduce(BigDecimal.ZERO, BigDecimal::add);
 
+        // 🧾 DB 저장
         BtcCandle1D candle = new BtcCandle1D();
         candle.setOpen(open);
         candle.setHigh(high);
         candle.setLow(low);
         candle.setClose(close);
         candle.setVolume(volume);
-        candle.setCandleTime(yesterday);
+        candle.setCandleTime(yesterday.toLocalDateTime());
 
         btcCandle1DRepository.insertCandle(candle);
+
+        // 📤 WebSocket 전송 (원한다면 아래 주석 해제)
+        // CandleDTO dto = CandleDTO.fromZonedUTC(yesterday, open, high, low, close);
+        // candleBroadcaster.broadcastCandle("1d", dto);
     }
 
     public void generate1WeekCandle() {
-        LocalDateTime thisWeek = LocalDateTime.now().with(java.time.DayOfWeek.MONDAY)
-                .withHour(0).withMinute(0).withSecond(0).withNano(0);
-        LocalDateTime lastWeek = thisWeek.minusWeeks(1);
+        // ⏱️ 이번 주 월요일 00:00 (UTC)
+        ZonedDateTime thisWeek = ZonedDateTime.now(ZoneOffset.UTC)
+            .with(java.time.DayOfWeek.MONDAY)
+            .withHour(0).withMinute(0).withSecond(0).withNano(0);
 
+        ZonedDateTime lastWeek = thisWeek.minusWeeks(1);
+
+        // 🔍 지난 1주일간의 일봉 7개
         List<BtcCandle1D> candles = btcCandle1DRepository.findRecentCandles(7);
         if (candles == null || candles.size() < 7) return;
 
+        // 📊 시가/고가/저가/종가/거래량 계산
         BigDecimal open = candles.get(0).getOpen();
+        BigDecimal close = candles.get(candles.size() - 1).getClose();
         BigDecimal high = candles.stream().map(BtcCandle1D::getHigh).max(BigDecimal::compareTo).orElse(open);
         BigDecimal low  = candles.stream().map(BtcCandle1D::getLow).min(BigDecimal::compareTo).orElse(open);
-        BigDecimal close = candles.get(candles.size() - 1).getClose();
-        BigDecimal volume = candles.stream().map(BtcCandle1D::getVolume)
-                                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal volume = candles.stream().map(BtcCandle1D::getVolume).reduce(BigDecimal.ZERO, BigDecimal::add);
 
+        // 🧾 DB 저장
         BtcCandle1W candle = new BtcCandle1W();
         candle.setOpen(open);
         candle.setHigh(high);
         candle.setLow(low);
         candle.setClose(close);
         candle.setVolume(volume);
-        candle.setCandleTime(lastWeek);
+        candle.setCandleTime(lastWeek.toLocalDateTime());
 
         btcCandle1WRepository.insertCandle(candle);
+
+        // 📤 WebSocket 전송 (원할 경우 주석 해제)
+        // CandleDTO dto = CandleDTO.fromZonedUTC(lastWeek, open, high, low, close);
+        // candleBroadcaster.broadcastCandle("1w", dto);
     }
 
-    public void generate1MonthCandle() {
-        LocalDateTime thisMonthStart = LocalDate.now().withDayOfMonth(1).atStartOfDay();
-        LocalDateTime lastMonthStart = thisMonthStart.minusMonths(1);
-        LocalDateTime lastMonthEnd = thisMonthStart;
 
-        List<BtcCandle1D> candles = btcCandle1DRepository.findCandlesBetween(lastMonthStart, lastMonthEnd);
+    public void generate1MonthCandle() {
+        // ⏱️ 이번 달 1일 00:00 (UTC 기준)
+        ZonedDateTime thisMonthStart = ZonedDateTime.now(ZoneOffset.UTC)
+            .withDayOfMonth(1)
+            .withHour(0).withMinute(0).withSecond(0).withNano(0);
+
+        ZonedDateTime lastMonthStart = thisMonthStart.minusMonths(1);
+        ZonedDateTime lastMonthEnd = thisMonthStart;
+
+        // 🔍 지난달 1일부터 이번달 1일 전까지 일봉 조회
+        List<BtcCandle1D> candles = btcCandle1DRepository.findCandlesBetween(
+            lastMonthStart.toLocalDateTime(),
+            lastMonthEnd.toLocalDateTime()
+        );
+
         if (candles == null || candles.isEmpty()) return;
 
+        // 📊 시가/고가/저가/종가/거래량 계산
         BigDecimal open = candles.get(0).getOpen();
+        BigDecimal close = candles.get(candles.size() - 1).getClose();
         BigDecimal high = candles.stream().map(BtcCandle1D::getHigh).max(BigDecimal::compareTo).orElse(open);
         BigDecimal low  = candles.stream().map(BtcCandle1D::getLow).min(BigDecimal::compareTo).orElse(open);
-        BigDecimal close = candles.get(candles.size() - 1).getClose();
         BigDecimal volume = candles.stream()
-                .map(BtcCandle1D::getVolume)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+            .map(BtcCandle1D::getVolume)
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
 
+        // 🧾 DB 저장
         BtcCandle1M candle = new BtcCandle1M();
         candle.setOpen(open);
         candle.setHigh(high);
         candle.setLow(low);
         candle.setClose(close);
         candle.setVolume(volume);
-        candle.setCandleTime(lastMonthStart); // 기준 시각 = 지난달 1일 00:00
+        candle.setCandleTime(lastMonthStart.toLocalDateTime());
 
         btcCandle1MRepository.insertCandle(candle);
+
+        // 📤 WebSocket 전송 (선택 사항)
+        // CandleDTO dto = CandleDTO.fromZonedUTC(lastMonthStart, open, high, low, close);
+        // candleBroadcaster.broadcastCandle("1M", dto);
     }
 
-    
-//    public void generate1MonthCandle() {
-//        LocalDateTime thisMonth = LocalDateTime.now().withDayOfMonth(1)
-//                .withHour(0).withMinute(0).withSecond(0).withNano(0);
-//        LocalDateTime lastMonth = thisMonth.minusMonths(1);
-//
-//        List<BtcCandle1D> candles = btcCandle1DRepository.findRecentCandles(30);
-//        if (candles == null || candles.size() < 30) return;
-//
-//        BigDecimal open = candles.get(0).getOpen();
-//        BigDecimal high = candles.stream().map(BtcCandle1D::getHigh).max(BigDecimal::compareTo).orElse(open);
-//        BigDecimal low  = candles.stream().map(BtcCandle1D::getLow).min(BigDecimal::compareTo).orElse(open);
-//        BigDecimal close = candles.get(candles.size() - 1).getClose();
-//        BigDecimal volume = candles.stream().map(BtcCandle1D::getVolume)
-//                                    .reduce(BigDecimal.ZERO, BigDecimal::add);
-//
-//        BtcCandle1M candle = new BtcCandle1M();
-//        candle.setOpen(open);
-//        candle.setHigh(high);
-//        candle.setLow(low);
-//        candle.setClose(close);
-//        candle.setVolume(volume);
-//        candle.setCandleTime(lastMonth);
-//
-//        btcCandle1MRepository.insertCandle(candle);
-//    }
 
 }
