@@ -39,9 +39,11 @@
 	<select id="findByTimeRange" parameterType="map"
 		resultMap="candleMap">
 		SELECT * FROM btc_candle_1min
-		WHERE candle_time &gt;= #{start}
+		WHERE candle_time &gt;=
+		#{start}
 		AND candle_time &lt; #{end}
 		ORDER BY candle_time ASC
 	</select>
-	
+
+
 </mapper>

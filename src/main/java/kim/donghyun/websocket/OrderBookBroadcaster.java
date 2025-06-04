@@ -2,6 +2,7 @@ package kim.donghyun.websocket;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
@@ -34,7 +35,7 @@ public class OrderBookBroadcaster {
         BigDecimal tickSize = currentPrice.compareTo(new BigDecimal("100000")) >= 0
                 ? new BigDecimal("0.1")
                 : new BigDecimal("0.01");
-        int depth = 12;
+        int depth = 6;
 
         Map<String, Object> orderbook = new HashMap<>();
         orderbook.put("asks", orderBookService.getAsks(currentPrice, tickSize, depth));
@@ -55,8 +56,16 @@ public class OrderBookBroadcaster {
             orderbook.put("prevCloseTime", sdf.format(createdAtDate));
         }
 
+        // 전송
         messagingTemplate.convertAndSend("/topic/orderbook", orderbook);
         
-        messagingTemplate.convertAndSend("/topic/price", currentPrice);
+
+        // ✅ 실시간 가격 + 시간 전송 (초 단위 timestamp)
+        Map<String, Object> pricePayload = new HashMap<>();
+        pricePayload.put("price", currentPrice);
+        // pricePayload.put("timestamp", System.currentTimeMillis() / 1000);
+        pricePayload.put("timestamp", Instant.now().getEpochSecond()); // ✅ 정확
+
+        messagingTemplate.convertAndSend("/topic/price", pricePayload);
     }
 }

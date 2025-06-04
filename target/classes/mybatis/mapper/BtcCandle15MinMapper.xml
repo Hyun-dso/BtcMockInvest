@@ -3,28 +3,40 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="kim.donghyun.repository.BtcCandle15MinRepository">
-    <resultMap id="candleMap" type="kim.donghyun.model.entity.BtcCandle15Min">
-        <id property="id" column="id"/>
-        <result property="open" column="open"/>
-        <result property="high" column="high"/>
-        <result property="low" column="low"/>
-        <result property="close" column="close"/>
-        <result property="volume" column="volume"/>
-        <result property="candleTime" column="candle_time"/>
-    </resultMap>
+<mapper
+	namespace="kim.donghyun.repository.BtcCandle15MinRepository">
+	<resultMap id="candleMap"
+		type="kim.donghyun.model.entity.BtcCandle15Min">
+		<id property="id" column="id" />
+		<result property="open" column="open" />
+		<result property="high" column="high" />
+		<result property="low" column="low" />
+		<result property="close" column="close" />
+		<result property="volume" column="volume" />
+		<result property="candleTime" column="candle_time" />
+	</resultMap>
 
-    <insert id="insertCandle" parameterType="kim.donghyun.model.entity.BtcCandle15Min">
-        INSERT IGNORE INTO btc_candle_15min (open, high, low, close, volume, candle_time)
-        VALUES (#{open}, #{high}, #{low}, #{close}, #{volume}, #{candleTime})
-    </insert>
+	<insert id="insertCandle"
+		parameterType="kim.donghyun.model.entity.BtcCandle15Min">
+		INSERT IGNORE INTO btc_candle_15min (open, high, low, close, volume,
+		candle_time)
+		VALUES (#{open}, #{high}, #{low}, #{close}, #{volume}, #{candleTime})
+	</insert>
 
-    <select id="findByCandleTime" parameterType="java.time.LocalDateTime" resultMap="candleMap">
-        SELECT * FROM btc_candle_15min WHERE candle_time = #{candleTime}
-    </select>
+	<select id="findByCandleTime"
+		parameterType="java.time.LocalDateTime" resultMap="candleMap">
+		SELECT * FROM btc_candle_15min WHERE candle_time = #{candleTime}
+	</select>
 
-    <select id="findRecentCandles" parameterType="int" resultMap="candleMap">
-        SELECT * FROM btc_candle_15min ORDER BY candle_time DESC LIMIT #{limit}
-    </select>
+	<select id="findRecentCandles" parameterType="int"
+		resultMap="candleMap">
+		SELECT * FROM btc_candle_15min ORDER BY candle_time DESC LIMIT #{limit}
+	</select>
+
+	<select id="findCandlesBetween" resultMap="candleMap">
+		SELECT * FROM btc_candle_1min
+		WHERE candle_time &gt;= #{start} AND candle_time &lt; #{end}
+		ORDER BY candle_time ASC
+	</select>
 
 </mapper>
