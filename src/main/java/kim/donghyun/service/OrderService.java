@@ -4,18 +4,23 @@ import java.math.BigDecimal;
 
 import org.springframework.stereotype.Service;
 
-import kim.donghyun.model.entity.TradeExecution;
+import java.util.EnumMap;
+import java.util.Map;
+
 import kim.donghyun.model.entity.TradeOrder;
+import kim.donghyun.model.entity.TradeExecution;
 import kim.donghyun.model.enums.OrderMode;
 import kim.donghyun.model.enums.OrderStatus;
 import kim.donghyun.model.enums.OrderType;
-import kim.donghyun.repository.TradeExecutionRepository;
+import kim.donghyun.service.strategy.OrderExecutionStrategy;
 import kim.donghyun.repository.TradeOrderRepository;
+import kim.donghyun.repository.TradeExecutionRepository;
 import kim.donghyun.util.PriceCache;
-import lombok.RequiredArgsConstructor;
+import kim.donghyun.service.OrderBookService;
+import kim.donghyun.service.TradePushService;
+import kim.donghyun.service.WalletService;
 
 @Service
-@RequiredArgsConstructor
 public class OrderService {
 
     private final PriceCache priceCache;
@@ -23,9 +28,33 @@ public class OrderService {
     private final TradeOrderRepository orderRepository;
     private final TradePushService tradePushService;
     private final TradeExecutionRepository tradeExecutionRepository;
-    private final WalletService walletService; // 💡 추가됨
+    private final WalletService walletService;
 
-    private final BigDecimal tickSize = new BigDecimal("10.00");
+    private final Map<OrderMode, OrderExecutionStrategy> strategyMap = new EnumMap<>(OrderMode.class);
+
+    public OrderService(PriceCache priceCache,
+                        OrderBookService orderBookService,
+                        TradeOrderRepository orderRepository,
+                        TradePushService tradePushService,
+                        TradeExecutionRepository tradeExecutionRepository,
+                        WalletService walletService,
+                        java.util.List<OrderExecutionStrategy> strategies) {
+        this.priceCache = priceCache;
+        this.orderBookService = orderBookService;
+        this.orderRepository = orderRepository;
+        this.tradePushService = tradePushService;
+        this.tradeExecutionRepository = tradeExecutionRepository;
+        this.walletService = walletService;
+        for (OrderExecutionStrategy s : strategies) {
+            if (s instanceof kim.donghyun.service.strategy.MarketOrderProcessor) {
+                strategyMap.put(OrderMode.MARKET, s);
+            } else if (s instanceof kim.donghyun.service.strategy.LimitOrderProcessor) {
+                strategyMap.put(OrderMode.LIMIT, s);
+            } else if (s instanceof kim.donghyun.service.strategy.FutureOrderProcessor) {
+                strategyMap.put(OrderMode.FUTURE, s);
+            }
+        }
+    }
 
     public TradeOrder executeMarketOrder(Long userId, OrderType type, BigDecimal amount, int depth) {
         BigDecimal price = BigDecimal.valueOf(priceCache.getLatestPrice());
@@ -75,5 +104,14 @@ public class OrderService {
         tradePushService.broadcastTrade(order);
 
         return order;
+    }
+
+    public TradeOrder executeOrder(Long userId, OrderType type, BigDecimal amount, BigDecimal price,
+                                   OrderMode mode, int leverage) {
+        OrderExecutionStrategy strategy = strategyMap.get(mode);
+        if (strategy == null) {
+            throw new IllegalArgumentException("지원하지 않는 주문 모드");
+        }
+        return strategy.execute(userId, type, amount, price, leverage);
     }
 }

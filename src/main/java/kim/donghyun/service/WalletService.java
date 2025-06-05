@@ -41,6 +41,15 @@ public class WalletService {
     public Wallet getWalletByUserId(Long userId) {
         return walletRepository.findByUserId(userId);
     }
+
+    @Transactional
+    public boolean applyFutureMargin(Long userId, BigDecimal margin) {
+        Wallet wallet = walletRepository.findByUserId(userId);
+        if (wallet.getUsdtBalance().compareTo(margin) < 0) return false;
+        wallet.setUsdtBalance(wallet.getUsdtBalance().subtract(margin));
+        walletRepository.updateBalance(wallet);
+        return true;
+    }
     
     @Transactional
     public void initializeWallet(Long userId) {
