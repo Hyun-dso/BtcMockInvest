@@ -23,11 +23,17 @@
 	gap: 30px;
 }
 
-.logo {
+.brand-box {
 	display: flex;
 	align-items: center;
-	gap: 10px;
-	cursor: pointer;
+	text-decoration: none;
+	color: inherit; /* 여기에 따라 svg 색이 바뀜 */
+}
+
+.logo {
+	width: 32px;
+	height: 32px;
+	margin-right: 8px;
 }
 
 .logo img {
@@ -60,7 +66,7 @@
 	left: 0;
 	background-color: #fff;
 	color: black;
-	box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 	border-radius: 5px;
 	min-width: 120px;
 	z-index: 1100;

@@ -11,11 +11,6 @@ public class HomeController {
 		return "main"; // 처음 진입시 보여줄 화면
 	}
 
-	@RequestMapping("/main")
-	public String main() {
-		return "main";
-	}
-
 	@RequestMapping("/btc")
 	public String home() {
 		return "btc";

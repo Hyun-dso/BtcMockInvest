@@ -1,34 +1,35 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>  <%-- ✅ 이거 꼭 필요 --%>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/header.css">
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%-- ✅ 이거 꼭 필요 --%>
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/header.css">
 
-<div class="header">
-	<div class="left-section">
-		<a href="${pageContext.request.contextPath}/" class="logo">
-			<img class="coin" src="${pageContext.request.contextPath}/resources/img/coin.png" alt="Coin" />
-			<img class="text" src="${pageContext.request.contextPath}/resources/img/btc-text.png" alt="BTC" />
+<header class="hero-header">
+	<div class="container">
+		<a href="${pageContext.request.contextPath}/" class="brand-box"> <svg
+				class="logo" xmlns="http://www.w3.org/2000/svg"
+				viewBox="0 0 200 200">
+	  <path
+					d="M17.5,-34.2C26.5,-25.1,40.2,-28.1,54.3,-24.4C68.3,-20.8,82.7,-10.4,87.3,2.7C92,15.7,86.9,31.5,74.7,38.4C62.5,45.3,43.2,43.3,29.6,39.9C15.9,36.6,8,31.8,-1.1,33.7C-10.2,35.6,-20.3,44.2,-33.4,47.2C-46.5,50.3,-62.5,47.8,-62.1,39C-61.8,30.2,-45,15.1,-44.2,0.5C-43.3,-14.1,-58.3,-28.2,-61.5,-41.9C-64.7,-55.6,-56,-68.8,-43.8,-76C-31.6,-83.2,-15.8,-84.4,-5.8,-74.4C4.2,-64.5,8.5,-43.3,17.5,-34.2Z"
+					transform="translate(100 100)" fill="currentColor" />
+	</svg>
+			<h1 class="brand">BtcMockInvest</h1>
 		</a>
-		<div class="dropdown">
-			<button class="dropdown-btn">거래하기 ▾</button>
-			<div class="dropdown-content">
-				<a href="${pageContext.request.contextPath}/btc">BTC</a>
-			</div>
-		</div>
+		<nav>
+			<c:choose>
+				<c:when test="${not empty sessionScope.loginUser}">
+					<span class="welcome"> <a
+						href="${pageContext.request.contextPath}/mypage">
+							${sessionScope.loginUser.username}</a> 님 환영합니다.
+					</span>
+					<a href="${pageContext.request.contextPath}/logout">LOGOUT</a>
+				</c:when>
+				<c:otherwise>
+					<a href="${pageContext.request.contextPath}/signin">SIGNIN</a>
+					<a href="${pageContext.request.contextPath}/signup">SIGNUP</a>
+				</c:otherwise>
+			</c:choose>
+		</nav>
 	</div>
-
-	<div class="nav-links">
-		<c:choose>
-			<c:when test="${not empty sessionScope.loginUser}">
-				<a href="${pageContext.request.contextPath}/mypage">
-					${sessionScope.loginUser.username}
-				</a>님 환영합니다.
-				<a href="${pageContext.request.contextPath}/logout">LOGOUT</a>
-			</c:when>
-			<c:otherwise>
-				<span>로그인이 필요합니다</span>
-				<a href="${pageContext.request.contextPath}/signin">SIGNIN</a>
-				<a href="${pageContext.request.contextPath}/signup">SIGNUP</a>
-			</c:otherwise>
-		</c:choose>
-	</div>
-</div>
+</header>
