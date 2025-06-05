@@ -28,8 +28,8 @@
     <select id="findByUserId" parameterType="long" resultMap="executionMap">
         SELECT ot.*
         FROM order_trade ot
-        JOIN trade_order bo ON ot.buy_order_id = bo.order_id
-        JOIN trade_order so ON ot.sell_order_id = so.order_id
+        LEFT JOIN trade_order bo ON ot.buy_order_id = bo.order_id
+        LEFT JOIN trade_order so ON ot.sell_order_id = so.order_id
         WHERE bo.user_id = #{userId} OR so.user_id = #{userId}
         ORDER BY ot.created_at DESC
     </select>

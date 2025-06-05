@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="kim.donghyun.repository.FuturePositionRepository">
+	<resultMap id="positionMap"
+		type="kim.donghyun.model.entity.FuturePosition">
+		<id property="id" column="id" />
+		<result property="userId" column="user_id" />
+		<result property="type" column="type"
+			javaType="kim.donghyun.model.enums.OrderType" />
+		<result property="amount" column="amount" />
+		<result property="entryPrice" column="entry_price" />
+		<result property="leverage" column="leverage" />
+		<result property="liquidationPrice" column="liquidation_price" />
+		<result property="open" column="is_open" />
+	</resultMap>
+
+	<insert id="insert"
+		parameterType="kim.donghyun.model.entity.FuturePosition"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO future_position (user_id, type, amount, entry_price, leverage,
+		liquidation_price, is_open)
+		VALUES (#{userId}, #{type}, #{amount}, #{entryPrice}, #{leverage},
+		#{liquidationPrice}, TRUE)
+	</insert>
+
+	<select id="findOpenPositions" resultMap="positionMap">
+		SELECT * FROM future_position WHERE is_open = TRUE
+	</select>
+
+	<update id="closePosition" parameterType="long">
+		UPDATE future_position SET is_open = FALSE WHERE id = #{id}
+	</update>
+</mapper>

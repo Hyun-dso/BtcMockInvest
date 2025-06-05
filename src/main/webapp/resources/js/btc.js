@@ -59,7 +59,16 @@ const percentSelect = document.getElementById('percentSelect');
 const customInput = document.getElementById('customInput');
 const btcDisplay = document.getElementById('btcAmount');
 const usdtDisplay = document.getElementById('usdtAmount');
-let totalUsdt = 1000;
+
+const orderInput = document.getElementById('orderAmount');
+let totalUsdt = 0;
+
+// 현재 지갑 잔액 조회
+fetch(`${window.contextPath}/api/wallet?userId=${window.loginUserId}`)
+  .then(res => res.json())
+  .then(data => {
+    totalUsdt = parseFloat(data.usdtBalance);
+  });
 
 percentSelect.addEventListener('change', function () {
   const value = this.value;
@@ -70,6 +79,7 @@ percentSelect.addEventListener('change', function () {
       const usdt = (btc * 43180).toFixed(2);
       btcDisplay.textContent = btc.toFixed(3);
       usdtDisplay.textContent = usdt;
+	  orderInput.value = btc.toFixed(3);
     });
   } else {
     customInput.style.display = 'none';
@@ -78,6 +88,7 @@ percentSelect.addEventListener('change', function () {
     const btc = useUsdt / 43180;
     btcDisplay.textContent = btc.toFixed(3);
     usdtDisplay.textContent = useUsdt.toFixed(2);
+	orderInput.value = btc.toFixed(3);
   }
 });
 
@@ -88,5 +99,6 @@ resetBtn.addEventListener('click', () => {
   percentSelect.value = '';
   customInput.value = '';
   customInput.style.display = 'none';
+  orderInput.value = '';
 });
 

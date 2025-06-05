@@ -91,9 +91,9 @@ public class OrderService {
         TradeExecution execution = new TradeExecution();
         if (type == OrderType.BUY) {
             execution.setBuyOrderId(order.getOrderId());
-            execution.setSellOrderId(0L); // 상대 주문 없음 (시뮬레이션)
+            execution.setSellOrderId(null); // 상대 주문 없음 (시뮬레이션)
         } else {
-            execution.setBuyOrderId(0L);
+            execution.setBuyOrderId(null);
             execution.setSellOrderId(order.getOrderId());
         }
         execution.setPrice(price);

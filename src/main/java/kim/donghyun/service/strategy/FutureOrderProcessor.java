@@ -5,6 +5,7 @@ import java.math.RoundingMode;
 
 import org.springframework.stereotype.Component;
 
+import kim.donghyun.model.entity.FuturePosition;
 import kim.donghyun.model.entity.TradeExecution;
 import kim.donghyun.model.entity.TradeOrder;
 import kim.donghyun.model.enums.OrderMode;
@@ -12,6 +13,7 @@ import kim.donghyun.model.enums.OrderStatus;
 import kim.donghyun.model.enums.OrderType;
 import kim.donghyun.repository.TradeExecutionRepository;
 import kim.donghyun.repository.TradeOrderRepository;
+import kim.donghyun.service.FuturePositionService;
 import kim.donghyun.service.TradePushService;
 import kim.donghyun.service.WalletService;
 import kim.donghyun.util.PriceCache;
@@ -26,6 +28,7 @@ public class FutureOrderProcessor implements OrderExecutionStrategy {
     private final TradeExecutionRepository tradeExecutionRepository;
     private final TradePushService tradePushService;
     private final WalletService walletService;
+    private final FuturePositionService futurePositionService;
 
     @Override
     public TradeOrder execute(Long userId, OrderType type, BigDecimal amount, BigDecimal price, int leverage) {
@@ -55,14 +58,31 @@ public class FutureOrderProcessor implements OrderExecutionStrategy {
         TradeExecution execution = new TradeExecution();
         if (type == OrderType.BUY) {
             execution.setBuyOrderId(order.getOrderId());
-            execution.setSellOrderId(0L);
+            execution.setSellOrderId(null);
         } else {
-            execution.setBuyOrderId(0L);
+            execution.setBuyOrderId(null);
             execution.setSellOrderId(order.getOrderId());
         }
         execution.setPrice(execPrice);
         execution.setAmount(amount);
         tradeExecutionRepository.insert(execution);
+        
+        BigDecimal liq;
+        if (type == OrderType.BUY) {
+            liq = execPrice.subtract(execPrice.divide(BigDecimal.valueOf(leverage), 8, RoundingMode.HALF_UP));
+        } else {
+            liq = execPrice.add(execPrice.divide(BigDecimal.valueOf(leverage), 8, RoundingMode.HALF_UP));
+        }
+
+        FuturePosition position = new FuturePosition();
+        position.setUserId(userId);
+        position.setType(type);
+        position.setAmount(amount);
+        position.setEntryPrice(execPrice);
+        position.setLeverage(leverage);
+        position.setLiquidationPrice(liq);
+        position.setOpen(true);
+        futurePositionService.openPosition(position);
 
         tradePushService.broadcastTrade(order);
         return order;
