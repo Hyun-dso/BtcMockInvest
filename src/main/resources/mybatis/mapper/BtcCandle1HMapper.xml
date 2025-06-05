@@ -27,4 +27,12 @@
         SELECT * FROM btc_candle_1h ORDER BY candle_time DESC LIMIT #{limit}
     </select>
 
+	<select id="findByTimeRange" resultType="kim.donghyun.model.entity.BtcCandle1H">
+    SELECT *
+    FROM btc_candle_1h
+    WHERE candle_time &gt;= #{start}
+      AND candle_time &lt; #{end}
+    ORDER BY candle_time ASC
+	</select>
+
 </mapper>

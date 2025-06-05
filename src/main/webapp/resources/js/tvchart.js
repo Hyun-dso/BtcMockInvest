@@ -13,6 +13,28 @@ function isValidCandle(candle) {
 let currentSubscription = null;
 let currentInterval = "1m";
 let websocketClient = null;
+let maVisible = false;
+let maSeries = null;
+
+function calculateMA(data, period = 10) {
+  const result = [];
+  const k = 2 / (period + 1);
+  let ema = data[0].close;
+
+  for (let i = 0; i < data.length; i++) {
+    if (i === 0) {
+      ema = data[0].close;
+    } else {
+      ema = data[i].close * k + ema * (1 - k);
+    }
+    result.push({
+      time: data[i].time,
+      value: ema
+    });
+  }
+
+  return result;
+}
 
 document.addEventListener("DOMContentLoaded", () => {
   const chartContainer = document.getElementById("tv-chart");
@@ -33,10 +55,97 @@ document.addEventListener("DOMContentLoaded", () => {
       secondsVisible: true,
     },
   });
+  window.chart = chart;
 
+  // ✅ 정식봉 시리즈
   const candleSeries = chart.addCandlestickSeries();
+  
+  // ✅ 툴팁 DOM 생성
+    const tooltip = document.createElement('div');
+    tooltip.style = `
+      position: absolute;
+      display: none;
+      padding: 8px;
+      background: rgba(0, 0, 0, 0.7);
+      color: #fff;
+      border-radius: 4px;
+      font-size: 12px;
+      pointer-events: none;
+      z-index: 1000;
+    `;
+    document.body.appendChild(tooltip);
+
+    // ✅ 툴팁 로직: 마우스 올릴 때
+    chart.subscribeCrosshairMove(param => {
+      if (!param || !param.time || !param.seriesData) {
+        tooltip.style.display = 'none';
+        return;
+      }
+
+      const seriesData = param.seriesData.get(candleSeries);
+      if (!seriesData) {
+        tooltip.style.display = 'none';
+        return;
+      }
+
+      const { open, high, low, close } = seriesData;
+      const date = new Date(param.time * 1000).toLocaleString('ko-KR');
+
+      tooltip.innerHTML = `
+        <strong>${date}</strong><br>
+        시가: ${open}<br>
+        고가: ${high}<br>
+        저가: ${low}<br>
+        종가: ${close}
+      `;
+
+      tooltip.style.display = 'block';
+	  const chartRect = chartContainer.getBoundingClientRect();
+	  tooltip.style.left = (chartRect.left + param.point.x + 10) + 'px';
+	  tooltip.style.top = (chartRect.top + param.point.y + 10) + 'px';
+    });
+	
   window.candleSeries = candleSeries;
+
+  // ✅ 실시간 임시봉 시리즈
+  const realtimeSeries = chart.addCandlestickSeries({
+    upColor: 'rgba(0, 200, 0, 0.4)',
+    downColor: 'rgba(200, 0, 0, 0.4)',
+    borderVisible: false,
+    wickVisible: false,
+	crossHairMarkerVisible: true
+  });
+  window.realtimeSeries = realtimeSeries;
+
   candleSeries.setData([]);
+
+  // ✅ MA 버튼 처리
+  const maBtn = document.getElementById("toggle-ma");
+  if (maBtn) {
+    maBtn.addEventListener("click", () => {
+      maVisible = !maVisible;
+
+      if (maVisible) {
+        const data = candleSeries._data || [];
+        const maData = calculateMA(data, 20);
+
+        if (!maSeries) {
+          maSeries = chart.addLineSeries({
+			color: 'rgba(0, 123, 255, 0.4)',
+			lineWidth: 2,
+			lineStyle: LightweightCharts.LineStyle.Solid, // default
+			crossHairMarkerVisible: false,
+          });
+        }
+
+        maSeries.setData(maData);
+        maBtn.innerText = "📉 MA선 숨기기";
+      } else {
+        if (maSeries) maSeries.setData([]);
+        maBtn.innerText = "📉 MA선 표시";
+      }
+    });
+  }
 
   // ✅ WebSocket 연결
   window.websocket.connect((client) => {
@@ -45,43 +154,33 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // ✅ 실시간 시세 → 임시 캔들
     client.subscribe("/topic/price", (message) => {
-		const { price, timestamp } = JSON.parse(message.body);
-		const nowSec = Number(timestamp);
+      const { price, timestamp } = JSON.parse(message.body);
+      const nowSec = Number(timestamp);
+      const candleTime = Math.floor(nowSec / 60) * 60;
 
-		// 실시간 임시 캔들 생성 로직...
-		if (!window.lastCandle || window.lastCandle.time !== nowSec) {
-		  window.lastCandle = {
-		    time: nowSec,
-		    open: price,
-		    high: price,
-		    low: price,
-		    close: price
-		  };
-		} else {
-		  window.lastCandle.close = price;
-		  window.lastCandle.high = Math.max(window.lastCandle.high, price);
-		  window.lastCandle.low = Math.min(window.lastCandle.low, price);
-		}
+      if (!window.lastCandle || window.lastCandle.time !== candleTime) {
+        window.lastCandle = {
+          time: candleTime,
+          open: price,
+          high: price,
+          low: price,
+          close: price,
+        };
+      } else {
+        window.lastCandle.high = Math.max(window.lastCandle.high, price);
+        window.lastCandle.low = Math.min(window.lastCandle.low, price);
+        window.lastCandle.close = price;
+      }
 
-		const lastKnown = window.candleSeries._lastBar;
+      const lastKnown = window.candleSeries._lastBar;
 
-		const toKST = (sec) => new Date(sec * 1000).toLocaleString("ko-KR", { timeZone: "Asia/Seoul" });
-		const toUTC = (sec) => new Date(sec * 1000).toISOString();
-
-		console.log("⏱️ 정식봉 마지막:",
-		  lastKnown?.time, `(${toUTC(lastKnown?.time)} | ${toKST(lastKnown?.time)})`,
-		  "| 실시간:", window.lastCandle.time, `(${toUTC(window.lastCandle.time)} | ${toKST(window.lastCandle.time)})`
-		);
-		// ✅ 스마트한 update 조건
-		if (
-		  !lastKnown ||
-		  (window.lastCandle.time > lastKnown.time &&
-		   window.lastCandle.time <= lastKnown.time + 120)
-		) {
-		  candleSeries.update({ ...window.lastCandle });
-		} else {
-		  console.warn("⚠️ 실시간 캔들이 정식 봉 범위를 벗어났습니다 → update 생략");
-		}
+      if (!lastKnown ||
+          (window.lastCandle.time >= lastKnown.time &&
+           window.lastCandle.time <= lastKnown.time + 60)) {
+        realtimeSeries.update({ ...window.lastCandle });
+      } else {
+        console.warn("⚠️ 실시간 캔들이 정식 봉 범위를 벗어났습니다 → update 생략");
+      }
     });
 
     // ✅ 정식 봉 구독
@@ -99,7 +198,8 @@ document.addEventListener("DOMContentLoaded", () => {
             close: Number(candle.close),
           };
           candleSeries.update(newCandle);
-          window.candleSeries._lastBar = newCandle; // ✅ 정식 봉일 때만 lastBar 갱신
+          window.candleSeries._lastBar = newCandle;
+          realtimeSeries.update({});
           console.log(`📩 정식 ${interval} 봉 수신:`, newCandle);
         }
       });
@@ -143,7 +243,9 @@ function subscribeToInterval(interval) {
         return;
       }
       window.candleSeries.setData(filtered);
-      window.candleSeries._lastBar = filtered[filtered.length - 1]; // ✅ 초기 기준 설정
+      window.candleSeries._lastBar = filtered[filtered.length - 1];
+	  
+	  window.candleSeries._data = filtered;  // ✅ MA 계산용 데이터 저장
     })
     .catch(err => {
       console.error("❌ 캔들 fetch 실패:", err);

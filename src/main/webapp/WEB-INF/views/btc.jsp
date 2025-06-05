@@ -83,6 +83,7 @@
     <button data-timeframe="1w">1w</button>
     <button data-timeframe="1M">1M</button>
   </div>
+    <button id="toggle-ma">📉 MA선 표시</button>
 </div>
 
     <!-- 오른쪽: 거래 UI 영역 -->

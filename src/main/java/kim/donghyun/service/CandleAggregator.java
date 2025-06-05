@@ -186,8 +186,8 @@ public class CandleAggregator {
         btcCandle1DRepository.insertCandle(candle);
 
         // 📤 WebSocket 전송 (원한다면 아래 주석 해제)
-        // CandleDTO dto = CandleDTO.fromZonedUTC(yesterday, open, high, low, close);
-        // candleBroadcaster.broadcastCandle("1d", dto);
+         CandleDTO dto = CandleDTO.fromZonedUTC(yesterday, open, high, low, close);
+         candleBroadcaster.broadcastCandle("1d", dto);
     }
 
     public void generate1WeekCandle() {
@@ -221,8 +221,8 @@ public class CandleAggregator {
         btcCandle1WRepository.insertCandle(candle);
 
         // 📤 WebSocket 전송 (원할 경우 주석 해제)
-        // CandleDTO dto = CandleDTO.fromZonedUTC(lastWeek, open, high, low, close);
-        // candleBroadcaster.broadcastCandle("1w", dto);
+         CandleDTO dto = CandleDTO.fromZonedUTC(lastWeek, open, high, low, close);
+         candleBroadcaster.broadcastCandle("1w", dto);
     }
 
 
@@ -264,8 +264,8 @@ public class CandleAggregator {
         btcCandle1MRepository.insertCandle(candle);
 
         // 📤 WebSocket 전송 (선택 사항)
-        // CandleDTO dto = CandleDTO.fromZonedUTC(lastMonthStart, open, high, low, close);
-        // candleBroadcaster.broadcastCandle("1M", dto);
+         CandleDTO dto = CandleDTO.fromZonedUTC(lastMonthStart, open, high, low, close);
+         candleBroadcaster.broadcastCandle("1M", dto);
     }
 
 
