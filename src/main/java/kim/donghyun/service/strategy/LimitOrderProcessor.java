@@ -25,7 +25,7 @@ public class LimitOrderProcessor implements OrderExecutionStrategy {
     private final WalletService walletService;
 
     @Override
-    public TradeOrder execute(Long userId, OrderType type, BigDecimal amount, BigDecimal price, int leverage) {
+    public TradeOrder execute(Long userId, OrderType type, BigDecimal amount, BigDecimal price) {
         BigDecimal total = price.multiply(amount);
 
         boolean success = walletService.applyTrade(userId, price, amount, type.name());

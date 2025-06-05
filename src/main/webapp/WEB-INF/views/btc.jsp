@@ -120,10 +120,8 @@ window.loginUserId = "${sessionScope.loginUser.id}"; // ✅ 이 값이 "6"이 �
           <select id="orderMode">
             <option value="MARKET">Market</option>
             <option value="LIMIT">Limit</option>
-            <option value="FUTURE">Future</option>
           </select>
           <input type="number" id="orderPrice" placeholder="가격 (USDT)" step="0.01" style="display:none;" />
-          <input type="number" id="orderLeverage" placeholder="레버리지 (1-100)" min="1" max="100" value="1" style="display:none;" />
         </div>
 
         <!-- 수량 선택 -->

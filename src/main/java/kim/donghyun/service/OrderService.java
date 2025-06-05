@@ -50,8 +50,6 @@ public class OrderService {
                 strategyMap.put(OrderMode.MARKET, s);
             } else if (s instanceof kim.donghyun.service.strategy.LimitOrderProcessor) {
                 strategyMap.put(OrderMode.LIMIT, s);
-            } else if (s instanceof kim.donghyun.service.strategy.FutureOrderProcessor) {
-                strategyMap.put(OrderMode.FUTURE, s);
             }
         }
     }
@@ -107,11 +105,11 @@ public class OrderService {
     }
 
     public TradeOrder executeOrder(Long userId, OrderType type, BigDecimal amount, BigDecimal price,
-                                   OrderMode mode, int leverage) {
+                                   OrderMode mode) {
         OrderExecutionStrategy strategy = strategyMap.get(mode);
         if (strategy == null) {
             throw new IllegalArgumentException("지원하지 않는 주문 모드");
         }
-        return strategy.execute(userId, type, amount, price, leverage);
+        return strategy.execute(userId, type, amount, price);
     }
 }

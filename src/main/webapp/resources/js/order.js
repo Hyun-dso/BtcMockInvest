@@ -3,7 +3,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const sellBtn = document.getElementById("sellBtn");
   const modeSelect = document.getElementById("orderMode");
   const priceInput = document.getElementById("orderPrice");
-  const leverageInput = document.getElementById("orderLeverage");
 
   const userId = Number(window.loginUserId); // 실제 로그인 시 session 값 주입
 
@@ -11,13 +10,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const mode = modeSelect.value;
     if (mode === "MARKET") {
       priceInput.style.display = "none";
-      leverageInput.style.display = "none";
     } else if (mode === "LIMIT") {
       priceInput.style.display = "block";
-      leverageInput.style.display = "none";
     } else {
       priceInput.style.display = "block";
-      leverageInput.style.display = "block";
     }
   }
 
@@ -42,10 +38,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const priceVal = priceInput.value;
     if (priceVal) params.append("price", priceVal);
-
-    let leverage = leverageInput.value || "1";
-    if (mode !== "FUTURE") leverage = "1";
-    params.append("leverage", leverage);
 
     fetch(`${window.contextPath}/api/order/execute`, {
       method: "POST",

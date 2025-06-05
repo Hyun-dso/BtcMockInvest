@@ -29,7 +29,7 @@ public class MarketOrderProcessor implements OrderExecutionStrategy {
     private final WalletService walletService;
 
     @Override
-    public TradeOrder execute(Long userId, OrderType type, BigDecimal amount, BigDecimal price, int leverage) {
+    public TradeOrder execute(Long userId, OrderType type, BigDecimal amount, BigDecimal price) {
         BigDecimal execPrice = BigDecimal.valueOf(priceCache.getLatestPrice());
 
         if (type == OrderType.BUY) {

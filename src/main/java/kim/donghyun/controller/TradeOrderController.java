@@ -43,16 +43,14 @@ public class TradeOrderController {
             @RequestParam("type") String type,
             @RequestParam("amount") BigDecimal amount,
             @RequestParam(value = "price", required = false) BigDecimal price,
-            @RequestParam("mode") String mode,
-            @RequestParam(value = "leverage", defaultValue = "1") int leverage) {
+            @RequestParam("mode") String mode) {
 
         TradeOrder order = orderService.executeOrder(
             userId,
             OrderType.valueOf(type.toUpperCase()),
             amount,
             price,
-            OrderMode.valueOf(mode.toUpperCase()),
-            leverage
+            OrderMode.valueOf(mode.toUpperCase())
         );
         return ResponseEntity.ok(order);
     }
