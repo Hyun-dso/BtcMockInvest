@@ -25,16 +25,19 @@
 		parameterType="kim.donghyun.model.entity.TradeOrder"
 		useGeneratedKeys="true" keyProperty="orderId">
 		INSERT INTO trade_order (
-		user_id, type, amount, price, total, order_mode, status, created_at
+		user_id,
+		type, amount, price, total, order_mode, status, created_at
 		) VALUES (
 		#{userId}, #{type}, #{amount}, #{price}, #{total},
-		#{orderMode}, #{status}, NOW()
+		#{orderMode},
+		#{status}, NOW()
 		)
 	</insert>
 
 	<!-- ✅ 단건 조회 -->
 	<select id="findById" parameterType="long" resultMap="orderMap">
-		SELECT * FROM trade_order WHERE order_id = #{orderId}
+		SELECT *
+		FROM trade_order WHERE order_id = #{orderId}
 	</select>
 
 	<!-- ✅ 유저별 주문 내역 조회 -->
@@ -42,7 +45,8 @@
 		resultMap="orderMap">
 		SELECT * FROM trade_order
 		WHERE user_id = #{userId}
-		ORDER BY created_at DESC
+		ORDER BY
+		created_at DESC
 	</select>
 
 	<!-- ✅ 상태 업데이트 -->
@@ -50,7 +54,35 @@
 		parameterType="kim.donghyun.model.entity.TradeOrder">
 		UPDATE trade_order
 		SET status = #{status}
-		WHERE order_id = #{orderId}
+		WHERE order_id =
+		#{orderId}
 	</update>
+
+	<!-- 지정가 매수 대기 -->
+	<select id="findPendingLimitBids"
+		resultType="kim.donghyun.model.dto.PriceQuantityDTO">
+		SELECT price, SUM(amount) AS totalQuantity
+		FROM trade_order
+		WHERE order_mode = 'LIMIT'
+		AND status = 'PENDING'
+		AND type = 'BUY'
+		GROUP BY price
+		ORDER BY price DESC
+		LIMIT #{depth}
+	</select>
+
+	<!-- 지정가 매도 대기 -->
+	<select id="findPendingLimitAsks"
+		resultType="kim.donghyun.model.dto.PriceQuantityDTO">
+		SELECT price, SUM(amount) AS totalQuantity
+		FROM trade_order
+		WHERE order_mode = 'LIMIT'
+		AND status = 'PENDING'
+		AND type = 'SELL'
+		GROUP BY price
+		ORDER BY price ASC
+		LIMIT #{depth}
+	</select>
+
 
 </mapper>

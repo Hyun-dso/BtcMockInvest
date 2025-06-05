@@ -27,15 +27,16 @@ public class OrderService {
 
     private final BigDecimal tickSize = new BigDecimal("10.00");
 
-    public TradeOrder executeMarketOrder(Long userId, OrderType type, BigDecimal amount) {
+    public TradeOrder executeMarketOrder(Long userId, OrderType type, BigDecimal amount, int depth) {
         BigDecimal price = BigDecimal.valueOf(priceCache.getLatestPrice());
 
+        // 타입에 따라 실제 대기 주문의 가격을 받아옴
         if (type == OrderType.BUY) {
-            price = orderBookService.getAsks(price, tickSize, 1)
-                    .keySet().stream().findFirst().orElse(price);
+            price = orderBookService.getPendingAsks(depth)
+                    .keySet().stream().findFirst().orElse(price); // 매도 대기 주문
         } else {
-            price = orderBookService.getBids(price, tickSize, 1)
-                    .keySet().stream().findFirst().orElse(price);
+            price = orderBookService.getPendingBids(depth)
+                    .keySet().stream().findFirst().orElse(price); // 매수 대기 주문
         }
 
         BigDecimal total = price.multiply(amount);

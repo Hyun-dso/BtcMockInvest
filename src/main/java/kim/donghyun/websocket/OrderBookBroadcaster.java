@@ -38,9 +38,24 @@ public class OrderBookBroadcaster {
         int depth = 6;
 
         Map<String, Object> orderbook = new HashMap<>();
-        orderbook.put("asks", orderBookService.getAsks(currentPrice, tickSize, depth));
-        orderbook.put("bids", orderBookService.getBids(currentPrice, tickSize, depth));
+        
+        // getPendingAsks()와 getPendingBids()로 값을 받아오고, 빈 값이면 0으로 대체
+        Map<BigDecimal, BigDecimal> asks = orderBookService.getPendingAsks(depth);
+        if (asks.isEmpty()) {
+            asks.put(BigDecimal.ZERO, BigDecimal.ZERO);  // 값이 없으면 0으로 처리
+        }
+
+        Map<BigDecimal, BigDecimal> bids = orderBookService.getPendingBids(depth);
+        if (bids.isEmpty()) {
+            bids.put(BigDecimal.ZERO, BigDecimal.ZERO);  // 값이 없으면 0으로 처리
+        }
+        
+        orderbook.put("asks", asks);
+        orderbook.put("bids", bids);
         orderbook.put("price", currentPrice);
+        
+//        System.out.println("📡 호가창 데이터 - 매도 (asks): " + orderbook.get("asks"));
+//        System.out.println("📡 호가창 데이터 - 매수 (bids): " + orderbook.get("bids"));
 
         // ✅ 종가 조회: 어제의 UTC 기준 (KST 기준 09:00)
         LocalDateTime referenceTime = LocalDateTime.now().withHour(9).withMinute(0).withSecond(0).withNano(0);

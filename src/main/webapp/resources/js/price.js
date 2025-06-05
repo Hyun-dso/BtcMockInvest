@@ -1,5 +1,7 @@
-// price.js
+import { renderAsks } from './asks.js';
+import { renderBids } from './bids.js';
 
+// /topic/orderbook 구독 (호가창 업데이트)
 window.websocket.connect((client) => {
   client.subscribe("/topic/orderbook", (message) => {
     try {
@@ -13,34 +15,39 @@ window.websocket.connect((client) => {
       const color = changeRate > 0 ? "red" : changeRate < 0 ? "blue" : "gray";
       const icon = changeRate > 0 ? "▲" : changeRate < 0 ? "▼" : "-";
 
-      const priceEl = document.getElementById("btc-price");
-      priceEl.textContent = price.toLocaleString("en-US", {
+      // 가격 표시
+      document.getElementById("btc-price").textContent = price.toLocaleString("en-US", {
         style: "currency",
         currency: "USD"
       });
-      priceEl.style.color = color;
-      priceEl.title = `기준가: $${prevClose.toFixed(2)} (${prevCloseTime})\n등락률: ${icon} ${Math.abs(changeRate)}%`;
+      document.getElementById("btc-price").style.color = color;
+      document.getElementById("btc-price").title = `기준가: $${prevClose.toFixed(2)} (${prevCloseTime})\n등락률: ${icon} ${Math.abs(changeRate)}%`;
 
       document.getElementById("mid-price").textContent = `가격: ${price.toFixed(2)} USDT`;
 
-      const asksList = document.getElementById("asks");
-      asksList.innerHTML = "";
-      Object.entries(asks).sort((a, b) => parseFloat(a[0]) - parseFloat(b[0])).reverse().forEach(([p, qty]) => {
-        const li = document.createElement("li");
-        li.textContent = `${parseFloat(p).toFixed(2)} | ${parseFloat(qty).toFixed(5)} BTC`;
-        asksList.appendChild(li);
-      });
-
-      const bidsList = document.getElementById("bids");
-      bidsList.innerHTML = "";
-      Object.entries(bids).sort((a, b) => parseFloat(a[0]) - parseFloat(b[0])).reverse().forEach(([p, qty]) => {
-        const li = document.createElement("li");
-        li.textContent = `${parseFloat(p).toFixed(2)} | ${parseFloat(qty).toFixed(5)} BTC`;
-        bidsList.appendChild(li);
-      });
-
+      // 호가창 렌더링 (매도, 매수)
+      renderAsks(asks);
+      renderBids(bids);
     } catch (e) {
       console.error("📛 시세 수신 처리 에러:", e);
+    }
+  });
+
+  // /topic/price 구독 (실시간 가격 업데이트)
+  client.subscribe("/topic/price", (message) => {
+    try {
+      const data = JSON.parse(message.body);
+      const price = parseFloat(data.price);
+
+      // 실시간 가격 표시
+      document.getElementById("btc-price").textContent = price.toLocaleString("en-US", {
+        style: "currency",
+        currency: "USD"
+      });
+      document.getElementById("btc-price").title = `실시간 가격: $${price.toFixed(2)}`;
+      console.log("📡 실시간 가격 수신:", price);
+    } catch (e) {
+      console.error("📛 실시간 가격 수신 처리 에러:", e);
     }
   });
 });

@@ -3,7 +3,6 @@ package kim.donghyun.service;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -122,17 +121,6 @@ public class CandleService {
             .filter(Objects::nonNull) // ✅ null 제거
             .sorted(java.util.Comparator.comparingLong(CandleDTO::getTime)) // 시간 오름차순 정렬
             .collect(Collectors.toList());
-        
-        // ✅ 없으면 임시 캔들 생성해서 대체
-        if (raw.isEmpty()) {
-            CandleDTO temp = generateTemp1DayCandle();
-            if (temp != null) {
-                System.out.println("⚠️ 1일봉 없음 → 임시 캔들로 대체");
-                return List.of(temp);
-            } else {
-                System.out.println("🚫 임시 1일봉도 생성 실패 → 빈 배열 반환");
-            }
-        }
 
         return fillMissingCandles(raw, 86400); // 1일
     }
@@ -248,28 +236,50 @@ public class CandleService {
     }
     
     public CandleDTO generateTemp1DayCandle() {
-        // 오늘 00:00 (UTC) 기준
-        LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC)
-                                         .withHour(0).withMinute(0).withSecond(0).withNano(0);
-        LocalDateTime start = now.minusDays(1); // 어제 00:00
+        // 오늘 00:00 (KST 기준)
+        LocalDateTime start = LocalDateTime.now()
+                                           .withHour(0).withMinute(0).withSecond(0).withNano(0);
+        LocalDateTime end = start.plusDays(1); // 내일 00:00
 
-        List<BtcCandle1H> candles = btcCandle1HRepository.findByTimeRange(start, now);
-        System.out.println("🧪 1일봉 생성 범위: " + start + " ~ " + now);
+        System.out.println("🧪 [1D] 임시 캔들 생성 시도: " + start + " ~ " + end);
+
+        // 이 구간으로 1시간봉 검색
+        List<BtcCandle1H> candles = btcCandle1HRepository.findByTimeRange(start, end);
         System.out.println("🧪 포함된 1시간봉 개수: " + (candles != null ? candles.size() : "null"));
 
-        if (candles == null || candles.size() < 20) {
-            System.out.println("⚠️ 1시간봉 데이터 부족 → 임시 1일봉 생략");
+        if (candles == null || candles.isEmpty()) {
+            System.out.println("⚠️ 1시간봉 데이터 없음 → 생략");
             return null;
         }
 
+        // 중복 방지 로직 유지
+        List<CandleDTO> latest = get1DCandleDTO(1);
+        long tempCandleTimeUTC = start.toEpochSecond(ZoneOffset.UTC);
+        if (!latest.isEmpty()) {
+            long latestDbTime = latest.get(0).getTime();
+            long diff = Math.abs(tempCandleTimeUTC - latestDbTime);
+            if (diff > 86400 * 2) {
+                System.out.println("⚠️ 정식봉과 시간 차이 큼 (" + diff + "초) → 임시 캔들 생략");
+                return null;
+            }
+        }
+
+        // OHLC 계산
         BigDecimal open = candles.get(0).getOpen();
         BigDecimal close = candles.get(candles.size() - 1).getClose();
         BigDecimal high = candles.stream().map(BtcCandle1H::getHigh).max(BigDecimal::compareTo).orElse(open);
         BigDecimal low  = candles.stream().map(BtcCandle1H::getLow).min(BigDecimal::compareTo).orElse(open);
 
-        return CandleDTO.fromUTC(start, open, high, low, close);
-    }
+        if (open == null || high == null || low == null || close == null) {
+            System.out.println("❌ OHLC 중 null 존재 → 생략");
+            return null;
+        }
 
+        // CandleDTO 생성 (start는 KST, 내부에서 UTC 변환됨)
+        CandleDTO dto = CandleDTO.fromUTC(start, open, high, low, close);
+        System.out.println("✅ [1D] 임시 캔들 생성 완료: " + dto);
+        return dto;
+    }
     
 }
 

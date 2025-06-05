@@ -1,43 +1,39 @@
 package kim.donghyun.service;
 
+import java.math.BigDecimal;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Random;
+import kim.donghyun.model.dto.PriceQuantityDTO;
+import kim.donghyun.repository.TradeOrderRepository;
 
 @Service
 public class OrderBookService {
 
-    private static final Random random = new Random();
+    @Autowired
+    private TradeOrderRepository tradeOrderRepository;
 
-    // 매도 호가 (현재가 기준 위로)
-    public Map<BigDecimal, BigDecimal> getAsks(BigDecimal currentPrice, BigDecimal tickSize, int depth) {
-        Map<BigDecimal, BigDecimal> asks = new LinkedHashMap<>();
-        for (int i = depth; i > 0; i--) {
-            BigDecimal price = currentPrice.add(tickSize.multiply(BigDecimal.valueOf(i))).setScale(2, RoundingMode.HALF_UP);
-            BigDecimal quantity = randomQuantity(); // 랜덤 더미 수량
-            asks.put(price, quantity);
+    // ✅ 매도 지정가 대기 주문 가져오기 (가격 오름차순)
+    public Map<BigDecimal, BigDecimal> getPendingAsks(int depth) {
+        List<PriceQuantityDTO> asks = tradeOrderRepository.findPendingLimitAsks(depth);
+        Map<BigDecimal, BigDecimal> result = new LinkedHashMap<>();
+        for (PriceQuantityDTO dto : asks) {
+            result.put(dto.getPrice(), dto.getTotalQuantity());
         }
-        return asks;
+        return result;
     }
 
-    // 매수 호가 (위에서 아래로 높은 가격 -> 낮은 가격 순)
-    public Map<BigDecimal, BigDecimal> getBids(BigDecimal currentPrice, BigDecimal tickSize, int depth) {
-        Map<BigDecimal, BigDecimal> bids = new LinkedHashMap<>();
-        for (int i = 1; i <= depth; i++) {
-            BigDecimal price = currentPrice.subtract(tickSize.multiply(BigDecimal.valueOf(i))).setScale(2, RoundingMode.HALF_UP);
-            BigDecimal quantity = randomQuantity();
-            bids.put(price, quantity);
+    // ✅ 매수 지정가 대기 주문 가져오기 (가격 내림차순)
+    public Map<BigDecimal, BigDecimal> getPendingBids(int depth) {
+        List<PriceQuantityDTO> bids = tradeOrderRepository.findPendingLimitBids(depth);
+        Map<BigDecimal, BigDecimal> result = new LinkedHashMap<>();
+        for (PriceQuantityDTO dto : bids) {
+            result.put(dto.getPrice(), dto.getTotalQuantity());
         }
-        return bids;
-    }
-
-    // 더미 수량 생성기 (0.01 ~ 0.5 BTC)
-    private BigDecimal randomQuantity() {
-        double amount = 0.01 + (0.49 * random.nextDouble());
-        return BigDecimal.valueOf(amount).setScale(5, RoundingMode.HALF_UP);
+        return result;
     }
 }

@@ -148,6 +148,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ✅ WebSocket 연결
+  // ✅ WebSocket 연결
   window.websocket.connect((client) => {
     console.log("🌐 WebSocket 연결 완료");
     websocketClient = client;
@@ -174,14 +175,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const lastKnown = window.candleSeries._lastBar;
 
-      if (!lastKnown ||
-          (window.lastCandle.time >= lastKnown.time &&
-           window.lastCandle.time <= lastKnown.time + 60)) {
+      // ✅ 인터벌별 허용 범위 설정 (초 단위)
+      const intervalAllowances = {
+        "1m": 120,
+        "15m": 1800,
+        "1h": 3600,
+        "1d": 86400 * 2,
+        "1w": 86400 * 10,
+        "1M": 86400 * 40
+      };
+      const allowance = intervalAllowances[currentInterval] || 3600;
+
+      if (
+        !lastKnown ||
+        (window.lastCandle.time >= lastKnown.time &&
+         window.lastCandle.time <= lastKnown.time + allowance)
+      ) {
         realtimeSeries.update({ ...window.lastCandle });
       } else {
         console.warn("⚠️ 실시간 캔들이 정식 봉 범위를 벗어났습니다 → update 생략");
       }
-    });
+    }); // ✅ 여기에서 닫아야 함!!
 
     // ✅ 정식 봉 구독
     ["1m", "15m", "1h", "1d", "1w", "1M"].forEach(interval => {
@@ -205,11 +219,11 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
 
-    // ✅ 기본 interval: 1m
+    // ✅ 기본 interval
     subscribeToInterval("1m");
   });
 
-  // ✅ interval 변경 시
+  // ✅ interval 변경 시 버튼 처리
   document.querySelectorAll('#timeframe-selector button').forEach(btn => {
     btn.addEventListener('click', () => {
       const interval = btn.dataset.timeframe;
@@ -217,7 +231,7 @@ document.addEventListener("DOMContentLoaded", () => {
       subscribeToInterval(interval);
     });
   });
-});
+  }); 
 
 // ✅ interval 변경 시 호출
 function subscribeToInterval(interval) {
@@ -239,7 +253,10 @@ function subscribeToInterval(interval) {
     .then(data => {
       const filtered = data.filter(isValidCandle).sort((a, b) => a.time - b.time);
       if (filtered.length === 0) {
-        console.warn("⚠️ 유효한 캔들 없음");
+		console.warn("⚠️ 유효한 캔들 없음 → 빈 데이터로 초기화 진행");
+		window.candleSeries.setData([]);                    // ✅ 이거 추가!!
+		window.candleSeries._lastBar = null;                // ✅ 명시적으로 초기화
+		window.candleSeries._data = [];                     // ✅ MA도 비우기
         return;
       }
       window.candleSeries.setData(filtered);

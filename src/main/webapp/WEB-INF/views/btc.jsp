@@ -16,9 +16,11 @@
 
   <!-- ✅ 기능별 스크립트 -->
   <script src="${pageContext.request.contextPath}/resources/js/websocket.js" defer></script>
+  <script src="${pageContext.request.contextPath}/resources/js/order.js" defer></script>
   <script src="${pageContext.request.contextPath}/resources/js/price.js" defer></script>
   <script src="${pageContext.request.contextPath}/resources/js/tvchart.js" defer></script>
   <script src="${pageContext.request.contextPath}/resources/js/btc.js" defer></script>
+  
 
   <!-- ✅ CSS -->
   <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/btc.css">
@@ -26,8 +28,12 @@
   
 </head>
 
-<body data-context="${pageContext.request.contextPath}" data-logged-in="<%= session.getAttribute("user") != null %>">
-
+<body data-context="${pageContext.request.contextPath}" data-logged-in="<%= session.getAttribute("loginUser") != null %>">
+<script>
+window.contextPath = document.body.getAttribute("data-context");
+window.loginUserId = "${sessionScope.loginUser.id}"; // ✅ 이 값이 "6"이 되도록!
+</script>
+<p>로그인 유저 ID: ${sessionScope.loginUser.id}</p>
   <div class="main-container">
     <!-- 왼쪽: 커뮤니티 채팅 영역 -->
     <div class="chat-area">
@@ -83,7 +89,7 @@
     <button data-timeframe="1w">1w</button>
     <button data-timeframe="1M">1M</button>
   </div>
-    <button id="toggle-ma">📉 MA선 표시</button>
+    <input type="checkbox" id="toggle-ma">📉 MA선 표시
 </div>
 
     <!-- 오른쪽: 거래 UI 영역 -->
@@ -104,8 +110,9 @@
 
         <!-- 매수/매도 버튼 -->
         <div class="action-buttons" style="display: flex; gap: 10px; margin: 10px 0;">
-          <button class="btn" id="buyBtn" style="color: white; background-color: rgba(255, 0, 0, 0.8); border: 2px solid transparent;">매수</button>
-          <button class="btn" id="sellBtn" style="color: white; background-color: rgba(0, 123, 255, 0.9); border: 2px solid transparent;">매도</button>
+        <input type="number" id="orderAmount" placeholder="수량 (BTC)" step="0.0001" />
+          <button class="BuyBtn" id="buyBtn" style="color: white; background-color: rgba(255, 0, 0, 0.8); border: 2px solid transparent;">매수</button>
+          <button class="sellBtn" id="sellBtn" style="color: white; background-color: rgba(0, 123, 255, 0.9); border: 2px solid transparent;">매도</button>
         </div>
 
         <!-- 수량 선택 -->
