@@ -13,7 +13,8 @@ export function renderBids(bids) {
     const li = document.createElement("li");
     if (entries[i]) {
       const [p, qty] = entries[i];
-      li.innerHTML = `<span>${parseFloat(qty).toFixed(5)} BTC</span><span>${parseFloat(p).toFixed(2)}</span>`;
+	  // 가격을 왼쪽, 수량을 오른쪽에 표시
+	  li.innerHTML = `<span>${parseFloat(p).toFixed(2)}</span><span>${parseFloat(qty).toFixed(5)} BTC</span>`;
     } else {
       li.innerHTML = `<span>-</span><span>-</span>`;
     }

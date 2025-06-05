@@ -99,7 +99,7 @@ window.loginUserId = "${sessionScope.loginUser.id}"; // ✅ 이 값이 "6"이 �
 
         <div id="mid-price" style="margin: 0.5rem 0; font-weight: bold; color: #333;">가격: -</div>
 
-        <div id="orderbook" style="display: flex; flex-direction: column; align-items: center; font-family: monospace;">
+        <div id="orderbook" style="display: flex; flex-direction: column; font-family: monospace;">
           <ul id="asks" style="color: red; list-style: none; padding: 0; margin: 0;"></ul>
 
           <div id="btc-price"
