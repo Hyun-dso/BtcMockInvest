@@ -66,12 +66,12 @@
 		WHERE order_mode = 'LIMIT'
 		AND status = 'PENDING'
 		AND type = 'BUY'
-		GROUP BY price
+		GROUP
+		BY price
 		ORDER BY price DESC
 		LIMIT #{depth}
 	</select>
 
-	<!-- 지정가 매도 대기 -->
 	<select id="findPendingLimitAsks"
 		resultType="kim.donghyun.model.dto.PriceQuantityDTO">
 		SELECT price, SUM(amount) AS totalQuantity
@@ -84,5 +84,24 @@
 		LIMIT #{depth}
 	</select>
 
+	<select id="findPendingBidQuantityAtPrice"
+		resultType="java.math.BigDecimal">
+		SELECT COALESCE(SUM(amount), 0)
+		FROM trade_order
+		WHERE order_mode = 'LIMIT'
+		AND status = 'PENDING'
+		AND type = 'BUY'
+		AND price = #{price}
+	</select>
+
+	<select id="findPendingAskQuantityAtPrice"
+		resultType="java.math.BigDecimal">
+		SELECT COALESCE(SUM(amount), 0)
+		FROM trade_order
+		WHERE order_mode = 'LIMIT'
+		AND status = 'PENDING'
+		AND type = 'SELL'
+		AND price = #{price}
+	</select>
 
 </mapper>

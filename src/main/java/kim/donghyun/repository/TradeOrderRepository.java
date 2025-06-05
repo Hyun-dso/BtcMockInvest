@@ -1,5 +1,6 @@
 package kim.donghyun.repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
@@ -19,4 +20,7 @@ public interface TradeOrderRepository {
     
     List<PriceQuantityDTO> findPendingLimitBids(@Param("depth") int depth);
     List<PriceQuantityDTO> findPendingLimitAsks(@Param("depth") int depth);
+    
+    BigDecimal findPendingBidQuantityAtPrice(@Param("price") BigDecimal price);
+    BigDecimal findPendingAskQuantityAtPrice(@Param("price") BigDecimal price);
 }

@@ -6,6 +6,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -38,16 +39,19 @@ public class OrderBookBroadcaster {
         int depth = 6;
 
         Map<String, Object> orderbook = new HashMap<>();
-        
-        // getPendingAsks()와 getPendingBids()로 값을 받아오고, 빈 값이면 0으로 대체
-        Map<BigDecimal, BigDecimal> asks = orderBookService.getPendingAsks(depth);
-        if (asks.isEmpty()) {
-            asks.put(BigDecimal.ZERO, BigDecimal.ZERO);  // 값이 없으면 0으로 처리
-        }
+ 
+        Map<BigDecimal, BigDecimal> asks = new LinkedHashMap<>();
+        Map<BigDecimal, BigDecimal> bids = new LinkedHashMap<>();
 
-        Map<BigDecimal, BigDecimal> bids = orderBookService.getPendingBids(depth);
-        if (bids.isEmpty()) {
-            bids.put(BigDecimal.ZERO, BigDecimal.ZERO);  // 값이 없으면 0으로 처리
+        for (int i = 1; i <= depth; i++) {
+            BigDecimal askPrice = currentPrice.add(tickSize.multiply(BigDecimal.valueOf(i)));
+            BigDecimal bidPrice = currentPrice.subtract(tickSize.multiply(BigDecimal.valueOf(i)));
+
+            BigDecimal askQty = orderBookService.getPendingAskQuantity(askPrice);
+            BigDecimal bidQty = orderBookService.getPendingBidQuantity(bidPrice);
+
+            asks.put(askPrice, askQty);
+            bids.put(bidPrice, bidQty);
         }
         
         orderbook.put("asks", asks);

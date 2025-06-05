@@ -24,12 +24,14 @@ public class TradeOrderController {
     public ResponseEntity<TradeOrder> executeMarketOrder(
             @RequestParam("userId") Long userId,
             @RequestParam("type") String type,       // BUY or SELL
-            @RequestParam("amount") BigDecimal amount) {
+            @RequestParam("amount") BigDecimal amount,
+            @RequestParam(value = "depth", defaultValue = "6") int depth) {
 
         TradeOrder order = orderService.executeMarketOrder(
             userId,
             OrderType.valueOf(type.toUpperCase()),  // 문자열을 enum으로 변환
-            amount
+            amount,
+            depth
         );
         return ResponseEntity.ok(order);
     }

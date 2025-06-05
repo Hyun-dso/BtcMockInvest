@@ -36,4 +36,14 @@ public class OrderBookService {
         }
         return result;
     }
+    
+    public BigDecimal getPendingBidQuantity(BigDecimal price) {
+        BigDecimal qty = tradeOrderRepository.findPendingBidQuantityAtPrice(price);
+        return qty != null ? qty : BigDecimal.ZERO;
+    }
+
+    public BigDecimal getPendingAskQuantity(BigDecimal price) {
+        BigDecimal qty = tradeOrderRepository.findPendingAskQuantityAtPrice(price);
+        return qty != null ? qty : BigDecimal.ZERO;
+    }
 }
