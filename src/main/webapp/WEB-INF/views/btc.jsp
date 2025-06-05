@@ -17,7 +17,7 @@
   <!-- ✅ 기능별 스크립트 -->
   <script src="${pageContext.request.contextPath}/resources/js/websocket.js" defer></script>
   <script src="${pageContext.request.contextPath}/resources/js/order.js" defer></script>
-  <script src="${pageContext.request.contextPath}/resources/js/price.js" defer></script>
+  <script type="module" src="${pageContext.request.contextPath}/resources/js/price.js" defer></script>
   <script src="${pageContext.request.contextPath}/resources/js/tvchart.js" defer></script>
   <script src="${pageContext.request.contextPath}/resources/js/btc.js" defer></script>
   
