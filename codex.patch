@@ -1,86 +1,83 @@
-diff --git a//dev/null b/src/main/java/kim/donghyun/service/strategy/MarketOrderProcessor.java
-index 0000000000000000000000000000000000000000..2ea56d8567c47c358e0ab5aea8101b84a9934bb3 100644
---- a//dev/null
-+++ b/src/main/java/kim/donghyun/service/strategy/MarketOrderProcessor.java
-@@ -0,0 +1,81 @@
-+package kim.donghyun.service.strategy;
-+
-+import java.math.BigDecimal;
-+
-+import org.springframework.stereotype.Component;
-+
-+import kim.donghyun.model.entity.TradeExecution;
-+import kim.donghyun.model.entity.TradeOrder;
-+import kim.donghyun.model.enums.OrderMode;
-+import kim.donghyun.model.enums.OrderStatus;
-+import kim.donghyun.model.enums.OrderType;
-+import kim.donghyun.repository.TradeExecutionRepository;
-+import kim.donghyun.repository.TradeOrderRepository;
-+import kim.donghyun.service.OrderBookService;
-+import kim.donghyun.service.TradePushService;
-+import kim.donghyun.service.WalletService;
-+import kim.donghyun.util.PriceCache;
-+import lombok.RequiredArgsConstructor;
-+
-+@Component
-+@RequiredArgsConstructor
-+public class MarketOrderProcessor implements OrderExecutionStrategy {
-+
-+    private final PriceCache priceCache;
-+    private final OrderBookService orderBookService;
-+    private final TradeOrderRepository orderRepository;
-+    private final TradePushService tradePushService;
-+    private final TradeExecutionRepository tradeExecutionRepository;
-+    private final WalletService walletService;
-+
-+    @Override
-+    public TradeOrder execute(Long userId, OrderType type, BigDecimal amount, BigDecimal price, int leverage) {
-+        BigDecimal execPrice = BigDecimal.valueOf(priceCache.getLatestPrice());
-+
-+        if (type == OrderType.BUY) {
-+            execPrice = orderBookService.getPendingAsks(1)
-+                                       .keySet()
-+                                       .stream()
-+                                       .findFirst()
-+                                       .orElse(execPrice);
-+        } else {
-+            execPrice = orderBookService.getPendingBids(1)
-+                                       .keySet()
-+                                       .stream()
-+                                       .findFirst()
-+                                       .orElse(execPrice);
-+        }
-+
-+        BigDecimal total = execPrice.multiply(amount);
-+
-+        boolean success = walletService.applyTrade(userId, execPrice, amount, type.name());
-+        if (!success) {
-+            throw new RuntimeException("잔고 부족으로 주문 실패");
-+        }
-+
-+        TradeOrder order = new TradeOrder();
-+        order.setUserId(userId);
-+        order.setType(type);
-+        order.setAmount(amount);
-+        order.setPrice(execPrice);
-+        order.setTotal(total);
-+        order.setOrderMode(OrderMode.MARKET);
-+        order.setStatus(OrderStatus.FILLED);
-+        orderRepository.insert(order);
-+
-+        TradeExecution execution = new TradeExecution();
-+        if (type == OrderType.BUY) {
-+            execution.setBuyOrderId(order.getOrderId());
-+            execution.setSellOrderId(0L);
-+        } else {
-+            execution.setBuyOrderId(0L);
-+            execution.setSellOrderId(order.getOrderId());
-+        }
-+        execution.setPrice(execPrice);
-+        execution.setAmount(amount);
-+        tradeExecutionRepository.insert(execution);
-+
-+        tradePushService.broadcastTrade(order);
-+        return order;
+diff --git a/src/main/webapp/resources/js/order.js b/src/main/webapp/resources/js/order.js
+index a9ed78536cfe2b7b0450c99325c0382c0f46e92a..30c34035fdc07c439053980c07cddc7bee789e9c 100644
+--- a/src/main/webapp/resources/js/order.js
++++ b/src/main/webapp/resources/js/order.js
+@@ -1,40 +1,72 @@
+ document.addEventListener("DOMContentLoaded", function () {
+   const buyBtn = document.getElementById("buyBtn");
+   const sellBtn = document.getElementById("sellBtn");
++  const modeSelect = document.getElementById("orderMode");
++  const priceInput = document.getElementById("orderPrice");
++  const leverageInput = document.getElementById("orderLeverage");
+ 
+   const userId = Number(window.loginUserId); // 실제 로그인 시 session 값 주입
+ 
++  function updateOptionVisibility() {
++    const mode = modeSelect.value;
++    if (mode === "MARKET") {
++      priceInput.style.display = "none";
++      leverageInput.style.display = "none";
++    } else if (mode === "LIMIT") {
++      priceInput.style.display = "block";
++      leverageInput.style.display = "none";
++    } else {
++      priceInput.style.display = "block";
++      leverageInput.style.display = "block";
 +    }
-+}
++  }
++
++  if (modeSelect) {
++    modeSelect.addEventListener("change", updateOptionVisibility);
++    updateOptionVisibility();
++  }
++
+   function sendOrder(type) {
+     const amount = document.getElementById("orderAmount").value;
+     if (!amount || isNaN(amount) || parseFloat(amount) <= 0) {
+       alert("수량을 올바르게 입력해주세요");
+       return;
+     }
+ 
+-    fetch(`${window.contextPath}/api/order/market`, {
++    const mode = modeSelect.value;
++    const params = new URLSearchParams();
++    params.append("userId", userId);
++    params.append("type", type);
++    params.append("amount", amount);
++    params.append("mode", mode);
++
++    const priceVal = priceInput.value;
++    if (priceVal) params.append("price", priceVal);
++
++    let leverage = leverageInput.value || "1";
++    if (mode !== "FUTURE") leverage = "1";
++    params.append("leverage", leverage);
++
++    fetch(`${window.contextPath}/api/order/execute`, {
+       method: "POST",
+       headers: {
+         "Content-Type": "application/x-www-form-urlencoded",
+       },
+-      body: new URLSearchParams({
+-        userId: userId,
+-        type: type,
+-        amount: amount,
+-      }),
++      body: params,
+     })
+       .then((res) => {
+         if (!res.ok) throw new Error("주문 실패");
+         return res.json();
+       })
+       .then((data) => {
+         alert(`✅ ${type} 주문 완료!\n체결가: ${data.price}\n수량: ${data.amount}`);
+       })
+       .catch((err) => {
+         console.error(err);
+         alert("❌ 주문 중 오류 발생");
+       });
+   }
+ 
+   if (buyBtn) buyBtn.addEventListener("click", () => sendOrder("BUY"));
+   if (sellBtn) sellBtn.addEventListener("click", () => sendOrder("SELL"));
+ });

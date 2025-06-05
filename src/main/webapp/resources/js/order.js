@@ -1,8 +1,30 @@
 document.addEventListener("DOMContentLoaded", function () {
   const buyBtn = document.getElementById("buyBtn");
   const sellBtn = document.getElementById("sellBtn");
+  const modeSelect = document.getElementById("orderMode");
+  const priceInput = document.getElementById("orderPrice");
+  const leverageInput = document.getElementById("orderLeverage");
 
   const userId = Number(window.loginUserId); // 실제 로그인 시 session 값 주입
+
+  function updateOptionVisibility() {
+    const mode = modeSelect.value;
+    if (mode === "MARKET") {
+      priceInput.style.display = "none";
+      leverageInput.style.display = "none";
+    } else if (mode === "LIMIT") {
+      priceInput.style.display = "block";
+      leverageInput.style.display = "none";
+    } else {
+      priceInput.style.display = "block";
+      leverageInput.style.display = "block";
+    }
+  }
+
+  if (modeSelect) {
+    modeSelect.addEventListener("change", updateOptionVisibility);
+    updateOptionVisibility();
+  }
 
   function sendOrder(type) {
     const amount = document.getElementById("orderAmount").value;
@@ -11,16 +33,26 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
-    fetch(`${window.contextPath}/api/order/market`, {
+    const mode = modeSelect.value;
+    const params = new URLSearchParams();
+    params.append("userId", userId);
+    params.append("type", type);
+    params.append("amount", amount);
+    params.append("mode", mode);
+
+    const priceVal = priceInput.value;
+    if (priceVal) params.append("price", priceVal);
+
+    let leverage = leverageInput.value || "1";
+    if (mode !== "FUTURE") leverage = "1";
+    params.append("leverage", leverage);
+
+    fetch(`${window.contextPath}/api/order/execute`, {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
-      body: new URLSearchParams({
-        userId: userId,
-        type: type,
-        amount: amount,
-      }),
+      body: params,
     })
       .then((res) => {
         if (!res.ok) throw new Error("주문 실패");

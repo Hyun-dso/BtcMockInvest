@@ -115,6 +115,17 @@ window.loginUserId = "${sessionScope.loginUser.id}"; // ✅ 이 값이 "6"이 �
           <button class="sellBtn" id="sellBtn" style="color: white; background-color: rgba(0, 123, 255, 0.9); border: 2px solid transparent;">매도</button>
         </div>
 
+        <!-- 주문 옵션 -->
+        <div class="order-options" style="margin-bottom: 10px; display:flex; flex-direction:column; gap:5px;">
+          <select id="orderMode">
+            <option value="MARKET">Market</option>
+            <option value="LIMIT">Limit</option>
+            <option value="FUTURE">Future</option>
+          </select>
+          <input type="number" id="orderPrice" placeholder="가격 (USDT)" step="0.01" style="display:none;" />
+          <input type="number" id="orderLeverage" placeholder="레버리지 (1-100)" min="1" max="100" value="1" style="display:none;" />
+        </div>
+
         <!-- 수량 선택 -->
         <div class="amount-selector" style="margin-bottom: 10px;">
           <label>수량 (사용자 선택):</label>

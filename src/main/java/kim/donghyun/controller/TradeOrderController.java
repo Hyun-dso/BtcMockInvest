@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import kim.donghyun.model.entity.TradeOrder;
+import kim.donghyun.model.enums.OrderMode;
 import kim.donghyun.model.enums.OrderType;
 import kim.donghyun.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +33,26 @@ public class TradeOrderController {
             OrderType.valueOf(type.toUpperCase()),  // 문자열을 enum으로 변환
             amount,
             depth
+        );
+        return ResponseEntity.ok(order);
+    }
+
+    @PostMapping("/execute")
+    public ResponseEntity<TradeOrder> executeOrder(
+            @RequestParam("userId") Long userId,
+            @RequestParam("type") String type,
+            @RequestParam("amount") BigDecimal amount,
+            @RequestParam(value = "price", required = false) BigDecimal price,
+            @RequestParam("mode") String mode,
+            @RequestParam(value = "leverage", defaultValue = "1") int leverage) {
+
+        TradeOrder order = orderService.executeOrder(
+            userId,
+            OrderType.valueOf(type.toUpperCase()),
+            amount,
+            price,
+            OrderMode.valueOf(mode.toUpperCase()),
+            leverage
         );
         return ResponseEntity.ok(order);
     }
