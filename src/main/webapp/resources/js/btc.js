@@ -63,13 +63,63 @@ const usdtDisplay = document.getElementById('usdtAmount');
 const orderInput = document.getElementById('orderAmount');
 let totalUsdt = 0;
 
+document.addEventListener("DOMContentLoaded", () => {
+	const isLoggedIn = document.body.getAttribute("data-logged-in") === "true";
 // 현재 지갑 잔액 조회
-fetch(`${window.contextPath}/api/wallet?userId=${window.loginUserId}`)
-  .then(res => res.json())
-  .then(data => {
-    totalUsdt = parseFloat(data.usdtBalance);
+// ✅ 버튼 클릭 시에는 로그인 확인 → alert
+if (!isLoggedIn) {
+  buttons.forEach(btn => {
+    btn.disabled = true;
+    btn.addEventListener('click', () => {
+      alert('로그인이 필요합니다.');
+      window.location.href = 'login.jsp';
+    });
   });
+}
 
+// ✅ fetch 전에 조용히 로그인 여부 확인만
+let totalUsdt = 0;
+
+if (isLoggedIn) {
+  fetch(`${window.contextPath}/api/wallet`)
+    .then(res => res.json())
+    .then(data => {
+      totalUsdt = parseFloat(data.usdtBalance);
+    });
+}
+
+    const buySlider = document.getElementById("buy-slider");
+
+    // totalUsdt는 이미 위에서 fetch로 받아옴
+    if (buySlider && window.noUiSlider) {
+      noUiSlider.create(buySlider, {
+        start: 0,
+        range: {
+          min: 0,
+          max: 100
+        },
+        step: 1,
+        tooltips: true,
+        pips: {
+          mode: 'positions',
+          values: [0, 25, 50, 75, 100],
+          density: 4
+        }
+      });
+
+      buySlider.noUiSlider.on('update', function (values, handle) {
+        const percent = parseFloat(values[handle]);
+        const useUsdt = totalUsdt * (percent / 100);
+        const currentPrice = 43180; // TODO: 실시간 가격 연동하면 여기 바꾸기
+        const btc = useUsdt / currentPrice;
+
+        btcDisplay.textContent = btc.toFixed(3);
+        usdtDisplay.textContent = useUsdt.toFixed(2);
+        orderInput.value = btc.toFixed(3);
+      });
+    }
+  });
+  
 percentSelect.addEventListener('change', function () {
   const value = this.value;
   if (value === 'custom') {
