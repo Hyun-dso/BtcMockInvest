@@ -3,40 +3,48 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="kim.donghyun.repository.TradeExecutionRepository">
-    <resultMap id="executionMap" type="kim.donghyun.model.entity.TradeExecution">
-        <id property="id" column="id"/>
-        <result property="buyOrderId" column="buy_order_id"/>
-        <result property="sellOrderId" column="sell_order_id"/>
-        <result property="price" column="price"/>
-        <result property="amount" column="amount"/>
-        <result property="createdAt" column="created_at"/>
-    </resultMap>
+<mapper
+	namespace="kim.donghyun.repository.TradeExecutionRepository">
+	<resultMap id="executionMap"
+		type="kim.donghyun.model.entity.TradeExecution">
+		<id property="id" column="id" />
+		<result property="buyOrderId" column="buy_order_id" />
+		<result property="sellOrderId" column="sell_order_id" />
+		<result property="price" column="price" />
+		<result property="amount" column="amount" />
+		<result property="createdAt" column="created_at" />
+	</resultMap>
 
-    <!-- 체결 기록 저장 -->
-    <insert id="insert" parameterType="kim.donghyun.model.entity.TradeExecution" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO order_trade (buy_order_id, sell_order_id, price, amount, created_at)
-        VALUES (#{buyOrderId}, #{sellOrderId}, #{price}, #{amount}, NOW())
-    </insert>
+	<!-- 체결 기록 저장 -->
+	<insert id="insert"
+		parameterType="kim.donghyun.model.entity.TradeExecution"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO order_trade (buy_order_id, sell_order_id, price, amount,
+		created_at)
+		VALUES (#{buyOrderId}, #{sellOrderId}, #{price}, #{amount}, NOW())
+	</insert>
 
-    <!-- 전체 체결 이력 -->
-    <select id="findAll" resultMap="executionMap">
-        SELECT * FROM order_trade ORDER BY created_at DESC
-    </select>
+	<!-- 전체 체결 이력 -->
+	<select id="findAll" resultMap="executionMap">
+		SELECT * FROM order_trade ORDER BY created_at DESC
+	</select>
 
-    <!-- 특정 유저의 체결 이력 (JOIN 방식) -->
-    <select id="findByUserId" parameterType="long" resultMap="executionMap">
-        SELECT ot.*
-        FROM order_trade ot
-        LEFT JOIN trade_order bo ON ot.buy_order_id = bo.order_id
-        LEFT JOIN trade_order so ON ot.sell_order_id = so.order_id
-        WHERE bo.user_id = #{userId} OR so.user_id = #{userId}
-        ORDER BY ot.created_at DESC
-    </select>
-    
-        <select id="findVolumeSince" parameterType="java.time.LocalDateTime" resultType="java.math.BigDecimal">
-        SELECT COALESCE(SUM(amount),0) FROM order_trade WHERE created_at >= #{since}
-    </select>
-    
+	<!-- 특정 유저의 체결 이력 (JOIN 방식) -->
+	<select id="findByUserId" parameterType="long"
+		resultMap="executionMap">
+		SELECT ot.*
+		FROM order_trade ot
+		LEFT JOIN trade_order bo ON ot.buy_order_id = bo.order_id
+		LEFT JOIN trade_order so ON ot.sell_order_id = so.order_id
+		WHERE bo.user_id = #{userId} OR so.user_id = #{userId}
+		ORDER BY ot.created_at DESC
+	</select>
+
+	<select id="findVolumeSince"
+		parameterType="java.time.LocalDateTime"
+		resultType="java.math.BigDecimal">
+		SELECT COALESCE(SUM(amount),0) FROM order_trade WHERE created_at >= #{since}
+	</select>
+
 
 </mapper>
