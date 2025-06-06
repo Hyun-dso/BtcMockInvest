@@ -32,8 +32,9 @@
 	defer></script>
 <!-- <script src="${pageContext.request.contextPath}/resources/js/btc.js"
 	defer></script> -->
-	<script src="${pageContext.request.contextPath}/resources/js/volume.js"
+        <script src="${pageContext.request.contextPath}/resources/js/volume.js"
         defer></script>
+        <script src="${pageContext.request.contextPath}/resources/js/trade-history.js" defer></script>
 
 
 <!-- ✅ CSS -->
@@ -198,7 +199,11 @@
 						style="color: blue; list-style: none; padding: 0; margin: 0;"></ul>
 				</div>
 
-		<div id="trade-volume" style="margin-top:10px; font-weight:bold;">거래량: -</div>
+		            <div id="trade-volume" style="margin-top:10px; font-weight:bold;">거래량: -</div>
+
+                <div id="trade-history">
+                    <ul id="history-list"></ul>
+                </div>
 
 
 			</div>
