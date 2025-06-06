@@ -32,6 +32,11 @@ public class MarketOrderProcessor implements OrderExecutionStrategy {
     public TradeOrder execute(Long userId, OrderType type, BigDecimal amount, BigDecimal price) {
         BigDecimal execPrice = BigDecimal.valueOf(priceCache.getLatestPrice());
 
+        
+        if (price != null && price.compareTo(execPrice) != 0) {
+            throw new IllegalArgumentException("시장가 주문은 현재 가격으로만 체결됩니다.");
+        }
+        
         if (type == OrderType.BUY) {
             execPrice = orderBookService.getPendingAsks(1)
                                        .keySet()

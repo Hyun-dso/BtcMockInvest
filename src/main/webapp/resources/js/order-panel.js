@@ -48,6 +48,39 @@ document.addEventListener('DOMContentLoaded', () => {
   const buyBtn = document.getElementById('buy-submit');
   const sellBtn = document.getElementById('sell-submit');
 
+  function setupCalc(priceId, amountId, totalId) {
+      const priceEl = document.getElementById(priceId);
+      const amountEl = document.getElementById(amountId);
+      const totalEl = document.getElementById(totalId);
+      if (!priceEl || !amountEl || !totalEl) return;
+
+      function fromAmount() {
+        const p = parseFloat(priceEl.value);
+        const a = parseFloat(amountEl.value);
+        if (!isNaN(p) && !isNaN(a)) {
+          totalEl.value = (p * a).toFixed(2);
+        }
+      }
+
+      function fromTotal() {
+        const p = parseFloat(priceEl.value);
+        const t = parseFloat(totalEl.value);
+        if (!isNaN(p) && !isNaN(t) && p !== 0) {
+          amountEl.value = (t / p).toFixed(5);
+        }
+      }
+
+      amountEl.addEventListener('input', fromAmount);
+      totalEl.addEventListener('input', fromTotal);
+      priceEl.addEventListener('input', () => {
+        fromAmount();
+        fromTotal();
+      });
+    }
+
+    setupCalc('buy-price', 'buy-amount', 'buy-total');
+    setupCalc('sell-price', 'sell-amount', 'sell-total');
+  
   if (buyBtn)
     buyBtn.addEventListener('click', () => sendOrder('BUY', 'buy-price', 'buy-amount'));
   if (sellBtn)

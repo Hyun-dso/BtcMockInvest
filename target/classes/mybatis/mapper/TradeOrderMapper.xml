@@ -94,14 +94,21 @@
 		AND price = #{price}
 	</select>
 
-	<select id="findPendingAskQuantityAtPrice"
-		resultType="java.math.BigDecimal">
-		SELECT COALESCE(SUM(amount), 0)
-		FROM trade_order
-		WHERE order_mode = 'LIMIT'
-		AND status = 'PENDING'
-		AND type = 'SELL'
-		AND price = #{price}
-	</select>
+	        <select id="findPendingAskQuantityAtPrice"
+                resultType="java.math.BigDecimal">
+                SELECT COALESCE(SUM(amount), 0)
+                FROM trade_order
+                WHERE order_mode = 'LIMIT'
+                AND status = 'PENDING'
+                AND type = 'SELL'
+                AND price = #{price}
+        </select>
+
+        <select id="findPendingOrdersByPrice" resultMap="orderMap">
+                SELECT * FROM trade_order
+                WHERE order_mode = 'LIMIT'
+                AND status = 'PENDING'
+                AND price = #{price}
+        </select>
 
 </mapper>

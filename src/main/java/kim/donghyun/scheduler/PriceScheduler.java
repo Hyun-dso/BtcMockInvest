@@ -11,6 +11,7 @@ import kim.donghyun.util.PriceCache;
 import kim.donghyun.util.PriceFetcher;
 import kim.donghyun.websocket.PriceWebSocketSender;
 import lombok.RequiredArgsConstructor;
+import kim.donghyun.service.LimitOrderMatcher;
 
 @Component
 @RequiredArgsConstructor
@@ -21,6 +22,7 @@ public class PriceScheduler {
     private final BtcPriceService btcPriceService;
     private final PriceWebSocketSender priceWebSocketSender;
     private final PriceCache priceCache;
+    private final LimitOrderMatcher limitOrderMatcher;
 
     private static final Logger log = LoggerFactory.getLogger(PriceScheduler.class);
 
@@ -35,6 +37,8 @@ public class PriceScheduler {
             double cachedPrice = priceCache.getLatestPrice(); // ✅ 반드시 캐시된 값 사용
             priceWebSocketSender.broadcast(cachedPrice);
 
+            limitOrderMatcher.match();
+            
         } catch (Exception e) {
             log.error("가격 수집 및 브로드캐스트 중 오류 발생", e);
         }

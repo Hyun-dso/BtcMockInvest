@@ -24,17 +24,20 @@
 	defer></script>
 <!-- <script src="${pageContext.request.contextPath}/resources/js/order.js"
 	defer></script> -->
-	<script src="${pageContext.request.contextPath}/resources/js/order-panel.js"
-        defer></script>
+<script
+	src="${pageContext.request.contextPath}/resources/js/order-panel.js"
+	defer></script>
 <script type="module"
 	src="${pageContext.request.contextPath}/resources/js/price.js" defer></script>
 <script src="${pageContext.request.contextPath}/resources/js/tvchart.js"
 	defer></script>
 <!-- <script src="${pageContext.request.contextPath}/resources/js/btc.js"
 	defer></script> -->
-        <script src="${pageContext.request.contextPath}/resources/js/volume.js"
-        defer></script>
-        <script src="${pageContext.request.contextPath}/resources/js/trade-history.js" defer></script>
+<script src="${pageContext.request.contextPath}/resources/js/volume.js"
+	defer></script>
+<script
+	src="${pageContext.request.contextPath}/resources/js/trade-history.js"
+	defer></script>
 
 
 <!-- ✅ CSS -->
@@ -149,15 +152,15 @@
 				<div class="order-box buy">
 					<h4>매수 (Buy)</h4>
 					<label>가격 (USDT)</label> <input type="number" id="buy-price"
-						step="0.01" placeholder="USDT">
-						<label>슬라이더로 수량 선택</label>
-						<div id="buy-slider" style="margin-top: 10px;"></div>
+						step="0.01" placeholder="USDT"> <label>슬라이더로 수량 선택</label>
+					<div id="buy-slider" style="margin-top: 10px;"></div>
 					<div class="slider-marks">
 						<span>0%</span> <span>25%</span> <span>50%</span> <span>75%</span>
 						<span>100%</span>
 					</div>
 					<label>수량 (BTC)</label> <input type="number" id="buy-amount"
-						step="0.0001" placeholder="BTC">
+						step="0.0001" placeholder="BTC"> <label>총액 (USDT)</label>
+					<input type="number" id="buy-total" step="0.01" placeholder="USDT">
 
 					<button id="buy-submit">매수 주문 (Buy)</button>
 				</div>
@@ -169,7 +172,8 @@
 					<input type="range" id="sell-slider" min="0" max="100" value="0"
 						step="1"> <small id="sell-percent-label">0%</small> <label>수량
 						(BTC)</label> <input type="number" id="sell-amount" step="0.0001"
-						placeholder="BTC">
+						placeholder="BTC"> <label>총액 (USDT)</label> <input
+						type="number" id="sell-total" step="0.01" placeholder="USDT">
 
 					<button id="sell-submit">매도 주문 (Sell)</button>
 				</div>
@@ -199,11 +203,12 @@
 						style="color: blue; list-style: none; padding: 0; margin: 0;"></ul>
 				</div>
 
-		            <div id="trade-volume" style="margin-top:10px; font-weight:bold;">거래량: -</div>
+				<div id="trade-volume" style="margin-top: 10px; font-weight: bold;">거래내역:
+					-</div>
 
-                <div id="trade-history">
-                    <ul id="history-list"></ul>
-                </div>
+				<div id="trade-history">
+					<ul id="history-list"></ul>
+				</div>
 
 
 			</div>
