@@ -22,14 +22,18 @@
 <script
 	src="${pageContext.request.contextPath}/resources/js/websocket.js"
 	defer></script>
-<script src="${pageContext.request.contextPath}/resources/js/order.js"
-	defer></script>
+<!-- <script src="${pageContext.request.contextPath}/resources/js/order.js"
+	defer></script> -->
+	<script src="${pageContext.request.contextPath}/resources/js/order-panel.js"
+        defer></script>
 <script type="module"
 	src="${pageContext.request.contextPath}/resources/js/price.js" defer></script>
 <script src="${pageContext.request.contextPath}/resources/js/tvchart.js"
 	defer></script>
-<script src="${pageContext.request.contextPath}/resources/js/btc.js"
-	defer></script>
+<!-- <script src="${pageContext.request.contextPath}/resources/js/btc.js"
+	defer></script> -->
+	<script src="${pageContext.request.contextPath}/resources/js/volume.js"
+        defer></script>
 
 
 <!-- ✅ CSS -->
@@ -194,54 +198,9 @@
 						style="color: blue; list-style: none; padding: 0; margin: 0;"></ul>
 				</div>
 
-				<!-- 매수/매도 버튼 -->
-				<div class="action-buttons"
-					style="display: flex; gap: 10px; margin: 10px 0;">
-					<input type="number" id="orderAmount" placeholder="수량 (BTC)"
-						step="0.0001" />
-					<button class="BuyBtn" id="buyBtn"
-						style="color: white; background-color: rgba(255, 0, 0, 0.8); border: 2px solid transparent;">매수</button>
-					<button class="sellBtn" id="sellBtn"
-						style="color: white; background-color: rgba(0, 123, 255, 0.9); border: 2px solid transparent;">매도</button>
-				</div>
+		<div id="trade-volume" style="margin-top:10px; font-weight:bold;">거래량: -</div>
 
-				<!-- 주문 옵션 -->
-				<div class="order-options"
-					style="margin-bottom: 10px; display: flex; flex-direction: column; gap: 5px;">
-					<select id="orderMode">
-						<option value="MARKET">Market</option>
-						<option value="LIMIT">Limit</option>
-					</select> <input type="number" id="orderPrice" placeholder="가격 (USDT)"
-						step="0.01" style="display: none;" />
-				</div>
 
-				<!-- 수량 선택 -->
-				<div class="amount-selector" style="margin-bottom: 10px;">
-					<label>수량 (사용자 선택):</label> <select id="percentSelect">
-						<option value="25">25%</option>
-						<option value="50">50%</option>
-						<option value="75">75%</option>
-						<option value="100">100%</option>
-						<option value="custom">direct input</option>
-					</select> <input type="number" id="customInput" placeholder="ex: 0.05 BTC"
-						style="width: 100%; margin-top: 5px; display: none;" step="0.01" />
-				</div>
-
-				<!-- BTC/USDT 계산 -->
-				<div class="price-display" style="margin-bottom: 10px;">
-					<p>
-						BTC: <span id="btcAmount">0.000</span>
-					</p>
-					<p>
-						USDT: <span id="usdtAmount">0.00</span>
-					</p>
-				</div>
-
-				<!-- 처리 버튼 -->
-				<div class="final-buttons" style="display: flex; gap: 10px;">
-					<button class="btn" id="resetBtn">Reset</button>
-					<button class="btn" id="tradeBtn">Trade</button>
-				</div>
 			</div>
 		</div>
 	</div>

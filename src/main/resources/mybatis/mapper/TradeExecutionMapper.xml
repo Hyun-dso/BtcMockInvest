@@ -33,5 +33,10 @@
         WHERE bo.user_id = #{userId} OR so.user_id = #{userId}
         ORDER BY ot.created_at DESC
     </select>
+    
+        <select id="findVolumeSince" parameterType="java.time.LocalDateTime" resultType="java.math.BigDecimal">
+        SELECT COALESCE(SUM(amount),0) FROM order_trade WHERE created_at >= #{since}
+    </select>
+    
 
 </mapper>
