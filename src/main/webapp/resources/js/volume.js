@@ -6,7 +6,7 @@ window.websocket.connect(client => {
       const volume = parseFloat(data.volume || 0);
       const el = document.getElementById('trade-volume');
       if (el) {
-        el.textContent = `거래량: ${volume.toFixed(4)} BTC`;
+		el.textContent = `거래내역: ${volume.toFixed(4)} BTC`;
       }
     } catch (e) {
       console.error('volume parse error', e);

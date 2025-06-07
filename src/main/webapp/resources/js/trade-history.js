@@ -1,3 +1,28 @@
+function loadRecentTrades() {
+  const ctx = window.contextPath || '';
+  fetch(ctx + '/api/trade/recent')
+    .then(res => res.json())
+    .then(list => {
+      list.slice().reverse().forEach(item => {
+        const price = parseFloat(item.price).toFixed(2);
+        const amount = parseFloat(item.amount).toFixed(5);
+        const type = item.type;
+        let timeStr = item.createdAt;
+        if (typeof timeStr === 'string') {
+          if (timeStr.includes('T')) {
+            timeStr = timeStr.split('T')[1];
+          } else if (timeStr.includes(' ')) {
+            timeStr = timeStr.split(' ')[1];
+          }
+          timeStr = timeStr.slice(0, 8);
+        }
+        addHistoryRow(price, amount, timeStr, type);
+      });
+    })
+    .catch(e => console.error('load recent trades error', e));
+}
+
+
 window.websocket.connect(client => {
   client.subscribe('/topic/trade', message => {
     try {
@@ -24,6 +49,8 @@ window.websocket.connect(client => {
     }
   });
 });
+
+loadRecentTrades();
 
 function addHistoryRow(price, amount, time, type) {
   const ul = document.getElementById('history-list');

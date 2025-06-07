@@ -7,6 +7,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import kim.donghyun.model.entity.TradeOrder;
+import kim.donghyun.util.TradeHistoryCache;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 public class TradePushService {
 
     private final SimpMessagingTemplate messagingTemplate;
+    private final TradeHistoryCache tradeHistoryCache;
 
     public void broadcastTrade(TradeOrder order) {
         Map<String, Object> message = new HashMap<>();
@@ -24,5 +26,6 @@ public class TradePushService {
         message.put("createdAt", order.getCreatedAt());
 
         messagingTemplate.convertAndSend("/topic/trade", message);
+        tradeHistoryCache.addTrade(message);
     }
 }
