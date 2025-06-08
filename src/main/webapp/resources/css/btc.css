@@ -183,7 +183,7 @@ input[type="range"] {
   position: relative;
 }
 
-* ✅ 눈금 표시용 배경 선 추가 */
+/* ✅ 눈금 표시용 배경 선 추가 */
 input[type="range"]::before {
   content: "";
   position: absolute;
