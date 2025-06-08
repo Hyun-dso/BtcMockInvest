@@ -31,8 +31,8 @@
 	src="${pageContext.request.contextPath}/resources/js/price.js" defer></script>
 <script src="${pageContext.request.contextPath}/resources/js/tvchart.js"
 	defer></script>
-<!-- <script src="${pageContext.request.contextPath}/resources/js/btc.js"
-	defer></script> -->
+<script src="${pageContext.request.contextPath}/resources/js/btc.js"
+	defer></script>
 <script src="${pageContext.request.contextPath}/resources/js/volume.js"
 	defer></script>
 <script
