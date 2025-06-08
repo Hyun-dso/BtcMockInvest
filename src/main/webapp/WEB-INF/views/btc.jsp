@@ -122,12 +122,28 @@
 								</p>
 							</div>
 						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+						                               </div>
+                        </div>
+                </div>
+                <div id="mini-wallet" class="mini-wallet">
+                        <div class="tabs">
+                                <button data-tab="balance" class="active">지갑</button>
+                                <button data-tab="history">거래내역</button>
+                        </div>
+                        <div class="tab-content">
+                                <div class="balance active">
+                                        <p>USDT: <span id="mini-usdt">0</span></p>
+                                        <p>BTC: <span id="mini-btc">0</span></p>
+                                        <p>수익률: <span id="mini-profit">0%</span></p>
+                                </div>
+                                <div class="history">
+                                        <ul id="mini-history"></ul>
+                                </div>
+                        </div>
+                </div>
+        </div>
 
-		<!-- 가운데 차트 영역 -->
+                <!-- 가운데 차트 영역 -->
 		<div class="chart-area">
 			<input type="checkbox" id="toggle-ma">📉 MA선 표시
 			<div id="tv-chart" style="width: 100%; height: 400px;"></div>
