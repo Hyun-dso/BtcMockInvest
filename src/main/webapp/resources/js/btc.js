@@ -1,13 +1,3 @@
-// 커뮤니티 패널
-const communityBtn = document.getElementById("communityChatToggle");
-const communityPanel = document.getElementById("communityChatPanel");
-let isCommunityOpen = false;
-communityBtn.addEventListener("click", () => {
-  isCommunityOpen = !isCommunityOpen;
-  communityPanel.style.transform = isCommunityOpen ? "translateX(0)" : "translateX(-100%)";
-  communityBtn.textContent = isCommunityOpen ? "커뮤니티 닫기" : "커뮤니티 열기";
-});
-
 // 댓글 토글
 document.querySelectorAll('.toggle-comments').forEach(toggle => {
   toggle.addEventListener('click', () => {

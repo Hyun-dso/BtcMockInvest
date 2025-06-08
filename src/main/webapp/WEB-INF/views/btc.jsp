@@ -66,14 +66,10 @@
 	<div class="main-container">
 		<!-- 왼쪽: 커뮤니티 채팅 영역 -->
 		<div class="chat-area">
-			<div style="position: relative; width: 100%; height: 100%;">
-				<button id="communityChatToggle"
-					style="position: absolute; left: 10px; top: 10px; z-index: 10;">커뮤니티
-					열기</button>
-				<div id="communityChatPanel"
-					style="position: absolute; left: 0; top: 50px; width: 100%; height: calc(100% - 50px); background: #fff; border: 1px solid #ccc; box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); transform: translateX(-100%); transition: transform 0.3s ease; overflow-y: auto; padding: 15px;">
-					<h3>커뮤니티채팅</h3>
-
+                        <div style="position: relative; width: 100%; height: 100%;">
+                                <div id="communityChatPanel"
+                                        style="position: absolute; left: 0; top: 50px; width: 100%; height: calc(100% - 50px); background: #fff; border: 1px solid #ccc; box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); transform: translateX(0); overflow-y: auto; padding: 15px;">
+                                        <h3>커뮤니티채팅</h3>
 					<div class="post"
 						style="border: 1px solid #ddd; margin-bottom: 15px; padding: 10px;">
 						<p>
