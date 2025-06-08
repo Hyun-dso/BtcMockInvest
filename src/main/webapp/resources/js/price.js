@@ -49,7 +49,7 @@ window.websocket.connect((client) => {
         style: "currency",
         currency: "USD"
       });
-      document.getElementById("btc-price").title = `실시간 가격: $${price.toFixed(2)}`;
+       // 타이틀은 기준가와 등락률 정보만 표시하도록 실시간 가격 툴팁 제거
 	  const bp = document.getElementById('buy-price');
 	  const sp = document.getElementById('sell-price');
 	  if (bp) bp.value = price.toFixed(2);
