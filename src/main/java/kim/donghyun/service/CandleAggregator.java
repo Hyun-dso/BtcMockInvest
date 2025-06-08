@@ -1,8 +1,8 @@
 package kim.donghyun.service;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -45,8 +45,10 @@ public class CandleAggregator {
         // 현재 시간에서 가장 가까운 지난 분 단위로 기준 시간 생성
         ZonedDateTime nowUtc = ZonedDateTime.now(ZoneOffset.UTC).withSecond(0).withNano(0);
         ZonedDateTime oneMinuteAgoUtc = nowUtc.minusMinutes(1);
-        LocalDateTime oneMinuteAgo = oneMinuteAgoUtc.toLocalDateTime(); // ✅ UTC 기준 LocalDateTime
-        LocalDateTime now = nowUtc.toLocalDateTime(); // 현재 시각도 UTC 기준으로 조회
+//        LocalDateTime oneMinuteAgo = oneMinuteAgoUtc.toLocalDateTime(); // ✅ UTC 기준 LocalDateTime
+//        LocalDateTime now = nowUtc.toLocalDateTime(); // 현재 시각도 UTC 기준으로 조회
+        LocalDateTime oneMinuteAgo = oneMinuteAgoUtc.withZoneSameInstant(ZoneId.of("Asia/Seoul")).toLocalDateTime();
+        LocalDateTime now = nowUtc.withZoneSameInstant(ZoneId.of("Asia/Seoul")).toLocalDateTime();
 
         // ✅ 디버깅: ZonedDateTime 값과 Epoch 확인
         System.out.println("✅ [DEBUG] 정식봉 기준 시간 (ZonedDateTime): " + oneMinuteAgoUtc);
@@ -91,9 +93,13 @@ public class CandleAggregator {
         ZonedDateTime end = start.plusMinutes(15);
 
         // 🔍 15분 구간의 1분봉 조회
+        LocalDateTime startKst = start.withZoneSameInstant(ZoneId.of("Asia/Seoul")).toLocalDateTime();
+        LocalDateTime endKst = end.withZoneSameInstant(ZoneId.of("Asia/Seoul")).toLocalDateTime();
         List<BtcCandle1Min> candles = btcCandle1MinRepository.findByTimeRange(
-            start.toLocalDateTime(),
-            end.toLocalDateTime()
+//            start.toLocalDateTime(),
+//            end.toLocalDateTime()
+                startKst,
+                endKst
         );
 
         if (candles == null || candles.isEmpty()) return;
@@ -112,7 +118,8 @@ public class CandleAggregator {
         candle.setLow(low);
         candle.setClose(close);
         candle.setVolume(volume);
-        candle.setCandleTime(start.toLocalDateTime());
+//        candle.setCandleTime(start.toLocalDateTime());
+        candle.setCandleTime(startKst);
 
         btcCandle15MinRepository.insertCandle(candle);
 
@@ -127,9 +134,13 @@ public class CandleAggregator {
         ZonedDateTime start = end.minusHours(1);
 
         // 🔍 1시간 구간의 1분봉 조회
+        LocalDateTime startKst = start.withZoneSameInstant(ZoneId.of("Asia/Seoul")).toLocalDateTime();
+        LocalDateTime endKst = end.withZoneSameInstant(ZoneId.of("Asia/Seoul")).toLocalDateTime();
         List<BtcCandle1Min> candles = btcCandle1MinRepository.findByTimeRange(
-            start.toLocalDateTime(),
-            end.toLocalDateTime()
+//            start.toLocalDateTime(),
+//            end.toLocalDateTime()
+                startKst,
+                endKst
         );
 
         if (candles == null || candles.isEmpty()) return;
@@ -148,7 +159,8 @@ public class CandleAggregator {
         candle.setLow(low);
         candle.setClose(close);
         candle.setVolume(volume);
-        candle.setCandleTime(start.toLocalDateTime());
+//        candle.setCandleTime(start.toLocalDateTime());
+        candle.setCandleTime(startKst);
 
         btcCandle1HRepository.insertCandle(candle);
 
@@ -181,7 +193,9 @@ public class CandleAggregator {
         candle.setLow(low);
         candle.setClose(close);
         candle.setVolume(volume);
-        candle.setCandleTime(yesterday.toLocalDateTime());
+//        candle.setCandleTime(yesterday.toLocalDateTime());
+        LocalDateTime yesterdayKst = yesterday.withZoneSameInstant(ZoneId.of("Asia/Seoul")).toLocalDateTime();
+        candle.setCandleTime(yesterdayKst);
 
         btcCandle1DRepository.insertCandle(candle);
 
@@ -216,7 +230,9 @@ public class CandleAggregator {
         candle.setLow(low);
         candle.setClose(close);
         candle.setVolume(volume);
-        candle.setCandleTime(lastWeek.toLocalDateTime());
+//        candle.setCandleTime(lastWeek.toLocalDateTime());
+        LocalDateTime lastWeekKst = lastWeek.withZoneSameInstant(ZoneId.of("Asia/Seoul")).toLocalDateTime();
+        candle.setCandleTime(lastWeekKst);
 
         btcCandle1WRepository.insertCandle(candle);
 
@@ -236,9 +252,13 @@ public class CandleAggregator {
         ZonedDateTime lastMonthEnd = thisMonthStart;
 
         // 🔍 지난달 1일부터 이번달 1일 전까지 일봉 조회
+        LocalDateTime lastMonthStartKst = lastMonthStart.withZoneSameInstant(ZoneId.of("Asia/Seoul")).toLocalDateTime();
+        LocalDateTime lastMonthEndKst = lastMonthEnd.withZoneSameInstant(ZoneId.of("Asia/Seoul")).toLocalDateTime();
         List<BtcCandle1D> candles = btcCandle1DRepository.findCandlesBetween(
-            lastMonthStart.toLocalDateTime(),
-            lastMonthEnd.toLocalDateTime()
+//            lastMonthStart.toLocalDateTime(),
+//            lastMonthEnd.toLocalDateTime()
+            lastMonthStartKst,
+            lastMonthEndKst
         );
 
         if (candles == null || candles.isEmpty()) return;
@@ -259,9 +279,11 @@ public class CandleAggregator {
         candle.setLow(low);
         candle.setClose(close);
         candle.setVolume(volume);
-        candle.setCandleTime(lastMonthStart.toLocalDateTime());
+//        candle.setCandleTime(lastMonthStart.toLocalDateTime());
+        candle.setCandleTime(lastMonthStartKst);
 
         btcCandle1MRepository.insertCandle(candle);
+        
 
         // 📤 WebSocket 전송 (선택 사항)
          CandleDTO dto = CandleDTO.fromZonedUTC(lastMonthStart, open, high, low, close);

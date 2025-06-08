@@ -2,7 +2,9 @@ package kim.donghyun.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -28,259 +30,280 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CandleService {
 
-    private final BtcCandle1MinRepository btcCandle1MinRepository;
-    private final BtcCandle15MinRepository btcCandle15MinRepository;
-    private final BtcCandle1HRepository btcCandle1HRepository;
-    private final BtcCandle1DRepository btcCandle1DRepository;
-    private final BtcCandle1WRepository btcCandle1WRepository;
-    private final BtcCandle1MRepository btcCandle1MRepository;
+	private final BtcCandle1MinRepository btcCandle1MinRepository;
+	private final BtcCandle15MinRepository btcCandle15MinRepository;
+	private final BtcCandle1HRepository btcCandle1HRepository;
+	private final BtcCandle1DRepository btcCandle1DRepository;
+	private final BtcCandle1WRepository btcCandle1WRepository;
+	private final BtcCandle1MRepository btcCandle1MRepository;
 
-    // 🔽 이게 바로 내부에서 쓰이는 private 변환 메서드!
-    private CandleDTO mapToDTO(Object candle) {
-        LocalDateTime time;
-        BigDecimal open, high, low, close;
+	// 🔽 이게 바로 내부에서 쓰이는 private 변환 메서드!
+	private CandleDTO mapToDTO(Object candle) {
+		LocalDateTime time;
+		BigDecimal open, high, low, close;
 
-        if (candle instanceof BtcCandle1Min c) {
-            time = c.getCandleTime(); open = c.getOpen(); high = c.getHigh(); low = c.getLow(); close = c.getClose();
-        } else if (candle instanceof BtcCandle15Min c) {
-            time = c.getCandleTime(); open = c.getOpen(); high = c.getHigh(); low = c.getLow(); close = c.getClose();
-        } else if (candle instanceof BtcCandle1H c) {
-            time = c.getCandleTime(); open = c.getOpen(); high = c.getHigh(); low = c.getLow(); close = c.getClose();
-        } else if (candle instanceof BtcCandle1D c) {
-            time = c.getCandleTime(); open = c.getOpen(); high = c.getHigh(); low = c.getLow(); close = c.getClose();
-        } else if (candle instanceof BtcCandle1W c) {
-            time = c.getCandleTime(); open = c.getOpen(); high = c.getHigh(); low = c.getLow(); close = c.getClose();
-        } else if (candle instanceof BtcCandle1M c) {
-            time = c.getCandleTime(); open = c.getOpen(); high = c.getHigh(); low = c.getLow(); close = c.getClose();
-        } else {
-            throw new IllegalArgumentException("❌ Unknown candle type: " + candle.getClass());
-        }
-        
-        // ✅ null 방어 필수!
-        if (time == null || open == null || high == null || low == null || close == null) {
-            System.out.println("❌ CandleDTO 변환 중 null 필드 존재. 변환 제외됨.");
-            return null;
-        }
+		if (candle instanceof BtcCandle1Min c) {
+			time = c.getCandleTime();
+			open = c.getOpen();
+			high = c.getHigh();
+			low = c.getLow();
+			close = c.getClose();
+		} else if (candle instanceof BtcCandle15Min c) {
+			time = c.getCandleTime();
+			open = c.getOpen();
+			high = c.getHigh();
+			low = c.getLow();
+			close = c.getClose();
+		} else if (candle instanceof BtcCandle1H c) {
+			time = c.getCandleTime();
+			open = c.getOpen();
+			high = c.getHigh();
+			low = c.getLow();
+			close = c.getClose();
+		} else if (candle instanceof BtcCandle1D c) {
+			time = c.getCandleTime();
+			open = c.getOpen();
+			high = c.getHigh();
+			low = c.getLow();
+			close = c.getClose();
+		} else if (candle instanceof BtcCandle1W c) {
+			time = c.getCandleTime();
+			open = c.getOpen();
+			high = c.getHigh();
+			low = c.getLow();
+			close = c.getClose();
+		} else if (candle instanceof BtcCandle1M c) {
+			time = c.getCandleTime();
+			open = c.getOpen();
+			high = c.getHigh();
+			low = c.getLow();
+			close = c.getClose();
+		} else {
+			throw new IllegalArgumentException("❌ Unknown candle type: " + candle.getClass());
+		}
 
+		// ✅ null 방어 필수!
+		if (time == null || open == null || high == null || low == null || close == null) {
+			System.out.println("❌ CandleDTO 변환 중 null 필드 존재. 변환 제외됨.");
+			return null;
+		}
 
-        return CandleDTO.fromUTC(time, open, high, low, close);
-    }
-    
-    public List<BtcCandle1Min> get1MinCandles(int limit) {
-        return btcCandle1MinRepository.findRecentCandles(limit);
-    }
+		return CandleDTO.fromUTC(time, open, high, low, close);
+	}
 
-    public List<BtcCandle15Min> get15MinCandles(int limit) {
-        return btcCandle15MinRepository.findRecentCandles(limit);
-    }
+	public List<BtcCandle1Min> get1MinCandles(int limit) {
+		return btcCandle1MinRepository.findRecentCandles(limit);
+	}
 
-    public List<BtcCandle1H> get1HourCandles(int limit) {
-        return btcCandle1HRepository.findRecentCandles(limit);
-    }
+	public List<BtcCandle15Min> get15MinCandles(int limit) {
+		return btcCandle15MinRepository.findRecentCandles(limit);
+	}
 
-    public List<BtcCandle1D> get1DayCandles(int limit) {
-        return btcCandle1DRepository.findRecentCandles(limit);
-    }
+	public List<BtcCandle1H> get1HourCandles(int limit) {
+		return btcCandle1HRepository.findRecentCandles(limit);
+	}
 
-    public List<BtcCandle1W> get1WeekCandles(int limit) {
-        return btcCandle1WRepository.findRecentCandles(limit);
-    }
+	public List<BtcCandle1D> get1DayCandles(int limit) {
+		return btcCandle1DRepository.findRecentCandles(limit);
+	}
 
-    public List<BtcCandle1M> get1MonthCandles(int limit) {
-        return btcCandle1MRepository.findRecentCandles(limit);
-    }
-    
-    public List<CandleDTO> get1MinCandleDTO(int limit) {
-        return btcCandle1MinRepository.findRecentCandles(limit)
-                .stream()
-                .map(this::mapToDTO)
-                .filter(Objects::nonNull) // ✅ null 제거
-                .collect(Collectors.toList());
-    }
-    
-    public List<CandleDTO> get15MinCandleDTO(int limit) {
-        return btcCandle15MinRepository.findRecentCandles(limit)
-                .stream()
-                .map(this::mapToDTO)
-                .filter(Objects::nonNull) // ✅ null 제거
-                .collect(Collectors.toList());
-    }
-    
-    public List<CandleDTO> get1HCandleDTO(int limit) {
-        return btcCandle1HRepository.findRecentCandles(limit)
-                .stream()
-                .map(this::mapToDTO)
-                .filter(Objects::nonNull) // ✅ null 제거
-                .collect(Collectors.toList());
-    }
-    
-    public List<CandleDTO> get1DCandleDTO(int limit) {
-        List<CandleDTO> raw = btcCandle1DRepository.findRecentCandles(limit)
-            .stream()
-            .map(this::mapToDTO)
-            .filter(Objects::nonNull) // ✅ null 제거
-            .sorted(java.util.Comparator.comparingLong(CandleDTO::getTime)) // 시간 오름차순 정렬
-            .collect(Collectors.toList());
+	public List<BtcCandle1W> get1WeekCandles(int limit) {
+		return btcCandle1WRepository.findRecentCandles(limit);
+	}
 
-        return fillMissingCandles(raw, 86400); // 1일
-    }
-    
-    public List<CandleDTO> get1WCandleDTO(int limit) {
-        List<CandleDTO> raw = btcCandle1WRepository.findRecentCandles(limit)
-            .stream()
-            .map(this::mapToDTO)
-            .filter(Objects::nonNull) // ✅ null 제거
-            .sorted(java.util.Comparator.comparingLong(CandleDTO::getTime)) // 시간 오름차순 정렬
-            .collect(Collectors.toList());
+	public List<BtcCandle1M> get1MonthCandles(int limit) {
+		return btcCandle1MRepository.findRecentCandles(limit);
+	}
 
-        return fillMissingCandles(raw, 604800); // 7일
-    }
-    
-    
-    
-    public List<CandleDTO> get1MCandleDTO(int limit) {
-        List<CandleDTO> raw = btcCandle1MRepository.findRecentCandles(limit)
-            .stream()
-            .map(this::mapToDTO)
-            .filter(Objects::nonNull) // ✅ null 제거
-            .sorted(java.util.Comparator.comparingLong(CandleDTO::getTime)) // 시간 오름차순 정렬
-            .collect(Collectors.toList());
+	public List<CandleDTO> get1MinCandleDTO(int limit) {
+		return btcCandle1MinRepository.findRecentCandles(limit).stream().map(this::mapToDTO).filter(Objects::nonNull) // ✅
+																														// null
+																														// 제거
+				.collect(Collectors.toList());
+	}
 
-        return fillMissingCandles(raw, 2629743); // 1달
-    }
-    
-    private List<CandleDTO> fillMissingCandles(List<CandleDTO> originalList, long intervalSeconds) {
-        if (originalList == null || originalList.size() < 2) return originalList;
+	public List<CandleDTO> get15MinCandleDTO(int limit) {
+		return btcCandle15MinRepository.findRecentCandles(limit).stream().map(this::mapToDTO).filter(Objects::nonNull) // ✅
+																														// null
+																														// 제거
+				.collect(Collectors.toList());
+	}
 
-        List<CandleDTO> filled = new java.util.ArrayList<>();
-        CandleDTO prev = originalList.get(0);
-        filled.add(prev);
+	public List<CandleDTO> get1HCandleDTO(int limit) {
+		return btcCandle1HRepository.findRecentCandles(limit).stream().map(this::mapToDTO).filter(Objects::nonNull) // ✅
+																													// null
+																													// 제거
+				.collect(Collectors.toList());
+	}
 
-        for (int i = 1; i < originalList.size(); i++) {
-            CandleDTO current = originalList.get(i);
-            long expectedTime = prev.getTime() + intervalSeconds;
+	public List<CandleDTO> get1DCandleDTO(int limit) {
+		List<CandleDTO> raw = btcCandle1DRepository.findRecentCandles(limit).stream().map(this::mapToDTO)
+				.filter(Objects::nonNull) // ✅ null 제거
+				.sorted(java.util.Comparator.comparingLong(CandleDTO::getTime)) // 시간 오름차순 정렬
+				.collect(Collectors.toList());
 
-            // 누락된 구간 보간 처리
-            while (expectedTime < current.getTime()) {
+		return fillMissingCandles(raw, 86400); // 1일
+	}
 
-                if (prev == null || prev.getClose() == null) {
-                    System.out.println("❌ 보간 불가: close 값이 null, 시간: " + (prev != null ? prev.getTime() : "null"));
-                    expectedTime += intervalSeconds;
-                    continue; // skip 보간
-                }
+	public List<CandleDTO> get1WCandleDTO(int limit) {
+		List<CandleDTO> raw = btcCandle1WRepository.findRecentCandles(limit).stream().map(this::mapToDTO)
+				.filter(Objects::nonNull) // ✅ null 제거
+				.sorted(java.util.Comparator.comparingLong(CandleDTO::getTime)) // 시간 오름차순 정렬
+				.collect(Collectors.toList());
 
-                CandleDTO interpolated = CandleDTO.fromUTC(
-                	    LocalDateTime.ofEpochSecond(expectedTime, 0, ZoneOffset.UTC), // ✅ UTC 기준 시간
-                	    prev.getClose(), // open
-                	    prev.getClose(), // high
-                	    prev.getClose(), // low
-                	    prev.getClose()  // close
-                );
+		return fillMissingCandles(raw, 604800); // 7일
+	}
 
-                filled.add(interpolated);
-                expectedTime += intervalSeconds;
-            }
+	public List<CandleDTO> get1MCandleDTO(int limit) {
+		List<CandleDTO> raw = btcCandle1MRepository.findRecentCandles(limit).stream().map(this::mapToDTO)
+				.filter(Objects::nonNull) // ✅ null 제거
+				.sorted(java.util.Comparator.comparingLong(CandleDTO::getTime)) // 시간 오름차순 정렬
+				.collect(Collectors.toList());
 
-            filled.add(current);
-            prev = current;
-        }
+		return fillMissingCandles(raw, 2629743); // 1달
+	}
 
-        return filled;
-    }
+	private List<CandleDTO> fillMissingCandles(List<CandleDTO> originalList, long intervalSeconds) {
+		if (originalList == null || originalList.size() < 2)
+			return originalList;
 
+		List<CandleDTO> filled = new java.util.ArrayList<>();
+		CandleDTO prev = originalList.get(0);
+		filled.add(prev);
 
-    private String formatTimeLabel(long unixTime) {
-        LocalDateTime dateTime = LocalDateTime.ofEpochSecond(unixTime, 0, ZoneOffset.UTC);
-        return dateTime.toString().replace("T", " ").substring(0, 16);
-    }
-    
- // ✅ 실시간 임시 15분 캔들 생성
-    public CandleDTO generateTemp15MinCandle() {
-        LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC).withSecond(0).withNano(0);
-        LocalDateTime start = now.minusMinutes(15);
+		for (int i = 1; i < originalList.size(); i++) {
+			CandleDTO current = originalList.get(i);
+			long expectedTime = prev.getTime() + intervalSeconds;
 
-        System.out.println("🧪 임시 15분봉 생성 시도: " + start + " ~ " + now);
+			// 누락된 구간 보간 처리
+			while (expectedTime < current.getTime()) {
 
-        List<BtcCandle1Min> candles = btcCandle1MinRepository.findByTimeRange(start, now);
-        System.out.println("🧪 포함된 1분봉 개수: " + (candles != null ? candles.size() : "null"));
+				if (prev == null || prev.getClose() == null) {
+					System.out.println("❌ 보간 불가: close 값이 null, 시간: " + (prev != null ? prev.getTime() : "null"));
+					expectedTime += intervalSeconds;
+					continue; // skip 보간
+				}
 
-        if (candles == null || candles.isEmpty()) return null;
+				CandleDTO interpolated = CandleDTO.fromUTC(LocalDateTime.ofEpochSecond(expectedTime, 0, ZoneOffset.UTC), // ✅
+																															// UTC
+																															// 기준
+																															// 시간
+						prev.getClose(), // open
+						prev.getClose(), // high
+						prev.getClose(), // low
+						prev.getClose() // close
+				);
 
-        // ✅ DB에 저장된 가장 최근 15분봉과 시간 차이 확인
-        List<CandleDTO> latest = get15MinCandleDTO(1); // 최근 1개
-        if (!latest.isEmpty()) {
-            long latestDbTime = latest.get(0).getTime(); // 초 단위
-            long tempCandleTime = start.toEpochSecond(ZoneOffset.UTC);
-            long diff = Math.abs(tempCandleTime - latestDbTime);
+				filled.add(interpolated);
+				expectedTime += intervalSeconds;
+			}
 
-            if (diff > 3600) { // 1시간 이상 차이나면 생성하지 않음
-                System.out.println("⚠️ DB 마지막 봉과 시간 차이 너무 큼 (" + diff + "초) → 임시 캔들 생략");
-                return null;
-            }
-        }
+			filled.add(current);
+			prev = current;
+		}
 
-        BigDecimal open = candles.get(0).getOpen();
-        BigDecimal high = candles.stream().map(BtcCandle1Min::getHigh).max(BigDecimal::compareTo).orElse(open);
-        BigDecimal low  = candles.stream().map(BtcCandle1Min::getLow).min(BigDecimal::compareTo).orElse(open);
-        BigDecimal close = candles.get(candles.size() - 1).getClose();
+		return filled;
+	}
 
-        LocalDateTime candleTime = start;
+	private String formatTimeLabel(long unixTime) {
+		LocalDateTime dateTime = LocalDateTime.ofEpochSecond(unixTime, 0, ZoneOffset.UTC);
+		return dateTime.toString().replace("T", " ").substring(0, 16);
+	}
 
-        CandleDTO dto = CandleDTO.fromUTC(
-        	    candleTime,
-        	    open, high, low, close
-        	);
+	// ✅ 실시간 임시 15분 캔들 생성
+	public CandleDTO generateTemp15MinCandle() {
+//        LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC).withSecond(0).withNano(0);
+//        LocalDateTime start = now.minusMinutes(15);
+		ZonedDateTime nowUtc = ZonedDateTime.now(ZoneOffset.UTC).withSecond(0).withNano(0);
+		ZonedDateTime startUtc = nowUtc.minusMinutes(15);
+		LocalDateTime now = nowUtc.withZoneSameInstant(ZoneId.of("Asia/Seoul")).toLocalDateTime();
+		LocalDateTime start = startUtc.withZoneSameInstant(ZoneId.of("Asia/Seoul")).toLocalDateTime();
 
-        System.out.println("✅ 임시 15분봉 생성됨: " + dto);
-        return dto;
-    }
-    
-    public CandleDTO generateTemp1DayCandle() {
-        // 오늘 00:00 (KST 기준)
-        LocalDateTime start = LocalDateTime.now()
-                                           .withHour(0).withMinute(0).withSecond(0).withNano(0);
-        LocalDateTime end = start.plusDays(1); // 내일 00:00
+		System.out.println("🧪 임시 15분봉 생성 시도: " + start + " ~ " + now);
 
-        System.out.println("🧪 [1D] 임시 캔들 생성 시도: " + start + " ~ " + end);
+		List<BtcCandle1Min> candles = btcCandle1MinRepository.findByTimeRange(start, now);
+		System.out.println("🧪 포함된 1분봉 개수: " + (candles != null ? candles.size() : "null"));
 
-        // 이 구간으로 1시간봉 검색
-        List<BtcCandle1H> candles = btcCandle1HRepository.findByTimeRange(start, end);
-        System.out.println("🧪 포함된 1시간봉 개수: " + (candles != null ? candles.size() : "null"));
+		if (candles == null || candles.isEmpty())
+			return null;
 
-        if (candles == null || candles.isEmpty()) {
-            System.out.println("⚠️ 1시간봉 데이터 없음 → 생략");
-            return null;
-        }
+		// ✅ DB에 저장된 가장 최근 15분봉과 시간 차이 확인
+		List<CandleDTO> latest = get15MinCandleDTO(1); // 최근 1개
+		if (!latest.isEmpty()) {
+			long latestDbTime = latest.get(0).getTime(); // 초 단위
+//            long tempCandleTime = start.toEpochSecond(ZoneOffset.UTC);
+			long tempCandleTime = startUtc.toEpochSecond();
+			long diff = Math.abs(tempCandleTime - latestDbTime);
 
-        // 중복 방지 로직 유지
-        List<CandleDTO> latest = get1DCandleDTO(1);
-        long tempCandleTimeUTC = start.toEpochSecond(ZoneOffset.UTC);
-        if (!latest.isEmpty()) {
-            long latestDbTime = latest.get(0).getTime();
-            long diff = Math.abs(tempCandleTimeUTC - latestDbTime);
-            if (diff > 86400 * 2) {
-                System.out.println("⚠️ 정식봉과 시간 차이 큼 (" + diff + "초) → 임시 캔들 생략");
-                return null;
-            }
-        }
+			if (diff > 3600) { // 1시간 이상 차이나면 생성하지 않음
+				System.out.println("⚠️ DB 마지막 봉과 시간 차이 너무 큼 (" + diff + "초) → 임시 캔들 생략");
+				return null;
+			}
+		}
 
-        // OHLC 계산
-        BigDecimal open = candles.get(0).getOpen();
-        BigDecimal close = candles.get(candles.size() - 1).getClose();
-        BigDecimal high = candles.stream().map(BtcCandle1H::getHigh).max(BigDecimal::compareTo).orElse(open);
-        BigDecimal low  = candles.stream().map(BtcCandle1H::getLow).min(BigDecimal::compareTo).orElse(open);
+		BigDecimal open = candles.get(0).getOpen();
+		BigDecimal high = candles.stream().map(BtcCandle1Min::getHigh).max(BigDecimal::compareTo).orElse(open);
+		BigDecimal low = candles.stream().map(BtcCandle1Min::getLow).min(BigDecimal::compareTo).orElse(open);
+		BigDecimal close = candles.get(candles.size() - 1).getClose();
 
-        if (open == null || high == null || low == null || close == null) {
-            System.out.println("❌ OHLC 중 null 존재 → 생략");
-            return null;
-        }
+		LocalDateTime candleTime = start;
 
-        // CandleDTO 생성 (start는 KST, 내부에서 UTC 변환됨)
-        CandleDTO dto = CandleDTO.fromUTC(start, open, high, low, close);
-        System.out.println("✅ [1D] 임시 캔들 생성 완료: " + dto);
-        return dto;
-    }
-    
+		CandleDTO dto = CandleDTO.fromUTC(candleTime, open, high, low, close);
+
+		System.out.println("✅ 임시 15분봉 생성됨: " + dto);
+		return dto;
+	}
+
+	public CandleDTO generateTemp1DayCandle() {
+		// 오늘 00:00 (KST 기준)
+//        LocalDateTime start = LocalDateTime.now()
+//                                           .withHour(0).withMinute(0).withSecond(0).withNano(0);
+//        LocalDateTime end = start.plusDays(1); // 내일 00:00
+		ZonedDateTime todayKst = ZonedDateTime.now(ZoneId.of("Asia/Seoul")).withHour(0).withMinute(0).withSecond(0)
+				.withNano(0);
+		ZonedDateTime tomorrowKst = todayKst.plusDays(1);
+		LocalDateTime start = todayKst.toLocalDateTime();
+		LocalDateTime end = tomorrowKst.toLocalDateTime();
+
+		System.out.println("🧪 [1D] 임시 캔들 생성 시도: " + start + " ~ " + end);
+
+		// 이 구간으로 1시간봉 검색
+		List<BtcCandle1H> candles = btcCandle1HRepository.findByTimeRange(start, end);
+		System.out.println("🧪 포함된 1시간봉 개수: " + (candles != null ? candles.size() : "null"));
+
+		if (candles == null || candles.isEmpty()) {
+			System.out.println("⚠️ 1시간봉 데이터 없음 → 생략");
+			return null;
+		}
+
+		// 중복 방지 로직 유지
+		List<CandleDTO> latest = get1DCandleDTO(1);
+//		long tempCandleTimeUTC = start.toEpochSecond(ZoneOffset.UTC);
+        long tempCandleTimeUTC = todayKst.withZoneSameInstant(ZoneOffset.UTC).toEpochSecond();
+		if (!latest.isEmpty()) {
+			long latestDbTime = latest.get(0).getTime();
+			long diff = Math.abs(tempCandleTimeUTC - latestDbTime);
+			if (diff > 86400 * 2) {
+				System.out.println("⚠️ 정식봉과 시간 차이 큼 (" + diff + "초) → 임시 캔들 생략");
+				return null;
+			}
+		}
+
+		// OHLC 계산
+		BigDecimal open = candles.get(0).getOpen();
+		BigDecimal close = candles.get(candles.size() - 1).getClose();
+		BigDecimal high = candles.stream().map(BtcCandle1H::getHigh).max(BigDecimal::compareTo).orElse(open);
+		BigDecimal low = candles.stream().map(BtcCandle1H::getLow).min(BigDecimal::compareTo).orElse(open);
+
+		if (open == null || high == null || low == null || close == null) {
+			System.out.println("❌ OHLC 중 null 존재 → 생략");
+			return null;
+		}
+
+		// CandleDTO 생성 (start는 KST, 내부에서 UTC 변환됨)
+		CandleDTO dto = CandleDTO.fromUTC(start, open, high, low, close);
+		System.out.println("✅ [1D] 임시 캔들 생성 완료: " + dto);
+		return dto;
+	}
+
 }
-
-
