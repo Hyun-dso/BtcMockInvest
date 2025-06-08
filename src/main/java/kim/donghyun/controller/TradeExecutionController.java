@@ -23,7 +23,8 @@ public class TradeExecutionController {
     private final TradeHistoryCache tradeHistoryCache;
 
     @GetMapping("/history")
-    public ResponseEntity<List<TradeExecution>> getTradeHistory(@RequestParam Long userId) {
+//    public ResponseEntity<List<TradeExecution>> getTradeHistory(@RequestParam Long userId) {
+    public ResponseEntity<List<TradeExecution>> getTradeHistory(@RequestParam("userId") Long userId) {
         List<TradeExecution> history = tradeExecutionRepository.findByUserId(userId);
         return ResponseEntity.ok(history);
     }

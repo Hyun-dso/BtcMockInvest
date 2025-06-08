@@ -22,7 +22,8 @@ public class WalletApiController {
     private final WalletService walletService;
 
     @GetMapping("/api/wallet")
-    public Wallet getWallet(@RequestParam Long userId) {
+//    public Wallet getWallet(@RequestParam Long userId) {
+    public Wallet getWallet(@RequestParam("userId") Long userId) {
         return walletService.getWalletByUserId(userId);
     }
     

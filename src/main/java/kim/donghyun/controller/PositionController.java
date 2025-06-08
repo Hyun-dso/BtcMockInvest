@@ -13,7 +13,8 @@ public class PositionController {
     private PositionService positionService;
 
     @GetMapping("/api/position")
-    public UserPosition getUserPosition(@RequestParam Long userId) {
+//    public UserPosition getUserPosition(@RequestParam Long userId) {
+    public UserPosition getUserPosition(@RequestParam("userId") Long userId) {
         return positionService.getSpotPosition(userId);
     }
 }
