@@ -31,7 +31,7 @@
 				<span class="label">BTC 보유 수량</span> <span class="value">${String.format("%.8f", wallet.btcBalance)} BTC</span>
 			</div>
 			<div class="balance-row">
-				<span class="label">주문 가능 금액</span> <span class="value">${String.format("%.8f", wallet.usdtBalance)}	USDT</span>
+				<span class="label">주문 가능 금액</span> <span class="value">${String.format("%.2f", wallet.usdtBalance)}	USDT</span>
 			</div>
 		</div>
 	</div>

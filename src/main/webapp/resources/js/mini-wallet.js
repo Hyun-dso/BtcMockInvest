@@ -3,17 +3,19 @@ document.addEventListener('DOMContentLoaded', () => {
   const userId = window.loginUserId;
   const usdtEl = document.getElementById('mini-usdt');
   const btcEl = document.getElementById('mini-btc');
+  const totalEl = document.getElementById('mini-total');
   const profitEl = document.getElementById('mini-profit');
   const historyUl = document.getElementById('mini-history');
 
   if (userId) {
     fetch(`${ctx}/api/wallet?userId=${userId}`)
       .then(res => res.json())
-      .then(w => {
-        if (usdtEl) usdtEl.textContent = parseFloat(w.usdtBalance).toFixed(2);
-        if (btcEl) btcEl.textContent = parseFloat(w.btcBalance).toFixed(5);
-        if (profitEl) profitEl.textContent = `${w.profitRateSafe}%`;
-      });
+	  .then(w => {
+	    if (totalEl) totalEl.textContent = parseFloat(w.totalValue).toFixed(2);
+	    if (btcEl) btcEl.textContent = parseFloat(w.btcBalance).toFixed(8);
+	    if (usdtEl) usdtEl.textContent = parseFloat(w.usdtBalance).toFixed(2);
+	    if (profitEl) profitEl.textContent = `${w.profitRateSafe}%`;
+	  });
 
     fetch(`${ctx}/api/trade/history?userId=${userId}`)
       .then(res => res.json())

@@ -36,8 +36,11 @@
 <script src="${pageContext.request.contextPath}/resources/js/volume.js"
 	defer></script>
 <script
-	src="${pageContext.request.contextPath}/resources/js/trade-history.js"
-	defer></script>
+        src="${pageContext.request.contextPath}/resources/js/trade-history.js"
+        defer></script>
+<script
+        src="${pageContext.request.contextPath}/resources/js/mini-wallet.js"
+        defer></script>
 
 
 <!-- ✅ CSS -->
@@ -128,13 +131,13 @@
                 <div id="mini-wallet" class="mini-wallet">
                         <div class="tabs">
                                 <button data-tab="balance" class="active">지갑</button>
-                                <button data-tab="history">거래내역</button>
+                                <button data-tab="history">주문내역</button>
                         </div>
                         <div class="tab-content">
                                 <div class="balance active">
-                                        <p>USDT: <span id="mini-usdt">0</span></p>
-                                        <p>BTC: <span id="mini-btc">0</span></p>
-                                        <p>수익률: <span id="mini-profit">0%</span></p>
+                                        <p>평가 금액: <span id="mini-total">0</span> USDT</p>
+                                        <p>BTC 보유 수량: <span id="mini-btc">0</span> BTC</p>
+                                        <p>주문 가능 금액: <span id="mini-usdt">0</span> USDT</p>
                                 </div>
                                 <div class="history">
                                         <ul id="mini-history"></ul>
