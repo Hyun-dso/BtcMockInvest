@@ -36,6 +36,7 @@ public class LimitOrderProcessor implements OrderExecutionStrategy {
         order.setAmount(amount);
         order.setPrice(price);
         order.setTotal(price.multiply(amount));
+        order.setCreatedAt(java.time.LocalDateTime.now());
         
         if (price.compareTo(marketPrice) == 0) {
             boolean success = walletService.applyTrade(userId, price, amount, type.name());
@@ -56,6 +57,7 @@ public class LimitOrderProcessor implements OrderExecutionStrategy {
             }
             execution.setPrice(price);
             execution.setAmount(amount);
+            execution.setCreatedAt(java.time.LocalDateTime.now());
             tradeExecutionRepository.insert(execution);
 
             tradePushService.broadcastTrade(order);

@@ -64,6 +64,7 @@ public class MarketOrderProcessor implements OrderExecutionStrategy {
         order.setAmount(amount);
         order.setPrice(execPrice);
         order.setTotal(total);
+        order.setCreatedAt(java.time.LocalDateTime.now());
         order.setOrderMode(OrderMode.MARKET);
         order.setStatus(OrderStatus.FILLED);
         orderRepository.insert(order);
@@ -78,6 +79,7 @@ public class MarketOrderProcessor implements OrderExecutionStrategy {
         }
         execution.setPrice(execPrice);
         execution.setAmount(amount);
+        execution.setCreatedAt(java.time.LocalDateTime.now());
         tradeExecutionRepository.insert(execution);
 
         tradePushService.broadcastTrade(order);

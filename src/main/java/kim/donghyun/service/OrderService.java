@@ -81,6 +81,7 @@ public class OrderService {
         order.setAmount(amount);
         order.setPrice(price);
         order.setTotal(total);
+        order.setCreatedAt(java.time.LocalDateTime.now());
         order.setOrderMode(OrderMode.MARKET);
         order.setStatus(OrderStatus.FILLED);
         orderRepository.insert(order);
@@ -96,6 +97,7 @@ public class OrderService {
         }
         execution.setPrice(price);
         execution.setAmount(amount);
+        execution.setCreatedAt(java.time.LocalDateTime.now());
         tradeExecutionRepository.insert(execution);
 
         // 3. 체결 메시지 전송

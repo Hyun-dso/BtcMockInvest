@@ -9,6 +9,7 @@ import kim.donghyun.model.entity.Wallet;
 import kim.donghyun.repository.WalletDepositLogRepository;
 import kim.donghyun.repository.WalletRepository;
 import kim.donghyun.repository.WalletResetLogRepository;
+import kim.donghyun.util.PriceCache;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -18,6 +19,7 @@ public class WalletService {
     private final WalletRepository walletRepository;
     private final WalletResetLogRepository walletResetLogRepository;
     private final WalletDepositLogRepository walletDepositLogRepository;
+    private final PriceCache priceCache;
     
     @Transactional
     public boolean applyTrade(Long userId, BigDecimal price, BigDecimal amount, String type) {
@@ -39,7 +41,15 @@ public class WalletService {
     }
     
     public Wallet getWalletByUserId(Long userId) {
-        return walletRepository.findByUserId(userId);
+        Wallet wallet = walletRepository.findByUserId(userId);
+
+        BigDecimal init = walletDepositLogRepository.findFirstAmountByUserId(userId);
+        wallet.setInitialValue(init);
+
+        BigDecimal price = BigDecimal.valueOf(priceCache.getLatestPrice());
+        wallet.setCurrentPrice(price);
+
+        return wallet;
     }
     
     @Transactional
@@ -81,6 +91,9 @@ public class WalletService {
         wallet.setUsdtBalance(before.add(amount));
         walletRepository.updateBalance(wallet);
 
+        // 최초 충전 금액 기록
+        wallet.setInitialValue(amount);
+        
         // 5. 충전 로그 저장
         walletDepositLogRepository.insert(userId, amount, before, wallet.getUsdtBalance());
     }

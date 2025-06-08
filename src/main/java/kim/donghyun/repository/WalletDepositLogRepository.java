@@ -9,4 +9,7 @@ public interface WalletDepositLogRepository {
                 @Param("amount") BigDecimal amount,
                 @Param("before") BigDecimal beforeBalance,
                 @Param("after") BigDecimal afterBalance);
+    
+    /** 최초 충전 금액 조회 */
+    BigDecimal findFirstAmountByUserId ( @Param("userId") Long userId) ;
 }

@@ -24,7 +24,11 @@ document.addEventListener('DOMContentLoaded', () => {
         historyUl.innerHTML = '';
         list.forEach(t => {
           const li = document.createElement('li');
-          const time = t.createdAt || t.date;
+		  let time = t.createdAt || t.date;
+		  if (typeof time === 'string') {
+		    const date = new Date(time.replace(' ', 'T') + '+09:00');
+		    time = date.toLocaleTimeString(undefined, { hour12: false });
+		  }
           li.textContent = `${time} ${t.amount} @ ${t.price}`;
           historyUl.appendChild(li);
         });

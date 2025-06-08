@@ -9,4 +9,13 @@
         (user_id, amount, before_balance, after_balance, created_at)
         VALUES (#{userId}, #{amount}, #{before}, #{after}, NOW())
     </insert>
+    
+    <select id="findFirstAmountByUserId" parameterType="long"
+            resultType="java.math.BigDecimal">
+        SELECT amount
+        FROM wallet_deposit_log
+        WHERE user_id = #{userId}
+        ORDER BY created_at ASC
+        LIMIT 1
+    </select>
 </mapper>

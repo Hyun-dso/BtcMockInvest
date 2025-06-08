@@ -136,6 +136,7 @@
                         <div class="tab-content">
                                 <div class="balance active">
                                         <p>평가 금액: <span id="mini-total">0</span> USDT</p>
+                                        <p>수익률: <span id="mini-profit">0</span>%</p>
                                         <p>BTC 보유 수량: <span id="mini-btc">0</span> BTC</p>
                                         <p>주문 가능 금액: <span id="mini-usdt">0</span> USDT</p>
                                 </div>
