@@ -1,6 +1,7 @@
 package kim.donghyun.service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,7 +44,14 @@ public class WalletService {
     public Wallet getWalletByUserId(Long userId) {
         Wallet wallet = walletRepository.findByUserId(userId);
 
-        BigDecimal init = walletDepositLogRepository.findFirstAmountByUserId(userId);
+        LocalDateTime lastReset = walletResetLogRepository.findLastResetTimeByUserId(userId);
+        BigDecimal init;
+        if (lastReset == null) {
+            init = walletDepositLogRepository.findFirstAmountByUserId(userId);
+        } else {
+            init = walletDepositLogRepository.findFirstAmountAfter(userId, lastReset);
+        }
+        if (init == null) init = BigDecimal.ZERO;
         wallet.setInitialValue(init);
 
         BigDecimal price = BigDecimal.valueOf(priceCache.getLatestPrice());
@@ -90,9 +98,6 @@ public class WalletService {
         BigDecimal before = wallet.getUsdtBalance();
         wallet.setUsdtBalance(before.add(amount));
         walletRepository.updateBalance(wallet);
-
-        // 최초 충전 금액 기록
-        wallet.setInitialValue(amount);
         
         // 5. 충전 로그 저장
         walletDepositLogRepository.insert(userId, amount, before, wallet.getUsdtBalance());

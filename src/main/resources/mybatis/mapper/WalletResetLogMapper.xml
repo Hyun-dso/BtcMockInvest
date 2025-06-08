@@ -10,4 +10,10 @@
         VALUES (#{userId}, #{beforeBtc}, #{beforeUsdt}, NOW())
     </insert>
 
+    <select id="findLastResetTimeByUserId" parameterType="long"
+            resultType="java.time.LocalDateTime">
+        SELECT MAX(reset_time)
+        FROM wallet_reset_log
+        WHERE user_id = #{userId}
+    </select>
 </mapper>

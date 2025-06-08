@@ -9,4 +9,7 @@ public interface WalletResetLogRepository {
         @Param("beforeBtc") BigDecimal beforeBtc,
         @Param("beforeUsdt") BigDecimal beforeUsdt
     );
+
+    /** 마지막 초기화 시점 조회 */
+    java.time.LocalDateTime findLastResetTimeByUserId(@Param("userId") Long userId);
 }

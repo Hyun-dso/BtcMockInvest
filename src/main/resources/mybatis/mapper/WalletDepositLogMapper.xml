@@ -3,19 +3,30 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="kim.donghyun.repository.WalletDepositLogRepository">
-    <insert id="insert">
-        INSERT INTO wallet_deposit_log
-        (user_id, amount, before_balance, after_balance, created_at)
-        VALUES (#{userId}, #{amount}, #{before}, #{after}, NOW())
-    </insert>
-    
-    <select id="findFirstAmountByUserId" parameterType="long"
-            resultType="java.math.BigDecimal">
-        SELECT amount
-        FROM wallet_deposit_log
-        WHERE user_id = #{userId}
-        ORDER BY created_at ASC
-        LIMIT 1
-    </select>
+<mapper
+	namespace="kim.donghyun.repository.WalletDepositLogRepository">
+	<insert id="insert">
+		INSERT INTO wallet_deposit_log
+		(user_id, amount, before_balance, after_balance, created_at)
+		VALUES (#{userId}, #{amount}, #{before}, #{after}, NOW())
+	</insert>
+
+	<select id="findFirstAmountByUserId" parameterType="long"
+		resultType="java.math.BigDecimal">
+		SELECT amount
+		FROM wallet_deposit_log
+		WHERE user_id = #{userId}
+		ORDER BY created_at ASC
+		LIMIT 1
+	</select>
+
+	<select id="findFirstAmountAfter" parameterType="map"
+		resultType="java.math.BigDecimal">
+		SELECT amount
+		FROM wallet_deposit_log
+		WHERE user_id = #{userId}
+		AND created_at >= #{after}
+		ORDER BY created_at ASC
+		LIMIT 1
+	</select>
 </mapper>
