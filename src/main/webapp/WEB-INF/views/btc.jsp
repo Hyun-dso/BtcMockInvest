@@ -131,7 +131,7 @@
 			<div id="mini-wallet" class="mini-wallet">
 				<div class="tabs">
 					<button data-tab="balance" class="active">지갑</button>
-					<button data-tab="history">주문내역</button>
+					<button data-tab="history">체결내역</button>
 				</div>
 				<div class="tab-content">
 					<div class="balance active">

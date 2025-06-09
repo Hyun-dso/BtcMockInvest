@@ -6,7 +6,6 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -33,26 +32,12 @@ public class OrderBookBroadcaster {
         BigDecimal currentPrice = BigDecimal.valueOf(priceCache.getLatestPrice());
 //        System.out.println("📡 브로드캐스트 직전 가격: " + currentPrice);
 
-        BigDecimal tickSize = currentPrice.compareTo(new BigDecimal("100000")) >= 0
-                ? new BigDecimal("0.1")
-                : new BigDecimal("0.01");
         int depth = 6;
 
         Map<String, Object> orderbook = new HashMap<>();
  
-        Map<BigDecimal, BigDecimal> asks = new LinkedHashMap<>();
-        Map<BigDecimal, BigDecimal> bids = new LinkedHashMap<>();
-
-        for (int i = 1; i <= depth; i++) {
-            BigDecimal askPrice = currentPrice.add(tickSize.multiply(BigDecimal.valueOf(i)));
-            BigDecimal bidPrice = currentPrice.subtract(tickSize.multiply(BigDecimal.valueOf(i)));
-
-            BigDecimal askQty = orderBookService.getPendingAskQuantity(askPrice);
-            BigDecimal bidQty = orderBookService.getPendingBidQuantity(bidPrice);
-
-            asks.put(askPrice, askQty);
-            bids.put(bidPrice, bidQty);
-        }
+        Map<BigDecimal, BigDecimal> asks = orderBookService.getPendingAsks(depth);
+        Map<BigDecimal, BigDecimal> bids = orderBookService.getPendingBids(depth);
         
         orderbook.put("asks", asks);
         orderbook.put("bids", bids);
