@@ -39,11 +39,14 @@ public class LimitOrderProcessor implements OrderExecutionStrategy {
         order.setCreatedAt(java.time.LocalDateTime.now());
         
         if (price.compareTo(marketPrice) == 0) {
-            boolean success = walletService.applyTrade(userId, price, amount, type.name());
-            if (!success) {
+            BigDecimal executedAmount = walletService.applyTradeWithCap(userId, price, amount, type.name());
+            if (executedAmount.compareTo(BigDecimal.ZERO) <= 0) {
                 throw new RuntimeException("잔고 부족으로 주문 실패");
             }
-
+            amount = executedAmount;
+            order.setAmount(amount);
+            order.setTotal(price.multiply(amount));
+            
             order.setStatus(OrderStatus.FILLED);
             orderRepository.insert(order);
 

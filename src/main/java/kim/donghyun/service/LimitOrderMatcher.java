@@ -28,10 +28,11 @@ public class LimitOrderMatcher {
         BigDecimal price = BigDecimal.valueOf(priceCache.getLatestPrice());
         List<TradeOrder> orders = orderRepository.findPendingOrdersByPrice(price);
         for (TradeOrder order : orders) {
-            boolean ok = walletService.applyTrade(order.getUserId(), price, order.getAmount(), order.getType().name());
-            if (!ok) {
+            BigDecimal executedAmount = walletService.applyTradeWithCap(order.getUserId(), price, order.getAmount(), order.getType().name());
+            if (executedAmount.compareTo(BigDecimal.ZERO) <= 0) {
                 continue;
             }
+            order.setAmount(executedAmount);
             order.setStatus(OrderStatus.FILLED);
             orderRepository.updateStatus(order);
 

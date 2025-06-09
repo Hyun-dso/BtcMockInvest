@@ -1,6 +1,7 @@
 package kim.donghyun.service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Service;
@@ -24,6 +25,16 @@ public class WalletService {
     
     @Transactional
     public boolean applyTrade(Long userId, BigDecimal price, BigDecimal amount, String type) {
+        return applyTradeWithCap(userId, price, amount, type).compareTo(BigDecimal.ZERO) > 0;
+    }
+
+    /**
+     * 잔고가 부족할 경우 보유 잔고 한도 내에서 주문 수량을 자동 조정하여 적용한다.
+     *
+     * @return 실제 반영된 수량 (0이면 실패)
+     */
+    @Transactional
+    public BigDecimal applyTradeWithCap(Long userId, BigDecimal price, BigDecimal amount, String type) {
         if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("수량은 0보다 커야 합니다.");
         }
@@ -32,20 +43,33 @@ public class WalletService {
         }
 
         Wallet wallet = walletRepository.findByUserId(userId);
+
+        BigDecimal finalAmount = amount;
         BigDecimal usdt = price.multiply(amount);
 
         if ("BUY".equalsIgnoreCase(type)) {
-            if (wallet.getUsdtBalance().compareTo(usdt) < 0) return false;
+            if (wallet.getUsdtBalance().compareTo(usdt) < 0) {
+                finalAmount = wallet.getUsdtBalance()
+                        .divide(price, 5, RoundingMode.DOWN);
+                usdt = price.multiply(finalAmount);
+            }
+            if (finalAmount.compareTo(BigDecimal.ZERO) <= 0) return BigDecimal.ZERO;
+
             wallet.setUsdtBalance(wallet.getUsdtBalance().subtract(usdt));
-            wallet.setBtcBalance(wallet.getBtcBalance().add(amount));
+            wallet.setBtcBalance(wallet.getBtcBalance().add(finalAmount));
         } else {
-            if (wallet.getBtcBalance().compareTo(amount) < 0) return false;
-            wallet.setBtcBalance(wallet.getBtcBalance().subtract(amount));
+            if (wallet.getBtcBalance().compareTo(finalAmount) < 0) {
+                finalAmount = wallet.getBtcBalance().setScale(5, RoundingMode.DOWN);
+                usdt = price.multiply(finalAmount);
+            }
+            if (finalAmount.compareTo(BigDecimal.ZERO) <= 0) return BigDecimal.ZERO;
+
+            wallet.setBtcBalance(wallet.getBtcBalance().subtract(finalAmount));
             wallet.setUsdtBalance(wallet.getUsdtBalance().add(usdt));
         }
 
         walletRepository.updateBalance(wallet);
-        return true;
+        return finalAmount;
     }
     
     public Wallet getWalletByUserId(Long userId) {

@@ -51,13 +51,13 @@ public class MarketOrderProcessor implements OrderExecutionStrategy {
                                        .orElse(execPrice);
         }
 
-        BigDecimal total = execPrice.multiply(amount);
-
-        boolean success = walletService.applyTrade(userId, execPrice, amount, type.name());
-        if (!success) {
+        BigDecimal executedAmount = walletService.applyTradeWithCap(userId, execPrice, amount, type.name());
+        if (executedAmount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new RuntimeException("잔고 부족으로 주문 실패");
         }
-
+        amount = executedAmount;
+        BigDecimal total = execPrice.multiply(amount);
+        
         TradeOrder order = new TradeOrder();
         order.setUserId(userId);
         order.setType(type);

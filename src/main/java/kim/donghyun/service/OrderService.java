@@ -69,13 +69,12 @@ public class OrderService {
                     .keySet().stream().findFirst().orElse(price); // 매수 대기 주문
         }
 
-        BigDecimal total = price.multiply(amount);
-
-        // ✅ 0. 지갑 잔고 차감 / 반영
-        boolean success = walletService.applyTrade(userId, price, amount, type.name());
-        if (!success) {
-            throw new RuntimeException("잔고 부족으로 주문 실패");
+        BigDecimal executedAmount = walletService.applyTradeWithCap(userId, price, amount, type.name());
+        if (executedAmount.compareTo(BigDecimal.ZERO) <= 0) {
+        throw new RuntimeException("잔고 부족으로 주문 실패");
         }
+        amount = executedAmount;
+        BigDecimal total = price.multiply(amount);
 
         // 1. 주문 저장
         TradeOrder order = new TradeOrder();
