@@ -1,6 +1,21 @@
 import { renderAsks } from './asks.js';
 import { renderBids } from './bids.js';
 
+let tickSize = 0.01;
+let lastAsks = {};
+let lastBids = {};
+
+document.addEventListener('DOMContentLoaded', () => {
+  const select = document.getElementById('tick-size');
+  if (select) {
+    select.addEventListener('change', () => {
+      tickSize = parseFloat(select.value);
+      renderAsks(lastAsks, tickSize);
+      renderBids(lastBids, tickSize);
+    });
+  }
+});
+
 // /topic/orderbook 구독 (호가창 업데이트)
 window.websocket.connect((client) => {
   client.subscribe("/topic/orderbook", (message) => {
@@ -33,10 +48,12 @@ window.websocket.connect((client) => {
 	      bp.value = price.toFixed(2);
 	  if (sp && !(sellLimitBtn && sellLimitBtn.classList.contains('active')))
 	      sp.value = price.toFixed(2);
-	  
-      // 호가창 렌더링 (매도, 매수)
-      renderAsks(asks);
-      renderBids(bids);
+
+	  // 호가창 데이터 저장 및 렌더링
+	  lastAsks = asks;
+	  lastBids = bids;
+	  renderAsks(lastAsks, tickSize);
+	  renderBids(lastBids, tickSize);
     } catch (e) {
       console.error("📛 시세 수신 처리 에러:", e);
     }

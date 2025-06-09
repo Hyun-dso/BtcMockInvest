@@ -226,8 +226,18 @@
 					<ul id="asks"
 						style="color: red; list-style: none; padding: 0; margin: 0;"></ul>
 
-					<div id="btc-price"
-						style="font-size: 2rem; font-weight: bold; text-align: center; margin: 1rem 0;">$-</div>
+					<div
+						style="display: flex; align-items: center; justify-content: center; gap: 4px; margin: 1rem 0;">
+						<div id="btc-price"
+							style="font-size: 2rem; font-weight: bold; text-align: center;">$-</div>
+						<select id="tick-size">
+							<option value="0.01">0.01</option>
+							<option value="0.1">0.1</option>
+							<option value="1">1</option>
+							<option value="10">10</option>
+							<option value="100">100</option>
+						</select>
+					</div>
 
 					<ul id="bids"
 						style="color: blue; list-style: none; padding: 0; margin: 0;"></ul>

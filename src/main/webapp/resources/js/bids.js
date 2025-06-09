@@ -1,12 +1,19 @@
 const MAX_LEVELS = 6;
 
-export function renderBids(bids) {
+export function renderBids(bids, tickSize = 0.01) {
   const bidsList = document.getElementById("bids");
   bidsList.innerHTML = "";
 
-  const entries = Object.entries(bids)
-    .sort((a, b) => parseFloat(a[0]) - parseFloat(b[0])) // 오름차순
-    .reverse()
+  const aggregated = {};
+  Object.entries(bids).forEach(([p, qty]) => {
+    const price = parseFloat(p);
+    const key = (Math.floor(price / tickSize) * tickSize).toFixed(2);
+    aggregated[key] = (aggregated[key] || 0) + parseFloat(qty);
+  });
+
+  const entries = Object.entries(aggregated)
+    .sort((a, b) => parseFloat(a[0]) - parseFloat(b[0]))
+	//     .sort((a, b) => parseFloat(a[0]) - parseFloat(b[0])) // 오름차순
     .slice(0, MAX_LEVELS);
 
   for (let i = 0; i < MAX_LEVELS; i++) {
