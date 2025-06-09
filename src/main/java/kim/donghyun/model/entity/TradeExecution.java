@@ -12,4 +12,7 @@ public class TradeExecution {
     private BigDecimal price;
     private BigDecimal amount;
     private LocalDateTime createdAt;
+    
+    // 사용자가 매수했는지 매도했는지 구분하기 위한 필드
+    private String userType;
 }
