@@ -6,16 +6,16 @@ let walletUsdt = 0;
 let walletBtc = 0;
 
 if (isLoggedIn) {
-    const ctx = window.contextPath || '';
-    const uid = window.loginUserId;
-    if (uid) {
-        fetch(`${ctx}/api/wallet?userId=${uid}`)
-            .then(res => res.json())
-            .then(w => {
-                walletUsdt = parseFloat(w.usdtBalance);
-                walletBtc = parseFloat(w.btcBalance);
-            });
-    }
+	const ctx = window.contextPath || '';
+	const uid = window.loginUserId;
+	if (uid) {
+		fetch(`${ctx}/api/wallet?userId=${uid}`)
+			.then(res => res.json())
+			.then(w => {
+				walletUsdt = parseFloat(w.usdtBalance);
+				walletBtc = parseFloat(w.btcBalance);
+			});
+	}
 }
 
 function redirectLogin() {
@@ -34,7 +34,7 @@ function floorInput(el, step, decimals) {
 	}
 }
 
-	function sendOrder(type, priceId, amountId) {
+function sendOrder(type, priceId, amountId) {
 	if (!isLoggedIn) {
 		redirectLogin();
 		return;
@@ -90,58 +90,79 @@ document.addEventListener('DOMContentLoaded', () => {
 	const buyBtn = document.getElementById('buy-submit');
 	const sellBtn = document.getElementById('sell-submit');
 
-	function setupCalc(type, priceId, amountId, totalId) {
-	        const priceEl = document.getElementById(priceId);
-	        const amountEl = document.getElementById(amountId);
-	        const totalEl = document.getElementById(totalId);
-	        if (!priceEl || !amountEl || !totalEl) return;
+	function setSliderBg(slider) {
+		const val = slider.value;
+		slider.style.background = `linear-gradient(to right, #0ECB81 0%, #0ECB81 ${val}%, #2B3139 ${val}%, #2B3139 100%)`;
+	}
 
-	        function fromAmount() {
-	                const p = parseFloat(priceEl.value);
-	                let a = parseFloat(amountEl.value);
-	                if (!isNaN(p) && !isNaN(a)) {
-	                        let total = p * a;
-	                        if (type === 'BUY' && total > walletUsdt) {
-	                                total = walletUsdt;
-	                                a = floorToStep(walletUsdt / p, 0.00001);
-	                                amountEl.value = a.toFixed(5);
-	                        } else if (type === 'SELL' && a > walletBtc) {
-	                                a = walletBtc;
-	                                amountEl.value = a.toFixed(5);
-	                                total = p * a;
-	                        }
-	                        totalEl.value = floorToStep(total, 0.01).toFixed(2);
-	                }
-	        }
+	function setupCalc(type, priceId, amountId, totalId, sliderId) {
+		const priceEl = document.getElementById(priceId);
+		const amountEl = document.getElementById(amountId);
+		const totalEl = document.getElementById(totalId);
+		const sliderEl = document.getElementById(sliderId);
+		if (!priceEl || !amountEl || !totalEl) return;
 
-	        function fromTotal() {
-	                const p = parseFloat(priceEl.value);
-	                let t = parseFloat(totalEl.value);
-	                if (!isNaN(p) && !isNaN(t) && p !== 0) {
-	                        if (type === 'BUY' && t > walletUsdt) {
-	                                t = walletUsdt;
-	                                totalEl.value = t.toFixed(2);
-	                        }
-	                        let a = t / p;
-	                        if (type === 'SELL' && a > walletBtc) {
-	                                a = walletBtc;
-	                                amountEl.value = a.toFixed(5);
-	                                t = p * a;
-	                                totalEl.value = floorToStep(t, 0.01).toFixed(2);
-	                        } else {
-	                                amountEl.value = floorToStep(a, 0.00001).toFixed(5);
-	                        }
-	                }
-	        }
+		function fromAmount() {
+			const p = parseFloat(priceEl.value);
+			let a = parseFloat(amountEl.value);
+			if (!isNaN(p) && !isNaN(a)) {
+				let total = p * a;
+				if (type === 'BUY' && total > walletUsdt) {
+					total = walletUsdt;
+					a = floorToStep(walletUsdt / p, 0.00001);
+					amountEl.value = a.toFixed(5);
+				} else if (type === 'SELL' && a > walletBtc) {
+					a = walletBtc;
+					amountEl.value = a.toFixed(5);
+					total = p * a;
+				}
+				totalEl.value = floorToStep(total, 0.01).toFixed(2);
+			}
+			if (sliderEl) {
+				const percent = type === 'BUY'
+					? (parseFloat(totalEl.value) / walletUsdt) * 100
+					: (parseFloat(amountEl.value) / walletBtc) * 100;
+				sliderEl.value = isNaN(percent) ? 0 : Math.min(100, Math.max(0, percent));
+				setSliderBg(sliderEl);
+			}
+		}
+
+		function fromTotal() {
+			const p = parseFloat(priceEl.value);
+			let t = parseFloat(totalEl.value);
+			if (!isNaN(p) && !isNaN(t) && p !== 0) {
+
+				if (type === 'BUY' && t > walletUsdt) {
+					t = walletUsdt;
+					totalEl.value = t.toFixed(2);
+				}
+				let a = t / p;
+				if (type === 'SELL' && a > walletBtc) {
+					a = walletBtc;
+					amountEl.value = a.toFixed(5);
+					t = p * a;
+					totalEl.value = floorToStep(t, 0.01).toFixed(2);
+				} else {
+					amountEl.value = floorToStep(a, 0.00001).toFixed(5);
+				}
+			}
+			if (sliderEl) {
+				const percent = type === 'BUY'
+					? (parseFloat(totalEl.value) / walletUsdt) * 100
+					: (parseFloat(amountEl.value) / walletBtc) * 100;
+				sliderEl.value = isNaN(percent) ? 0 : Math.min(100, Math.max(0, percent));
+				setSliderBg(sliderEl);
+			}
+		}
 
 		amountEl.addEventListener('input', fromAmount);
 		totalEl.addEventListener('input', fromTotal);
 		// 입력 칸을 다시 클릭하면 해당 필드를 비워 재입력이 가능하도록 처리
 		amountEl.addEventListener('focus', () => {
-		        amountEl.value = '';
+			amountEl.value = '';
 		});
 		totalEl.addEventListener('focus', () => {
-		        totalEl.value = '';
+			totalEl.value = '';
 		});
 		priceEl.addEventListener('input', () => {
 			fromAmount();
@@ -181,11 +202,33 @@ document.addEventListener('DOMContentLoaded', () => {
 				fromTotal();
 			}
 		});
+
+		if (sliderEl) {
+			setSliderBg(sliderEl);
+			sliderEl.addEventListener('input', () => {
+				const percent = parseFloat(sliderEl.value);
+				setSliderBg(sliderEl);
+				if (type === 'BUY') {
+					const usdt = walletUsdt * (percent / 100);
+					totalEl.value = floorToStep(usdt, 0.01).toFixed(2);
+					if (!isNaN(parseFloat(priceEl.value))) {
+						const a = usdt / parseFloat(priceEl.value);
+						amountEl.value = floorToStep(a, 0.00001).toFixed(5);
+					}
+				} else {
+					const btc = walletBtc * (percent / 100);
+					amountEl.value = floorToStep(btc, 0.00001).toFixed(5);
+					if (!isNaN(parseFloat(priceEl.value))) {
+						const t = btc * parseFloat(priceEl.value);
+						totalEl.value = floorToStep(t, 0.01).toFixed(2);
+					}
+				}
+			});
+		}
 	}
 
-	setupCalc('BUY', 'buy-price', 'buy-amount', 'buy-total');
-	setupCalc('SELL', 'sell-price', 'sell-amount', 'sell-total');
-
+	setupCalc('BUY', 'buy-price', 'buy-amount', 'buy-total', 'buy-slider');
+	setupCalc('SELL', 'sell-price', 'sell-amount', 'sell-total', 'sell-slider');
 	if (buyBtn)
 		buyBtn.addEventListener('click', () => sendOrder('BUY', 'buy-price', 'buy-amount'));
 	if (sellBtn)
