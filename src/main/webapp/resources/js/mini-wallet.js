@@ -10,9 +10,10 @@ document.addEventListener('DOMContentLoaded', () => {
 	const historySection = document.querySelector('#mini-wallet .history');
 
 	function setHistoryHeight() {
-		if (balanceSection && historySection) {
-			historySection.style.maxHeight = balanceSection.offsetHeight + 'px';
-		}
+	        if (balanceSection && historySection) {
+	                const refHeight = Math.max(balanceSection.offsetHeight, historySection.offsetHeight);
+	                historySection.style.maxHeight = refHeight + 'px';
+	        }
 	}
 
 	function refreshWallet() {
@@ -118,13 +119,16 @@ document.addEventListener('DOMContentLoaded', () => {
 	setHistoryHeight();
 	window.addEventListener('resize', setHistoryHeight);
 	tabs.forEach(btn => {
-		btn.addEventListener('click', () => {
-			tabs.forEach(b => b.classList.remove('active'));
-			sections.forEach(sec => sec.classList.remove('active'));
-			btn.classList.add('active');
-			const target = btn.getAttribute('data-tab');
-			const el = document.querySelector(`#mini-wallet .${target}`);
-			if (el) el.classList.add('active');
-		});
+	        btn.addEventListener('click', () => {
+	                tabs.forEach(b => b.classList.remove('active'));
+	                sections.forEach(sec => sec.classList.remove('active'));
+	                btn.classList.add('active');
+	                const target = btn.getAttribute('data-tab');
+	                const el = document.querySelector(`#mini-wallet .${target}`);
+	                if (el) {
+	                        el.classList.add('active');
+	                        setHistoryHeight();
+	                }
+	        });
 	});
 });
