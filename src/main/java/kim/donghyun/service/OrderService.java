@@ -55,7 +55,10 @@ public class OrderService {
     }
 
     public TradeOrder executeMarketOrder(Long userId, OrderType type, BigDecimal amount, int depth) {
-        BigDecimal price = BigDecimal.valueOf(priceCache.getLatestPrice());
+        if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("주문 수량은 0보다 커야 합니다.");
+        }
+        BigDecimal price = BigDecimal.valueOf(priceCache.getLatestPrice());  
 
         // 타입에 따라 실제 대기 주문의 가격을 받아옴
         if (type == OrderType.BUY) {
@@ -108,6 +111,10 @@ public class OrderService {
 
     public TradeOrder executeOrder(Long userId, OrderType type, BigDecimal amount, BigDecimal price,
                                    OrderMode mode) {
+        if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("주문 수량은 0보다 커야 합니다.");
+        }
+        
         OrderExecutionStrategy strategy = strategyMap.get(mode);
         if (strategy == null) {
             throw new IllegalArgumentException("지원하지 않는 주문 모드");

@@ -24,6 +24,13 @@ public class WalletService {
     
     @Transactional
     public boolean applyTrade(Long userId, BigDecimal price, BigDecimal amount, String type) {
+        if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("수량은 0보다 커야 합니다.");
+        }
+        if (price == null || price.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("가격은 0보다 커야 합니다.");
+        }
+
         Wallet wallet = walletRepository.findByUserId(userId);
         BigDecimal usdt = price.multiply(amount);
 
