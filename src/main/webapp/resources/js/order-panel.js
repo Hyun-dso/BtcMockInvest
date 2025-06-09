@@ -2,6 +2,22 @@
 // 로그인 여부 확인
 const isLoggedIn = document.body.getAttribute('data-logged-in') === 'true';
 
+let walletUsdt = 0;
+let walletBtc = 0;
+
+if (isLoggedIn) {
+    const ctx = window.contextPath || '';
+    const uid = window.loginUserId;
+    if (uid) {
+        fetch(`${ctx}/api/wallet?userId=${uid}`)
+            .then(res => res.json())
+            .then(w => {
+                walletUsdt = parseFloat(w.usdtBalance);
+                walletBtc = parseFloat(w.btcBalance);
+            });
+    }
+}
+
 function redirectLogin() {
 	window.location.href = window.contextPath + '/signin';
 }
@@ -18,7 +34,7 @@ function floorInput(el, step, decimals) {
 	}
 }
 
-function sendOrder(type, priceId, amountId) {
+	function sendOrder(type, priceId, amountId) {
 	if (!isLoggedIn) {
 		redirectLogin();
 		return;
@@ -74,27 +90,49 @@ document.addEventListener('DOMContentLoaded', () => {
 	const buyBtn = document.getElementById('buy-submit');
 	const sellBtn = document.getElementById('sell-submit');
 
-	function setupCalc(priceId, amountId, totalId) {
-		const priceEl = document.getElementById(priceId);
-		const amountEl = document.getElementById(amountId);
-		const totalEl = document.getElementById(totalId);
-		if (!priceEl || !amountEl || !totalEl) return;
+	function setupCalc(type, priceId, amountId, totalId) {
+	        const priceEl = document.getElementById(priceId);
+	        const amountEl = document.getElementById(amountId);
+	        const totalEl = document.getElementById(totalId);
+	        if (!priceEl || !amountEl || !totalEl) return;
 
-		function fromAmount() {
-			const p = parseFloat(priceEl.value);
-			const a = parseFloat(amountEl.value);
-			if (!isNaN(p) && !isNaN(a)) {
-				totalEl.value = floorToStep(p * a, 0.01).toFixed(2);
-			}
-		}
+	        function fromAmount() {
+	                const p = parseFloat(priceEl.value);
+	                let a = parseFloat(amountEl.value);
+	                if (!isNaN(p) && !isNaN(a)) {
+	                        let total = p * a;
+	                        if (type === 'BUY' && total > walletUsdt) {
+	                                total = walletUsdt;
+	                                a = floorToStep(walletUsdt / p, 0.00001);
+	                                amountEl.value = a.toFixed(5);
+	                        } else if (type === 'SELL' && a > walletBtc) {
+	                                a = walletBtc;
+	                                amountEl.value = a.toFixed(5);
+	                                total = p * a;
+	                        }
+	                        totalEl.value = floorToStep(total, 0.01).toFixed(2);
+	                }
+	        }
 
-		function fromTotal() {
-			const p = parseFloat(priceEl.value);
-			const t = parseFloat(totalEl.value);
-			if (!isNaN(p) && !isNaN(t) && p !== 0) {
-				amountEl.value = floorToStep(t / p, 0.00001).toFixed(5);
-			}
-		}
+	        function fromTotal() {
+	                const p = parseFloat(priceEl.value);
+	                let t = parseFloat(totalEl.value);
+	                if (!isNaN(p) && !isNaN(t) && p !== 0) {
+	                        if (type === 'BUY' && t > walletUsdt) {
+	                                t = walletUsdt;
+	                                totalEl.value = t.toFixed(2);
+	                        }
+	                        let a = t / p;
+	                        if (type === 'SELL' && a > walletBtc) {
+	                                a = walletBtc;
+	                                amountEl.value = a.toFixed(5);
+	                                t = p * a;
+	                                totalEl.value = floorToStep(t, 0.01).toFixed(2);
+	                        } else {
+	                                amountEl.value = floorToStep(a, 0.00001).toFixed(5);
+	                        }
+	                }
+	        }
 
 		amountEl.addEventListener('input', fromAmount);
 		totalEl.addEventListener('input', fromTotal);
@@ -145,8 +183,8 @@ document.addEventListener('DOMContentLoaded', () => {
 		});
 	}
 
-	setupCalc('buy-price', 'buy-amount', 'buy-total');
-	setupCalc('sell-price', 'sell-amount', 'sell-total');
+	setupCalc('BUY', 'buy-price', 'buy-amount', 'buy-total');
+	setupCalc('SELL', 'sell-price', 'sell-amount', 'sell-total');
 
 	if (buyBtn)
 		buyBtn.addEventListener('click', () => sendOrder('BUY', 'buy-price', 'buy-amount'));
