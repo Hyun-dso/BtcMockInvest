@@ -97,10 +97,13 @@ document.addEventListener('DOMContentLoaded', () => {
 	        if (!priceEl) return;
 
 	        btn.classList.toggle('active');
-	        if (btn.classList.contains('active')) {
+	        const active = btn.classList.contains('active');
+	        if (active) {
 	                priceEl.removeAttribute('readonly');
+	                btn.textContent = '현재시세';
 	        } else {
 	                priceEl.setAttribute('readonly', true);
+	                btn.textContent = '지정가';
 	        }
 	}
 
@@ -197,9 +200,12 @@ document.addEventListener('DOMContentLoaded', () => {
 			fromTotal();
 		});
 		priceEl.addEventListener('blur', () => {
-			floorInput(priceEl, 0.01, 2);
-			fromAmount();
-			fromTotal();
+		        floorInput(priceEl, 0.01, 2);
+		        fromAmount();
+		        fromTotal();
+		});
+		priceEl.addEventListener('change', () => {
+		        floorInput(priceEl, 0.01, 2);
 		});
 
 		amountEl.addEventListener('keydown', (e) => {

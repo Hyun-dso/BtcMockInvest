@@ -26,9 +26,13 @@ window.websocket.connect((client) => {
       document.getElementById("mid-price").textContent = `가격: ${price.toFixed(2)} USDT`;
 
 	  const bp = document.getElementById('buy-price');
-	    const sp = document.getElementById('sell-price');
-	    if (bp) bp.value = price.toFixed(2);
-	    if (sp) sp.value = price.toFixed(2);
+	  const sp = document.getElementById('sell-price');
+	  const buyLimitBtn = document.getElementById('buy-limit-btn');
+	  const sellLimitBtn = document.getElementById('sell-limit-btn');
+	  if (bp && !(buyLimitBtn && buyLimitBtn.classList.contains('active')))
+	      bp.value = price.toFixed(2);
+	  if (sp && !(sellLimitBtn && sellLimitBtn.classList.contains('active')))
+	      sp.value = price.toFixed(2);
 	  
       // 호가창 렌더링 (매도, 매수)
       renderAsks(asks);
@@ -50,10 +54,14 @@ window.websocket.connect((client) => {
         currency: "USD"
       });
        // 타이틀은 기준가와 등락률 정보만 표시하도록 실시간 가격 툴팁 제거
-	  const bp = document.getElementById('buy-price');
-	  const sp = document.getElementById('sell-price');
-	  if (bp) bp.value = price.toFixed(2);
-	  if (sp) sp.value = price.toFixed(2);
+	   const bp = document.getElementById('buy-price');
+	   const sp = document.getElementById('sell-price');
+	   const buyLimitBtn = document.getElementById('buy-limit-btn');
+	   const sellLimitBtn = document.getElementById('sell-limit-btn');
+	   if (bp && !(buyLimitBtn && buyLimitBtn.classList.contains('active')))
+	       bp.value = price.toFixed(2);
+	   if (sp && !(sellLimitBtn && sellLimitBtn.classList.contains('active')))
+	       sp.value = price.toFixed(2);
       console.log("📡 실시간 가격 수신:", price);
     } catch (e) {
       console.error("📛 실시간 가격 수신 처리 에러:", e);
