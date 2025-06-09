@@ -348,6 +348,10 @@ input[type="range"]::before {
   display: none;
 }
 
+.mini-wallet .history {
+  overflow-y: auto;
+}
+
 .mini-wallet .balance.active,
 .mini-wallet .history.active {
   display: block;

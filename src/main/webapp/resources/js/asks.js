@@ -13,7 +13,11 @@ export function renderAsks(asks) {
     const li = document.createElement("li");
     if (entries[i]) {
       const [p, qty] = entries[i];
-      li.innerHTML = `<span>${parseFloat(p).toFixed(2)}</span><span>${parseFloat(qty).toFixed(5)} BTC</span>`;
+	  const price = parseFloat(p);
+	  li.innerHTML = `<span>${price.toFixed(2)}</span><span>${parseFloat(qty).toFixed(5)} BTC</span>`;
+	  li.addEventListener("click", () => {
+	    if (window.handleOrderbookClick) window.handleOrderbookClick("ASK", price);
+	  });
     } else {
       li.innerHTML = `<span>-</span><span>-</span>`;
     }

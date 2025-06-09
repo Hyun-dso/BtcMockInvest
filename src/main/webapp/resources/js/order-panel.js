@@ -28,11 +28,34 @@ function floorToStep(value, step) {
 }
 
 function floorInput(el, step, decimals) {
-	const v = parseFloat(el.value);
-	if (!isNaN(v)) {
-		el.value = floorToStep(v, step).toFixed(decimals);
+	        const v = parseFloat(el.value);
+	        if (!isNaN(v)) {
+	                el.value = floorToStep(v, step).toFixed(decimals);
+	        }
 	}
+
+	function activateLimit(btnId, priceId) {
+	        const btn = document.getElementById(btnId);
+	        const priceEl = document.getElementById(priceId);
+	        if (!btn || !priceEl) return;
+	        if (!btn.classList.contains('active')) {
+	                btn.classList.add('active');
+	                priceEl.removeAttribute('readonly');
+	                btn.textContent = '현재시세';
+	        }
 }
+
+window.handleOrderbookClick = function (side, price) {
+        if (side === 'ASK') {
+                activateLimit('sell-limit-btn', 'sell-price');
+                const sp = document.getElementById('sell-price');
+                if (sp) sp.value = price.toFixed(2);
+        } else if (side === 'BID') {
+                activateLimit('buy-limit-btn', 'buy-price');
+                const bp = document.getElementById('buy-price');
+                if (bp) bp.value = price.toFixed(2);
+        }
+};
 
 function sendOrder(type, priceId, amountId) {
 	if (!isLoggedIn) {
