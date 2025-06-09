@@ -89,6 +89,25 @@ function sendOrder(type, priceId, amountId) {
 document.addEventListener('DOMContentLoaded', () => {
 	const buyBtn = document.getElementById('buy-submit');
 	const sellBtn = document.getElementById('sell-submit');
+	const buyLimitBtn = document.getElementById('buy-limit-btn');
+	const sellLimitBtn = document.getElementById('sell-limit-btn');
+
+	function toggleLimit(btn, priceId) {
+	        const priceEl = document.getElementById(priceId);
+	        if (!priceEl) return;
+
+	        btn.classList.toggle('active');
+	        if (btn.classList.contains('active')) {
+	                priceEl.removeAttribute('readonly');
+	        } else {
+	                priceEl.setAttribute('readonly', true);
+	        }
+	}
+
+	if (buyLimitBtn)
+	        buyLimitBtn.addEventListener('click', () => toggleLimit(buyLimitBtn, 'buy-price'));
+	if (sellLimitBtn)
+	        sellLimitBtn.addEventListener('click', () => toggleLimit(sellLimitBtn, 'sell-price'));
 
 	function setSliderBg(slider) {
 		const val = slider.value;

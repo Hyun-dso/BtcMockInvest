@@ -213,7 +213,7 @@ document.addEventListener("DOMContentLoaded", () => {
           };
           candleSeries.update(newCandle);
           window.candleSeries._lastBar = newCandle;
-          realtimeSeries.update({});
+          realtimeSeries.setData([]);
           console.log(`📩 정식 ${interval} 봉 수신:`, newCandle);
         }
       });
