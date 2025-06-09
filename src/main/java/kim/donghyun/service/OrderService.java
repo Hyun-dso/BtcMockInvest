@@ -114,4 +114,20 @@ public class OrderService {
         }
         return strategy.execute(userId, type, amount, price);
     }
+
+    public java.util.List<TradeOrder> getPendingOrders(Long userId) {
+        return orderRepository.findPendingByUserId(userId);
+    }
+
+    public void cancelOrder(Long orderId) {
+        TradeOrder order = orderRepository.findById(orderId);
+        if (order == null) {
+            throw new IllegalArgumentException("주문이 존재하지 않습니다");
+        }
+        if (order.getStatus() != OrderStatus.PENDING) {
+            return;
+        }
+        order.setStatus(OrderStatus.CANCELED);
+        orderRepository.updateStatus(order);
+    }
 }

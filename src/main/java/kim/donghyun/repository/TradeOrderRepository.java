@@ -16,7 +16,10 @@ public interface TradeOrderRepository {
 
     List<TradeOrder> findByUserId(Long userId);
 
+    List<TradeOrder> findPendingByUserId(Long userId);
+    
     void updateStatus(TradeOrder order);
+    
     
     List<PriceQuantityDTO> findPendingLimitBids(@Param("depth") int depth);
     List<PriceQuantityDTO> findPendingLimitAsks(@Param("depth") int depth);

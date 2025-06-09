@@ -364,6 +364,12 @@ input[type="range"]::before {
   text-align: right;
 }
 
+#mini-history .cancel-btn {
+  margin: 0 4px;
+  font-size: 0.75rem;
+  padding: 2px 4px;
+}
+
 #mini-history li.buy span:nth-child(3) {
   color: #d9534f;
 }

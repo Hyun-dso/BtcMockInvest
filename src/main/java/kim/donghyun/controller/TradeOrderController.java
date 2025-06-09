@@ -3,6 +3,7 @@ package kim.donghyun.controller;
 import java.math.BigDecimal;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -53,5 +54,17 @@ public class TradeOrderController {
             OrderMode.valueOf(mode.toUpperCase())
         );
         return ResponseEntity.ok(order);
+    }
+    
+
+    @GetMapping("/pending")
+    public ResponseEntity<java.util.List<TradeOrder>> getPendingOrders(@RequestParam("userId") Long userId) {
+        return ResponseEntity.ok(orderService.getPendingOrders(userId));
+    }
+
+    @PostMapping("/cancel")
+    public ResponseEntity<Void> cancelOrder(@RequestParam("orderId") Long orderId) {
+        orderService.cancelOrder(orderId);
+        return ResponseEntity.ok().build();
     }
 }

@@ -168,7 +168,7 @@
 				<div class="order-box buy">
 					<h4>매수 (Buy)</h4>
 					<label>가격 (USDT)</label> <input type="number" id="buy-price"
-						step="0.01" placeholder="USDT"> <label>슬라이더로 수량 선택</label>
+						step="0.01" placeholder="USDT">
 					<div id="buy-slider" style="margin-top: 10px;"></div>
 					<div class="slider-marks">
 						<span>0%</span> <span>25%</span> <span>50%</span> <span>75%</span>
@@ -184,7 +184,7 @@
 				<div class="order-box sell">
 					<h4>매도 (Sell)</h4>
 					<label>가격 (USDT)</label> <input type="number" id="sell-price"
-						step="0.01" placeholder="USDT"> <label>슬라이더로 수량 선택</label>
+						step="0.01" placeholder="USDT">
 					<input type="range" id="sell-slider" min="0" max="100" value="0"
 						step="1"> <small id="sell-percent-label">0%</small> <label>수량
 						(BTC)</label> <input type="number" id="sell-amount" step="0.0001"

@@ -49,6 +49,15 @@
 		created_at DESC
 	</select>
 
+	<select id="findPendingByUserId" parameterType="long"
+		resultMap="orderMap">
+		SELECT * FROM trade_order
+		WHERE user_id = #{userId}
+		AND status = 'PENDING'
+		AND order_mode = 'LIMIT'
+		ORDER BY created_at DESC
+	</select>
+
 	<!-- ✅ 상태 업데이트 -->
 	<update id="updateStatus"
 		parameterType="kim.donghyun.model.entity.TradeOrder">
@@ -88,27 +97,29 @@
 		resultType="java.math.BigDecimal">
 		SELECT COALESCE(SUM(amount), 0)
 		FROM trade_order
-		WHERE order_mode = 'LIMIT'
+		WHERE
+		order_mode = 'LIMIT'
 		AND status = 'PENDING'
 		AND type = 'BUY'
+		AND price =
+		#{price}
+	</select>
+
+	<select id="findPendingAskQuantityAtPrice"
+		resultType="java.math.BigDecimal">
+		SELECT COALESCE(SUM(amount), 0)
+		FROM trade_order
+		WHERE order_mode = 'LIMIT'
+		AND status = 'PENDING'
+		AND type = 'SELL'
 		AND price = #{price}
 	</select>
 
-	        <select id="findPendingAskQuantityAtPrice"
-                resultType="java.math.BigDecimal">
-                SELECT COALESCE(SUM(amount), 0)
-                FROM trade_order
-                WHERE order_mode = 'LIMIT'
-                AND status = 'PENDING'
-                AND type = 'SELL'
-                AND price = #{price}
-        </select>
-
-        <select id="findPendingOrdersByPrice" resultMap="orderMap">
-                SELECT * FROM trade_order
-                WHERE order_mode = 'LIMIT'
-                AND status = 'PENDING'
-                AND price = #{price}
-        </select>
+	<select id="findPendingOrdersByPrice" resultMap="orderMap">
+		SELECT * FROM trade_order
+		WHERE order_mode = 'LIMIT'
+		AND status = 'PENDING'
+		AND price = #{price}
+	</select>
 
 </mapper>
