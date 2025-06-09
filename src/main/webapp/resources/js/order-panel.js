@@ -98,6 +98,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
 		amountEl.addEventListener('input', fromAmount);
 		totalEl.addEventListener('input', fromTotal);
+		// 입력 칸을 다시 클릭하면 해당 필드를 비워 재입력이 가능하도록 처리
+		amountEl.addEventListener('focus', () => {
+		        amountEl.value = '';
+		});
+		totalEl.addEventListener('focus', () => {
+		        totalEl.value = '';
+		});
 		priceEl.addEventListener('input', () => {
 			fromAmount();
 			fromTotal();
