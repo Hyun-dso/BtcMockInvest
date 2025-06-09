@@ -137,6 +137,26 @@ body {
   gap: 10px;
 }
 
+.mode-toggle {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.limit-btn {
+  padding: 4px 8px;
+  background: #444;
+  color: #fff;
+  border: 1px solid #666;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.limit-btn.active {
+  background: #666;
+  font-weight: bold;
+}
+
 .order-box h4 {
   margin-bottom: 10px;
   font-size: 16px;

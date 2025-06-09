@@ -36,11 +36,11 @@
 <script src="${pageContext.request.contextPath}/resources/js/volume.js"
 	defer></script>
 <script
-        src="${pageContext.request.contextPath}/resources/js/trade-history.js"
-        defer></script>
+	src="${pageContext.request.contextPath}/resources/js/trade-history.js"
+	defer></script>
 <script
-        src="${pageContext.request.contextPath}/resources/js/mini-wallet.js"
-        defer></script>
+	src="${pageContext.request.contextPath}/resources/js/mini-wallet.js"
+	defer></script>
 
 
 <!-- ✅ CSS -->
@@ -69,10 +69,10 @@
 	<div class="main-container">
 		<!-- 왼쪽: 커뮤니티 채팅 영역 -->
 		<div class="chat-area">
-                        <div style="position: relative; width: 100%; height: 100%;">
-                                <div id="communityChatPanel"
-                                        style="position: absolute; left: 0; top: 50px; width: 100%; height: calc(100% - 50px); background: #fff; border: 1px solid #ccc; box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); transform: translateX(0); overflow-y: auto; padding: 15px;">
-                                        <h3>커뮤니티채팅</h3>
+			<div style="position: relative; width: 100%; height: 100%;">
+				<div id="communityChatPanel"
+					style="position: absolute; left: 0; top: 50px; width: 100%; height: calc(100% - 50px); background: #fff; border: 1px solid #ccc; box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); transform: translateX(0); overflow-y: auto; padding: 15px;">
+					<h3>커뮤니티채팅</h3>
 					<div class="post"
 						style="border: 1px solid #ddd; margin-bottom: 15px; padding: 10px;">
 						<p>
@@ -125,29 +125,37 @@
 								</p>
 							</div>
 						</div>
-						                               </div>
-                        </div>
-                </div>
-                <div id="mini-wallet" class="mini-wallet">
-                        <div class="tabs">
-                                <button data-tab="balance" class="active">지갑</button>
-                                <button data-tab="history">주문내역</button>
-                        </div>
-                        <div class="tab-content">
-                                <div class="balance active">
-                                        <p>평가 금액: <span id="mini-total">0</span> USDT</p>
-                                        <p>수익률: <span id="mini-profit">0</span></p>
-                                        <p>BTC 보유 수량: <span id="mini-btc">0</span> BTC</p>
-                                        <p>주문 가능 금액: <span id="mini-usdt">0</span> USDT</p>
-                                </div>
-                                <div class="history">
-                                        <ul id="mini-history"></ul>
-                                </div>
-                        </div>
-                </div>
-        </div>
+					</div>
+				</div>
+			</div>
+			<div id="mini-wallet" class="mini-wallet">
+				<div class="tabs">
+					<button data-tab="balance" class="active">지갑</button>
+					<button data-tab="history">주문내역</button>
+				</div>
+				<div class="tab-content">
+					<div class="balance active">
+						<p>
+							평가 금액: <span id="mini-total">0</span> USDT
+						</p>
+						<p>
+							수익률: <span id="mini-profit">0</span>
+						</p>
+						<p>
+							BTC 보유 수량: <span id="mini-btc">0</span> BTC
+						</p>
+						<p>
+							주문 가능 금액: <span id="mini-usdt">0</span> USDT
+						</p>
+					</div>
+					<div class="history">
+						<ul id="mini-history"></ul>
+					</div>
+				</div>
+			</div>
+		</div>
 
-                <!-- 가운데 차트 영역 -->
+		<!-- 가운데 차트 영역 -->
 		<div class="chart-area">
 			<input type="checkbox" id="toggle-ma">📉 MA선 표시
 			<div id="tv-chart" style="width: 100%; height: 400px;"></div>
@@ -167,28 +175,36 @@
 			<div class="order-panel">
 				<div class="order-box buy">
 					<h4>매수 (Buy)</h4>
+					<div class="mode-toggle">
+						<button id="buy-limit-btn" class="limit-btn">지정가</button>
+					</div>
 					<label>가격 (USDT)</label> <input type="number" id="buy-price"
-						step="0.01" placeholder="USDT">
-                                        <div class="bn-slider-wrapper">
-                                                <input type="range" id="buy-slider" class="range-slider" min="0" max="100" value="0" />
-                                        </div>
-                                        <label>수량 (BTC)</label> <input type="number" id="buy-amount"
-                         step="0.00001" placeholder="BTC"> <label>총액 (USDT)</label>
-                                        <input type="number" id="buy-total" step="0.01" placeholder="USDT">
+						readonly step="0.01" placeholder="USDT">
+					<div class="bn-slider-wrapper">
+						<input type="range" id="buy-slider" class="range-slider" min="0"
+							max="100" value="0" />
+					</div>
+					<label>수량 (BTC)</label> <input type="number" id="buy-amount"
+						step="0.00001" placeholder="BTC"> <label>총액 (USDT)</label>
+					<input type="number" id="buy-total" step="0.01" placeholder="USDT">
 					<button id="buy-submit">매수 주문 (Buy)</button>
 				</div>
 
 				<div class="order-box sell">
 					<h4>매도 (Sell)</h4>
+					<div class="mode-toggle">
+						<button id="sell-limit-btn" class="limit-btn">지정가</button>
+					</div>
 					<label>가격 (USDT)</label> <input type="number" id="sell-price"
-						step="0.01" placeholder="USDT">
-                           <div class="bn-slider-wrapper">
-                                                <input type="range" id="sell-slider" class="range-slider" min="0" max="100" value="0" />
-                                        </div>
-                                        <label>수량 (BTC)</label> <input type="number" id="sell-amount" step="0.00001"
-                                                placeholder="BTC"> <label>총액 (USDT)</label> <input
-                                                type="number" id="sell-total" step="0.01" placeholder="USDT">
-                                                
+						readonly step="0.01" placeholder="USDT">
+					<div class="bn-slider-wrapper">
+						<input type="range" id="sell-slider" class="range-slider" min="0"
+							max="100" value="0" />
+					</div>
+					<label>수량 (BTC)</label> <input type="number" id="sell-amount"
+						step="0.00001" placeholder="BTC"> <label>총액 (USDT)</label>
+					<input type="number" id="sell-total" step="0.01" placeholder="USDT">
+
 					<button id="sell-submit">매도 주문 (Sell)</button>
 				</div>
 			</div>
