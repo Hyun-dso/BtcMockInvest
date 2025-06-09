@@ -131,6 +131,7 @@
 			<div id="mini-wallet" class="mini-wallet">
 				<div class="tabs">
 					<button data-tab="balance" class="active">지갑</button>
+					<button data-tab="orders">주문내역</button>
 					<button data-tab="history">체결내역</button>
 				</div>
 				<div class="tab-content">
@@ -147,6 +148,9 @@
 						<p>
 							주문 가능 금액: <span id="mini-usdt">0</span> USDT
 						</p>
+					</div>
+					<div class="orders">
+						<ul id="mini-orders"></ul>
 					</div>
 					<div class="history">
 						<ul id="mini-history"></ul>

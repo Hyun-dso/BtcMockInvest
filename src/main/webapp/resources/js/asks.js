@@ -14,10 +14,15 @@ export function renderAsks(asks) {
     if (entries[i]) {
       const [p, qty] = entries[i];
 	  const price = parseFloat(p);
-	  li.innerHTML = `<span>${price.toFixed(2)}</span><span>${parseFloat(qty).toFixed(5)} BTC</span>`;
-	  li.addEventListener("click", () => {
-	    if (window.handleOrderbookClick) window.handleOrderbookClick("ASK", price);
-	  });
+	  const amount = parseFloat(qty);
+	  if (isNaN(price) || isNaN(amount)) {
+	    li.innerHTML = `<span>-</span><span>-</span>`;
+	  } else {
+	    li.innerHTML = `<span>${price.toFixed(2)}</span><span>${amount.toFixed(5)} BTC</span>`;
+	    li.addEventListener("click", () => {
+	      if (window.handleOrderbookClick) window.handleOrderbookClick("ASK", price);
+	    });
+	  }
     } else {
       li.innerHTML = `<span>-</span><span>-</span>`;
     }
