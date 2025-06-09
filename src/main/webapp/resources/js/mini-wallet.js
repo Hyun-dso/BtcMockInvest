@@ -7,15 +7,27 @@ document.addEventListener('DOMContentLoaded', () => {
 	const profitEl = document.getElementById('mini-profit');
 	const historyUl = document.getElementById('mini-history');
 
-	if (userId) {
+	function refreshWallet() {
+	        if (!userId) return;
 	        fetch(`${ctx}/api/wallet?userId=${userId}`)
 	                .then(res => res.json())
 	                .then(w => {
 	                        if (totalEl) totalEl.textContent = parseFloat(w.totalValue).toFixed(2);
 	                        if (btcEl) btcEl.textContent = parseFloat(w.btcBalance).toFixed(8);
 	                        if (usdtEl) usdtEl.textContent = parseFloat(w.usdtBalance).toFixed(2);
-	                        if (profitEl) profitEl.textContent = `${w.profitRateSafe}%`;
+	                        if (profitEl) {
+	                                const rate = parseFloat(w.profitRateValue || w.profitRateSafe);
+	                                profitEl.textContent = `${w.profitRateSafe}%`;
+	                                if (rate > 0) profitEl.style.color = 'red';
+	                                else if (rate < 0) profitEl.style.color = 'blue';
+	                                else profitEl.style.color = '';
+	                        }
 	                });
+	}
+
+	if (userId) {
+	        refreshWallet();
+	        setInterval(refreshWallet, 5000);
 
 	        if (historyUl) historyUl.innerHTML = '';
 
