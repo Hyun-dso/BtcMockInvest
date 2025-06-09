@@ -1,6 +1,6 @@
 const MAX_LEVELS = 6;
 
-export function renderAsks(asks, tickSize = 0.01) {
+export function renderAsks(asks, tickSize = 0.01, currentPrice = 0) {
   const asksList = document.getElementById("asks");
   asksList.innerHTML = "";
 
@@ -11,21 +11,19 @@ export function renderAsks(asks, tickSize = 0.01) {
     aggregated[key] = (aggregated[key] || 0) + parseFloat(qty);
   });
 
-  const entries = Object.entries(aggregated)
-    .sort((a, b) => parseFloat(b[0]) - parseFloat(a[0]))
-    .slice(0, MAX_LEVELS);
+  const startPrice = Math.ceil(currentPrice / tickSize) * tickSize;
 
-  for (let i = 0; i < MAX_LEVELS; i++) {
+  for (let i = MAX_LEVELS; i > 0; i--) {
+    const price = (startPrice + tickSize * i).toFixed(2);
+    const qty = aggregated[price];  
     const li = document.createElement("li");
-    if (entries[i]) {
-      const [p, qty] = entries[i];
-	  const price = parseFloat(p);
-	  li.innerHTML = `<span>${price.toFixed(2)}</span><span>${parseFloat(qty).toFixed(5)} BTC</span>`;
+	if (qty) {
+	  li.innerHTML = `<span>${parseFloat(price).toFixed(2)}</span><span>${qty.toFixed(5)} BTC</span>`;
 	  li.addEventListener("click", () => {
-	    if (window.handleOrderbookClick) window.handleOrderbookClick("ASK", price);
+	    if (window.handleOrderbookClick) window.handleOrderbookClick("ASK", parseFloat(price));
 	  });
     } else {
-      li.innerHTML = `<span>-</span><span>-</span>`;
+      li.innerHTML = `<span>${parseFloat(price).toFixed(2)}</span><span>-</span>`;
     }
     asksList.appendChild(li);
   }

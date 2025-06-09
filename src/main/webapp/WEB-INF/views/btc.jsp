@@ -216,10 +216,16 @@
 		<div class="trade-area">
 			<div class="trade-ui">
 				<h3>호가</h3>
-
+						<select id="tick-size">
+							<option value="0.01">0.01</option>
+							<option value="0.1">0.1</option>
+							<option value="1">1</option>
+							<option value="10">10</option>
+							<option value="100">100</option>
+						</select>
 				<div id="mid-price"
-					style="margin: 0.5rem 0; font-weight: bold; color: #333;">가격:
-					-</div>
+					style="margin: 0.5rem 0; font-weight: bold; color: #333;">가격:-
+						</div>
 
 				<div id="orderbook"
 					style="display: flex; flex-direction: column; font-family: monospace;">
@@ -230,13 +236,6 @@
 						style="display: flex; align-items: center; justify-content: center; gap: 4px; margin: 1rem 0;">
 						<div id="btc-price"
 							style="font-size: 2rem; font-weight: bold; text-align: center;">$-</div>
-						<select id="tick-size">
-							<option value="0.01">0.01</option>
-							<option value="0.1">0.1</option>
-							<option value="1">1</option>
-							<option value="10">10</option>
-							<option value="100">100</option>
-						</select>
 					</div>
 
 					<ul id="bids"
