@@ -174,8 +174,8 @@
 						<span>0%</span> <span>25%</span> <span>50%</span> <span>75%</span>
 						<span>100%</span>
 					</div>
-					<label>수량 (BTC)</label> <input type="number" id="buy-amount"
-						step="0.0001" placeholder="BTC"> <label>총액 (USDT)</label>
+                        <label>수량 (BTC)</label> <input type="number" id="buy-amount"
+                         step="0.00001" placeholder="BTC"> <label>총액 (USDT)</label>
 					<input type="number" id="buy-total" step="0.01" placeholder="USDT">
 
 					<button id="buy-submit">매수 주문 (Buy)</button>
@@ -187,7 +187,7 @@
 						step="0.01" placeholder="USDT">
 					<input type="range" id="sell-slider" min="0" max="100" value="0"
 						step="1"> <small id="sell-percent-label">0%</small> <label>수량
-						(BTC)</label> <input type="number" id="sell-amount" step="0.0001"
+						(BTC)</label> <input type="number" id="sell-amount" step="0.00001"
 						placeholder="BTC"> <label>총액 (USDT)</label> <input
 						type="number" id="sell-total" step="0.01" placeholder="USDT">
 
