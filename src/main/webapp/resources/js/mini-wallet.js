@@ -10,71 +10,68 @@ document.addEventListener('DOMContentLoaded', () => {
 	const historySection = document.querySelector('#mini-wallet .history');
 
 	function setHistoryHeight() {
-	        if (balanceSection && historySection) {
-	                historySection.style.maxHeight = balanceSection.offsetHeight + 'px';
-	        }
+		if (balanceSection && historySection) {
+			historySection.style.maxHeight = balanceSection.offsetHeight + 'px';
+		}
 	}
 
 	function refreshWallet() {
-	        if (!userId) return;
-	        fetch(`${ctx}/api/wallet?userId=${userId}`)
-	                .then(res => res.json())
-	                .then(w => {
-	                        if (totalEl) totalEl.textContent = parseFloat(w.totalValue).toFixed(2);
-	                        if (btcEl) btcEl.textContent = parseFloat(w.btcBalance).toFixed(8);
-	                        if (usdtEl) usdtEl.textContent = parseFloat(w.usdtBalance).toFixed(2);
-							                        if (profitEl) {
-							                                const rate = parseFloat(w.profitRateValue || w.profitRateSafe);
-							                                profitEl.textContent = `${w.profitRateSafe}%`;
-							                                if (rate > 0) profitEl.style.color = 'red';
-							                                else if (rate < 0) profitEl.style.color = 'blue';
-							                                else profitEl.style.color = '';
-							                        }
-							                        setHistoryHeight();
-							                });
-							}
+		if (!userId) return;
+		fetch(`${ctx}/api/wallet?userId=${userId}`)
+			.then(res => res.json())
+			.then(w => {
+				if (totalEl) totalEl.textContent = parseFloat(w.totalValue).toFixed(2);
+				if (btcEl) btcEl.textContent = parseFloat(w.btcBalance).toFixed(8);
+				if (usdtEl) usdtEl.textContent = parseFloat(w.usdtBalance).toFixed(2);
+				if (profitEl) {
+					const rate = parseFloat(w.profitRateValue || w.profitRateSafe);
+					profitEl.textContent = `${w.profitRateSafe}%`;
+					if (rate > 0) profitEl.style.color = 'red';
+					else if (rate < 0) profitEl.style.color = 'blue';
+					else profitEl.style.color = '';
+				}
+				setHistoryHeight();
+			});
+	}
 
 	if (userId) {
-	        refreshWallet();
-	        setInterval(refreshWallet, 5000);
+		refreshWallet();
+		setInterval(refreshWallet, 5000);
 
-	        if (historyUl) historyUl.innerHTML = '';
+		if (historyUl) historyUl.innerHTML = '';
 
-	        fetch(`${ctx}/api/order/pending?userId=${userId}`)
-	                .then(res => res.json())
-	                .then(list => {
-	                        if (!historyUl) return;
-							list.forEach(o => {
-							        const li = document.createElement('li');
-	                                const type = o.type === 'BUY' ? '매수' : '매도';
-	                                const d = new Date(o.createdAt.replace(' ', 'T') + '+09:00');
-	                                const time = d.toLocaleTimeString('ko-KR', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
-	                                const price = parseFloat(o.price).toFixed(2);
-	                                const amount = parseFloat(o.amount).toFixed(5);
-	                                li.classList.add(o.type === 'BUY' ? 'buy' : 'sell');
-	                                li.innerHTML = `<span>${type}</span><button class="cancel-btn" data-id="${o.orderId}">취소</button><span>${price}</span><span>${amount}</span><span>${time}</span>`;
-	                                li.querySelector('.cancel-btn').addEventListener('click', e => {
-	                                        const id = e.target.getAttribute('data-id');
-	                                        fetch(`${ctx}/api/order/cancel?orderId=${id}`, { method: 'POST' })
-	                                                .then(r => { if (r.ok) li.remove(); });
-	                                });
-									historyUl.appendChild(li);
-									                                                while (historyUl.children.length > 10) {
-									                                                        historyUl.removeChild(historyUl.firstChild);
-									                                                }
-									        });
-									        setHistoryHeight();
-									});
+		fetch(`${ctx}/api/order/pending?userId=${userId}`)
+			.then(res => res.json())
+			.then(list => {
+				if (!historyUl) return;
+				list.forEach(o => {
+					const li = document.createElement('li');
+					const type = o.type === 'BUY' ? '매수' : '매도';
+					const d = new Date(o.createdAt.replace(' ', 'T') + '+09:00');
+					const time = d.toLocaleTimeString('ko-KR', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+					const price = parseFloat(o.price).toFixed(2);
+					const amount = parseFloat(o.amount).toFixed(5);
+					li.classList.add(o.type === 'BUY' ? 'buy' : 'sell');
+					li.innerHTML = `<span>${type}</span><button class="cancel-btn" data-id="${o.orderId}">취소</button><span>${price}</span><span>${amount}</span><span>${time}</span>`;
+					li.querySelector('.cancel-btn').addEventListener('click', e => {
+						const id = e.target.getAttribute('data-id');
+						fetch(`${ctx}/api/order/cancel?orderId=${id}`, { method: 'POST' })
+							.then(r => { if (r.ok) li.remove(); });
+					});
+					historyUl.appendChild(li);
+				});
+				setHistoryHeight();
+			});
 
-					                                        fetch(`${ctx}/api/trade/history?userId=${userId}&limit=10`)
-					        .then(res => res.json())
-					        .then(list => {
-					                if (!historyUl) return;
-					                list.forEach(t => {
-					                        const li = document.createElement('li');
-					                        let timeData = t.createdAt || t.date;
-					                         let displayTime = '';
-					                         let tooltip = '';
+			fetch(`${ctx}/api/trade/history?userId=${userId}&limit=20`)
+			.then(res => res.json())
+			.then(list => {
+				if (!historyUl) return;
+				list.forEach(t => {
+					const li = document.createElement('li');
+					let timeData = t.createdAt || t.date;
+					let displayTime = '';
+					let tooltip = '';
 
 					if (Array.isArray(timeData)) {
 						const [y, mon, d, h, m, s] = timeData;
@@ -112,25 +109,22 @@ document.addEventListener('DOMContentLoaded', () => {
 					li.innerHTML = `<span>${type}</span><span>${price}</span><span>${amount}</span><span>${displayTime}</span>`;
 					if (tooltip) li.title = tooltip;
 					historyUl.appendChild(li);
-					                                                while (historyUl.children.length > 10) {
-					                                                        historyUl.removeChild(historyUl.firstChild);
-					                                                }
-					                                                });
-					                                                setHistoryHeight();
-					});
+				});
+				setHistoryHeight();
+			});
 	}
 	const tabs = document.querySelectorAll('#mini-wallet .tabs button');
 	const sections = document.querySelectorAll('#mini-wallet .tab-content > div');
 	setHistoryHeight();
 	window.addEventListener('resize', setHistoryHeight);
 	tabs.forEach(btn => {
-	        btn.addEventListener('click', () => {
-	                tabs.forEach(b => b.classList.remove('active'));
-	                sections.forEach(sec => sec.classList.remove('active'));
-	                btn.classList.add('active');
-	                const target = btn.getAttribute('data-tab');
-	                const el = document.querySelector(`#mini-wallet .${target}`);
-	                if (el) el.classList.add('active');
-	        });
+		btn.addEventListener('click', () => {
+			tabs.forEach(b => b.classList.remove('active'));
+			sections.forEach(sec => sec.classList.remove('active'));
+			btn.classList.add('active');
+			const target = btn.getAttribute('data-tab');
+			const el = document.querySelector(`#mini-wallet .${target}`);
+			if (el) el.classList.add('active');
+		});
 	});
 });

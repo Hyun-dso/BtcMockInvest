@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <jsp:include page="common/header.jsp" />
 <!DOCTYPE html>
 <html>
@@ -27,11 +28,11 @@
             <c:when test="${not empty history}">
                 <c:forEach var="trade" items="${history}">
                     <tr>
-                        <td>${trade.date}</td>
-                        <td>${trade.type}</td>
-                        <td>${trade.amount}</td>
-                        <td>${trade.price}</td>
-                        <td>${trade.total}</td>
+                        <td><fmt:formatDate value="${trade.createdAt}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
+                        <td>${trade.userType}</td>
+                        <td><fmt:formatNumber value="${trade.amount}" pattern="0.#####"/></td>
+                        <td><fmt:formatNumber value="${trade.price}" pattern="0.00"/></td>
+                        <td><fmt:formatNumber value="${trade.total}" pattern="0.00"/></td>
                     </tr>
                 </c:forEach>
             </c:when>

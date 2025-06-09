@@ -15,4 +15,15 @@ public class TradeExecution {
     
     // 사용자가 매수했는지 매도했는지 구분하기 위한 필드
     private String userType;
+    
+    /**
+     * 거래 금액 합계를 반환한다.
+     * @return price * amount 값, null 값이 있을 경우 0
+     */
+    public java.math.BigDecimal getTotal() {
+        if (price == null || amount == null) {
+            return java.math.BigDecimal.ZERO;
+        }
+        return price.multiply(amount);
+    }
 }
