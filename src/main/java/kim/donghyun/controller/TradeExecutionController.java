@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import kim.donghyun.model.entity.TradeExecution;
-import kim.donghyun.repository.TradeExecutionRepository;
+import kim.donghyun.service.TradeHistoryService;
 import kim.donghyun.util.TradeHistoryCache;
 import lombok.RequiredArgsConstructor;
 
@@ -19,13 +19,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class TradeExecutionController {
 
-    private final TradeExecutionRepository tradeExecutionRepository;
+    private final TradeHistoryService tradeHistoryService;
     private final TradeHistoryCache tradeHistoryCache;
 
     @GetMapping("/history")
-//    public ResponseEntity<List<TradeExecution>> getTradeHistory(@RequestParam Long userId) {
-    public ResponseEntity<List<TradeExecution>> getTradeHistory(@RequestParam("userId") Long userId) {
-        List<TradeExecution> history = tradeExecutionRepository.findByUserId(userId);
+    public ResponseEntity<List<TradeExecution>> getTradeHistory(
+            @RequestParam("userId") Long userId,
+            @RequestParam(value = "limit", required = false, defaultValue = "30") int limit) {
+        List<TradeExecution> history = tradeHistoryService.getHistory(userId, limit);
         return ResponseEntity.ok(history);
     }
     

@@ -1,10 +1,22 @@
 package kim.donghyun.controller;
 
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import jakarta.servlet.http.HttpSession;
+import kim.donghyun.model.entity.TradeExecution;
+import kim.donghyun.model.entity.User;
+import kim.donghyun.service.TradeHistoryService;
+import lombok.RequiredArgsConstructor;
+
 @Controller
+@RequiredArgsConstructor
 public class HomeController {
+	
+	private final TradeHistoryService tradeHistoryService;
 
 	@RequestMapping("/")
 	public String index() {
@@ -31,7 +43,13 @@ public class HomeController {
         return "mywallet";  // /WEB-INF/views/wallet.jsp
     }
     @RequestMapping("/history")
-    public String history() {
+    public String history(HttpSession session, Model model) {
+        User loginUser = (User) session.getAttribute("loginUser");
+        if (loginUser == null) {
+            return "redirect:/signin";
+        }
+        List<TradeExecution> list = tradeHistoryService.getHistory(loginUser.getId(), 30);
+        model.addAttribute("history", list);
         return "history"; // /WEB-INF/views/history.jsp
     }
     

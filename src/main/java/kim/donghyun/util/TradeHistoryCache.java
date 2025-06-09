@@ -10,7 +10,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class TradeHistoryCache {
-    private static final int MAX_SIZE = 20;
+    // Limit the history to the latest 10 trades
+    private static final int MAX_SIZE = 10;
     private final Deque<Map<String, Object>> recentTrades = new ArrayDeque<>();
 
     public synchronized void addTrade(Map<String, Object> trade) {

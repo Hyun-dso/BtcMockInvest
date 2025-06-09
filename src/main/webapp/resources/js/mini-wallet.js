@@ -58,12 +58,15 @@ document.addEventListener('DOMContentLoaded', () => {
 	                                        fetch(`${ctx}/api/order/cancel?orderId=${id}`, { method: 'POST' })
 	                                                .then(r => { if (r.ok) li.remove(); });
 	                                });
-									                historyUl.appendChild(li);
+									historyUl.appendChild(li);
+									                                                while (historyUl.children.length > 10) {
+									                                                        historyUl.removeChild(historyUl.firstChild);
+									                                                }
 									        });
 									        setHistoryHeight();
 									});
 
-					fetch(`${ctx}/api/trade/history?userId=${userId}`)
+					                                        fetch(`${ctx}/api/trade/history?userId=${userId}&limit=10`)
 					        .then(res => res.json())
 					        .then(list => {
 					                if (!historyUl) return;
@@ -108,9 +111,12 @@ document.addEventListener('DOMContentLoaded', () => {
 					const amount = parseFloat(t.amount).toFixed(5);
 					li.innerHTML = `<span>${type}</span><span>${price}</span><span>${amount}</span><span>${displayTime}</span>`;
 					if (tooltip) li.title = tooltip;
-					                                        historyUl.appendChild(li);
-					        });
-					        setHistoryHeight();
+					historyUl.appendChild(li);
+					                                                while (historyUl.children.length > 10) {
+					                                                        historyUl.removeChild(historyUl.firstChild);
+					                                                }
+					                                                });
+					                                                setHistoryHeight();
 					});
 	}
 	const tabs = document.querySelectorAll('#mini-wallet .tabs button');

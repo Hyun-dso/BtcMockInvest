@@ -59,7 +59,7 @@ function addHistoryRow(price, amount, time, type) {
   li.classList.add(type === 'BUY' ? 'buy' : 'sell');
   li.innerHTML = `<span>${price}</span><span>${amount} BTC</span><span>${time}</span>`;
   ul.insertBefore(li, ul.firstChild);
-  const max = 20;
+  const max = 10;
   while (ul.children.length > max) {
     ul.removeChild(ul.lastChild);
   }
