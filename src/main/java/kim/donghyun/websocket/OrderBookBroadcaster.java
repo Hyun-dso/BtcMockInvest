@@ -1,11 +1,13 @@
 package kim.donghyun.websocket;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -33,11 +35,23 @@ public class OrderBookBroadcaster {
 //        System.out.println("📡 브로드캐스트 직전 가격: " + currentPrice);
 
         int depth = 6;
+        BigDecimal step = new BigDecimal("0.01");
 
         Map<String, Object> orderbook = new HashMap<>();
- 
-        Map<BigDecimal, BigDecimal> asks = orderBookService.getPendingAsks(depth);
-        Map<BigDecimal, BigDecimal> bids = orderBookService.getPendingBids(depth);
+        
+        Map<BigDecimal, BigDecimal> asks = new LinkedHashMap<>();
+        for (int i = depth; i > 0; i--) {
+            BigDecimal priceLevel = currentPrice.add(step.multiply(BigDecimal.valueOf(i))).setScale(2, RoundingMode.HALF_UP);
+            BigDecimal qty = orderBookService.getPendingAskQuantity(priceLevel);
+            asks.put(priceLevel, qty);
+        }
+
+        Map<BigDecimal, BigDecimal> bids = new LinkedHashMap<>();
+        for (int i = 0; i < depth; i++) {
+            BigDecimal priceLevel = currentPrice.subtract(step.multiply(BigDecimal.valueOf(i + 1))).setScale(2, RoundingMode.HALF_UP);
+            BigDecimal qty = orderBookService.getPendingBidQuantity(priceLevel);
+            bids.put(priceLevel, qty);
+        }
         
         orderbook.put("asks", asks);
         orderbook.put("bids", bids);
