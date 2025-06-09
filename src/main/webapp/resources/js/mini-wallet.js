@@ -6,6 +6,14 @@ document.addEventListener('DOMContentLoaded', () => {
 	const totalEl = document.getElementById('mini-total');
 	const profitEl = document.getElementById('mini-profit');
 	const historyUl = document.getElementById('mini-history');
+	const balanceSection = document.querySelector('#mini-wallet .balance');
+	const historySection = document.querySelector('#mini-wallet .history');
+
+	function setHistoryHeight() {
+	        if (balanceSection && historySection) {
+	                historySection.style.maxHeight = balanceSection.offsetHeight + 'px';
+	        }
+	}
 
 	function refreshWallet() {
 	        if (!userId) return;
@@ -15,15 +23,16 @@ document.addEventListener('DOMContentLoaded', () => {
 	                        if (totalEl) totalEl.textContent = parseFloat(w.totalValue).toFixed(2);
 	                        if (btcEl) btcEl.textContent = parseFloat(w.btcBalance).toFixed(8);
 	                        if (usdtEl) usdtEl.textContent = parseFloat(w.usdtBalance).toFixed(2);
-	                        if (profitEl) {
-	                                const rate = parseFloat(w.profitRateValue || w.profitRateSafe);
-	                                profitEl.textContent = `${w.profitRateSafe}%`;
-	                                if (rate > 0) profitEl.style.color = 'red';
-	                                else if (rate < 0) profitEl.style.color = 'blue';
-	                                else profitEl.style.color = '';
-	                        }
-	                });
-	}
+							                        if (profitEl) {
+							                                const rate = parseFloat(w.profitRateValue || w.profitRateSafe);
+							                                profitEl.textContent = `${w.profitRateSafe}%`;
+							                                if (rate > 0) profitEl.style.color = 'red';
+							                                else if (rate < 0) profitEl.style.color = 'blue';
+							                                else profitEl.style.color = '';
+							                        }
+							                        setHistoryHeight();
+							                });
+							}
 
 	if (userId) {
 	        refreshWallet();
@@ -35,8 +44,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	                .then(res => res.json())
 	                .then(list => {
 	                        if (!historyUl) return;
-	                        list.forEach(o => {
-	                                const li = document.createElement('li');
+							list.forEach(o => {
+							        const li = document.createElement('li');
 	                                const type = o.type === 'BUY' ? '매수' : '매도';
 	                                const d = new Date(o.createdAt.replace(' ', 'T') + '+09:00');
 	                                const time = d.toLocaleTimeString('ko-KR', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
@@ -49,9 +58,10 @@ document.addEventListener('DOMContentLoaded', () => {
 	                                        fetch(`${ctx}/api/order/cancel?orderId=${id}`, { method: 'POST' })
 	                                                .then(r => { if (r.ok) li.remove(); });
 	                                });
-	                                historyUl.appendChild(li);
-	                        });
-	                });
+									                historyUl.appendChild(li);
+									        });
+									        setHistoryHeight();
+									});
 
 					fetch(`${ctx}/api/trade/history?userId=${userId}`)
 					        .then(res => res.json())
@@ -98,21 +108,23 @@ document.addEventListener('DOMContentLoaded', () => {
 					const amount = parseFloat(t.amount).toFixed(5);
 					li.innerHTML = `<span>${type}</span><span>${price}</span><span>${amount}</span><span>${displayTime}</span>`;
 					if (tooltip) li.title = tooltip;
-					historyUl.appendChild(li);
-				});
-			});
+					                                        historyUl.appendChild(li);
+					        });
+					        setHistoryHeight();
+					});
 	}
-
 	const tabs = document.querySelectorAll('#mini-wallet .tabs button');
 	const sections = document.querySelectorAll('#mini-wallet .tab-content > div');
+	setHistoryHeight();
+	window.addEventListener('resize', setHistoryHeight);
 	tabs.forEach(btn => {
-		btn.addEventListener('click', () => {
-			tabs.forEach(b => b.classList.remove('active'));
-			sections.forEach(sec => sec.classList.remove('active'));
-			btn.classList.add('active');
-			const target = btn.getAttribute('data-tab');
-			const el = document.querySelector(`#mini-wallet .${target}`);
-			if (el) el.classList.add('active');
-		});
+	        btn.addEventListener('click', () => {
+	                tabs.forEach(b => b.classList.remove('active'));
+	                sections.forEach(sec => sec.classList.remove('active'));
+	                btn.classList.add('active');
+	                const target = btn.getAttribute('data-tab');
+	                const el = document.querySelector(`#mini-wallet .${target}`);
+	                if (el) el.classList.add('active');
+	        });
 	});
 });
