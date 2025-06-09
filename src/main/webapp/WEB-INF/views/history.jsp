@@ -20,8 +20,8 @@
 					<th>날짜</th>
 					<th>종류</th>
 					<th>수량</th>
-					<th>거래가</th>
-					<th>총 금액</th>
+					<th>체결가(BTC)</th>
+					<th>주문 금액(USDT)</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -31,11 +31,20 @@
 							<tr>
 								<td><fmt:formatDate value="${trade.createdAtDate}"
 										pattern="yyyy-MM-dd HH:mm:ss" /></td>
-								<td>${trade.userType}</td>
-								<td><fmt:formatNumber value="${trade.amount}"
-										pattern="0.#####" /></td>
+								<td class="${trade.userType eq 'BUY' ? 'buy' : 'sell'}"><c:choose>
+										<c:when test="${trade.userType eq 'BUY'}">매수</c:when>
+										<c:otherwise>매도</c:otherwise>
+									</c:choose></td>
+								<td class="${trade.userType eq 'BUY' ? 'buy' : 'sell'}"><c:choose>
+										<c:when test="${trade.userType eq 'BUY'}">+</c:when>
+										<c:otherwise>-</c:otherwise>
+									</c:choose> <fmt:formatNumber value="${trade.amount}" pattern="0.#####" />
+								</td>
 								<td><fmt:formatNumber value="${trade.price}" pattern="0.00" /></td>
-								<td><fmt:formatNumber value="${trade.total}" pattern="0.00" /></td>
+								<td class="${trade.userType eq 'BUY' ? 'sell' : 'buy'}"><c:choose>
+										<c:when test="${trade.userType eq 'BUY'}">-</c:when>
+										<c:otherwise>+</c:otherwise>
+									</c:choose> <fmt:formatNumber value="${trade.total}" pattern="0.00" /></td>
 							</tr>
 						</c:forEach>
 					</c:when>
