@@ -18,6 +18,9 @@
 <script
 	src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
 
+<script src="${pageContext.request.contextPath}/resources/js/toast.js"
+	defer></script>
+
 <!-- ✅ 기능별 스크립트 -->
 <script
 	src="${pageContext.request.contextPath}/resources/js/websocket.js"
@@ -54,6 +57,8 @@
 	href="${pageContext.request.contextPath}/resources/css/mini-wallet.css">
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/tvchart.css">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/toast.css">
 
 <!-- ✅ noUiSlider CSS -->
 <link rel="stylesheet"

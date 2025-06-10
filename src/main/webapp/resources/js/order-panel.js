@@ -28,33 +28,33 @@ function floorToStep(value, step) {
 }
 
 function floorInput(el, step, decimals) {
-	        const v = parseFloat(el.value);
-	        if (!isNaN(v)) {
-	                el.value = floorToStep(v, step).toFixed(decimals);
-	        }
+	const v = parseFloat(el.value);
+	if (!isNaN(v)) {
+		el.value = floorToStep(v, step).toFixed(decimals);
 	}
-
-	function activateLimit(btnId, priceId) {
-	        const btn = document.getElementById(btnId);
-	        const priceEl = document.getElementById(priceId);
-	        if (!btn || !priceEl) return;
-	        if (!btn.classList.contains('active')) {
-	                btn.classList.add('active');
-	                priceEl.removeAttribute('readonly');
-	                btn.textContent = '현재시세';
-	        }
 }
 
-window.handleOrderbookClick = function (side, price) {
-        if (side === 'ASK') {
-                activateLimit('sell-limit-btn', 'sell-price');
-                const sp = document.getElementById('sell-price');
-                if (sp) sp.value = price.toFixed(2);
-        } else if (side === 'BID') {
-                activateLimit('buy-limit-btn', 'buy-price');
-                const bp = document.getElementById('buy-price');
-                if (bp) bp.value = price.toFixed(2);
-        }
+function activateLimit(btnId, priceId) {
+	const btn = document.getElementById(btnId);
+	const priceEl = document.getElementById(priceId);
+	if (!btn || !priceEl) return;
+	if (!btn.classList.contains('active')) {
+		btn.classList.add('active');
+		priceEl.removeAttribute('readonly');
+		btn.textContent = '현재시세';
+	}
+}
+
+window.handleOrderbookClick = function(side, price) {
+	if (side === 'ASK') {
+		activateLimit('sell-limit-btn', 'sell-price');
+		const sp = document.getElementById('sell-price');
+		if (sp) sp.value = price.toFixed(2);
+	} else if (side === 'BID') {
+		activateLimit('buy-limit-btn', 'buy-price');
+		const bp = document.getElementById('buy-price');
+		if (bp) bp.value = price.toFixed(2);
+	}
 };
 
 function sendOrder(type, priceId, amountId) {
@@ -72,7 +72,7 @@ function sendOrder(type, priceId, amountId) {
 	const price = parseFloat(priceEl.value);
 	const amount = parseFloat(amountEl.value);
 	if (!price || !amount) {
-		alert('가격과 수량을 입력하세요');
+		showToast('가격과 수량을 입력하세요');
 		return;
 	}
 
@@ -80,7 +80,7 @@ function sendOrder(type, priceId, amountId) {
 	const flooredAmount = floorToStep(amount, 0.00001).toFixed(5);
 	const total = parseFloat(flooredPrice) * parseFloat(flooredAmount);
 	if (total < 1) {
-		alert('총 거래 금액은 최소 1 USDT 이상이어야 합니다');
+		showToast('총 거래 금액은 최소 1 USDT 이상이어야 합니다');
 		return;
 	}
 
@@ -101,11 +101,11 @@ function sendOrder(type, priceId, amountId) {
 			return res.json();
 		})
 		.then(data => {
-			alert(`✅ ${type} 주문 완료!\n체결가: ${data.price}\n수량: ${data.amount}`);
+			showToast(`✅ ${type} 주문 완료!\n체결가: ${data.price}\n수량: ${data.amount}`);
 		})
 		.catch(err => {
 			console.error(err);
-			alert('❌ 주문 중 오류 발생');
+			showToast('❌ 주문 중 오류 발생');
 		});
 }
 
@@ -116,24 +116,24 @@ document.addEventListener('DOMContentLoaded', () => {
 	const sellLimitBtn = document.getElementById('sell-limit-btn');
 
 	function toggleLimit(btn, priceId) {
-	        const priceEl = document.getElementById(priceId);
-	        if (!priceEl) return;
+		const priceEl = document.getElementById(priceId);
+		if (!priceEl) return;
 
-	        btn.classList.toggle('active');
-	        const active = btn.classList.contains('active');
-	        if (active) {
-	                priceEl.removeAttribute('readonly');
-	                btn.textContent = '현재시세';
-	        } else {
-	                priceEl.setAttribute('readonly', true);
-	                btn.textContent = '지정가';
-	        }
+		btn.classList.toggle('active');
+		const active = btn.classList.contains('active');
+		if (active) {
+			priceEl.removeAttribute('readonly');
+			btn.textContent = '현재시세';
+		} else {
+			priceEl.setAttribute('readonly', true);
+			btn.textContent = '지정가';
+		}
 	}
 
 	if (buyLimitBtn)
-	        buyLimitBtn.addEventListener('click', () => toggleLimit(buyLimitBtn, 'buy-price'));
+		buyLimitBtn.addEventListener('click', () => toggleLimit(buyLimitBtn, 'buy-price'));
 	if (sellLimitBtn)
-	        sellLimitBtn.addEventListener('click', () => toggleLimit(sellLimitBtn, 'sell-price'));
+		sellLimitBtn.addEventListener('click', () => toggleLimit(sellLimitBtn, 'sell-price'));
 
 	function setSliderBg(slider) {
 		const val = slider.value;
@@ -223,12 +223,12 @@ document.addEventListener('DOMContentLoaded', () => {
 			fromTotal();
 		});
 		priceEl.addEventListener('blur', () => {
-		        floorInput(priceEl, 0.01, 2);
-		        fromAmount();
-		        fromTotal();
+			floorInput(priceEl, 0.01, 2);
+			fromAmount();
+			fromTotal();
 		});
 		priceEl.addEventListener('change', () => {
-		        floorInput(priceEl, 0.01, 2);
+			floorInput(priceEl, 0.01, 2);
 		});
 
 		amountEl.addEventListener('keydown', (e) => {

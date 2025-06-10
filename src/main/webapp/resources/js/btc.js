@@ -18,8 +18,8 @@ if (!isLoggedIn) {
   buttons.forEach(btn => {
     btn.disabled = true;
     btn.addEventListener('click', () => {
-      alert('로그인이 필요합니다.');
-      window.location.href = 'login.jsp';
+		showToast('로그인이 필요합니다.');
+		setTimeout(() => { window.location.href = 'login.jsp'; }, 500);
     });
   });
 } else {
@@ -37,9 +37,9 @@ if (!isLoggedIn) {
 
   tradeBtn.addEventListener('click', () => {
     if (!tradeMode) {
-      alert('매수 또는 매도를 선택하세요.');
+     showToast('매수 또는 매도를 선택하세요.');
     } else {
-      alert(tradeMode + '하기 실행!');
+      showToast(tradeMode + '하기 실행!');
     }
   });
 }
@@ -61,8 +61,8 @@ if (!isLoggedIn) {
   buttons.forEach(btn => {
     btn.disabled = true;
     btn.addEventListener('click', () => {
-      alert('로그인이 필요합니다.');
-      window.location.href = 'login.jsp';
+		showToast('로그인이 필요합니다.');
+		setTimeout(() => { window.location.href = 'login.jsp'; }, 500);
     });
   });
 }
