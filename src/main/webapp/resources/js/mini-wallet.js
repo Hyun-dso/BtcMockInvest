@@ -6,14 +6,18 @@ document.addEventListener('DOMContentLoaded', () => {
 	const totalEl = document.getElementById('mini-total');
 	const profitEl = document.getElementById('mini-profit');
 	const historyUl = document.getElementById('mini-history');
+	const orderUl = document.getElementById('mini-orders');
 	const balanceSection = document.querySelector('#mini-wallet .balance');
+	const orderSection = document.querySelector('#mini-wallet .orders');
 	const historySection = document.querySelector('#mini-wallet .history');
 
 	function setHistoryHeight() {
-	        if (balanceSection && historySection) {
-	                const refHeight = Math.max(balanceSection.offsetHeight, historySection.offsetHeight);
-	                historySection.style.maxHeight = refHeight + 'px';
-	        }
+		const sections = [balanceSection, orderSection, historySection].filter(Boolean);
+		if (sections.length > 0) {
+			const refHeight = Math.max(...sections.map(s => s.offsetHeight));
+			if (orderSection) orderSection.style.maxHeight = refHeight + 'px';
+			if (historySection) historySection.style.maxHeight = refHeight + 'px';
+		}
 	}
 
 	function refreshWallet() {
@@ -39,12 +43,13 @@ document.addEventListener('DOMContentLoaded', () => {
 		refreshWallet();
 		setInterval(refreshWallet, 5000);
 
+		if (orderUl) orderUl.innerHTML = '';
 		if (historyUl) historyUl.innerHTML = '';
 
 		fetch(`${ctx}/api/order/pending?userId=${userId}`)
 			.then(res => res.json())
 			.then(list => {
-				if (!historyUl) return;
+				if (!orderUl) return;
 				list.forEach(o => {
 					const li = document.createElement('li');
 					const type = o.type === 'BUY' ? '매수' : '매도';
@@ -53,18 +58,18 @@ document.addEventListener('DOMContentLoaded', () => {
 					const price = parseFloat(o.price).toFixed(2);
 					const amount = parseFloat(o.amount).toFixed(5);
 					li.classList.add(o.type === 'BUY' ? 'buy' : 'sell');
-					li.innerHTML = `<span>${type}</span><button class="cancel-btn" data-id="${o.orderId}">취소</button><span>${price}</span><span>${amount}</span><span>${time}</span>`;
+					li.innerHTML = `<span>${type}</span><span>${price}</span><span>${amount}</span><span>${time}</span><button class="cancel-btn" data-id="${o.orderId}">취소</button>`;
 					li.querySelector('.cancel-btn').addEventListener('click', e => {
 						const id = e.target.getAttribute('data-id');
 						fetch(`${ctx}/api/order/cancel?orderId=${id}`, { method: 'POST' })
 							.then(r => { if (r.ok) li.remove(); });
 					});
-					historyUl.appendChild(li);
+					orderUl.appendChild(li);
 				});
 				setHistoryHeight();
 			});
 
-			fetch(`${ctx}/api/trade/history?userId=${userId}&limit=20`)
+		fetch(`${ctx}/api/trade/history?userId=${userId}&limit=20`)
 			.then(res => res.json())
 			.then(list => {
 				if (!historyUl) return;
@@ -119,16 +124,16 @@ document.addEventListener('DOMContentLoaded', () => {
 	setHistoryHeight();
 	window.addEventListener('resize', setHistoryHeight);
 	tabs.forEach(btn => {
-	        btn.addEventListener('click', () => {
-	                tabs.forEach(b => b.classList.remove('active'));
-	                sections.forEach(sec => sec.classList.remove('active'));
-	                btn.classList.add('active');
-	                const target = btn.getAttribute('data-tab');
-	                const el = document.querySelector(`#mini-wallet .${target}`);
-	                if (el) {
-	                        el.classList.add('active');
-	                        setHistoryHeight();
-	                }
-	        });
+		btn.addEventListener('click', () => {
+			tabs.forEach(b => b.classList.remove('active'));
+			sections.forEach(sec => sec.classList.remove('active'));
+			btn.classList.add('active');
+			const target = btn.getAttribute('data-tab');
+			const el = document.querySelector(`#mini-wallet .${target}`);
+			if (el) {
+				el.classList.add('active');
+				setHistoryHeight();
+			}
+		});
 	});
 });

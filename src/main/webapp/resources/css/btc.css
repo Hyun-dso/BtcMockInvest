@@ -344,15 +344,18 @@ input[type="range"]::before {
 }
 
 .mini-wallet .balance,
-.mini-wallet .history {
+.mini-wallet .history,
+.mini-wallet .orders {	
   display: none;
 }
 
+.mini-wallet .orders,
 .mini-wallet .history {
   overflow-y: auto;
 }
 
 .mini-wallet .balance.active,
+.mini-wallet .orders.active,
 .mini-wallet .history.active {
   display: block;
 }
@@ -363,19 +366,41 @@ input[type="range"]::before {
   margin: 0;
 }
 
+#mini-orders {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
 #mini-history li {
-	  display: flex;
+	          display: flex;
   justify-content: space-between;
   font-size: 0.85rem;
   border-bottom: 1px solid #ddd;
   padding: 2px 0;
   }
 
+#mini-orders li {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  border-bottom: 1px solid #ddd;
+  padding: 2px 0;
+}
+
 #mini-history li span {
   flex: 1;
 }
 
+#mini-orders li span {
+  flex: 1;
+}
+
 #mini-history li span:nth-child(1) {
+  text-align: left;
+}
+
+#mini-orders li span:nth-child(1) {
   text-align: left;
 }
 
@@ -384,7 +409,16 @@ input[type="range"]::before {
   text-align: center;
 }
 
+#mini-orders li span:nth-child(2),
+#mini-orders li span:nth-child(3) {
+  text-align: center;
+}
+
 #mini-history li span:nth-child(4) {
+  text-align: right;
+}
+
+#mini-orders li span:nth-child(4) {
   text-align: right;
 }
 
@@ -394,7 +428,17 @@ input[type="range"]::before {
   padding: 2px 4px;
 }
 
+#mini-orders .cancel-btn {
+  margin: 0 4px;
+  font-size: 0.75rem;
+  padding: 2px 4px;
+}
+
 #mini-history li.buy span:nth-child(1) {
+  color: #d9534f;
+}
+
+#mini-orders li.buy span:nth-child(1) {
   color: #d9534f;
 }
 
@@ -402,13 +446,25 @@ input[type="range"]::before {
   color: #007bff;
 }
 
+#mini-orders li.sell span:nth-child(1) {
+  color: #007bff;
+}
+
 #mini-history li.buy span:nth-child(3) {
+  color: #d9534f;
+}
+
+#mini-orders li.buy span:nth-child(3) {
   color: #d9534f;
 }
 
 #mini-history li.sell span:nth-child(3) {
   color: #007bff;
   }
+
+#mini-orders li.sell span:nth-child(3) {
+  color: #007bff;
+}
 
 /* Binance style slider */
 .bn-slider-wrapper {

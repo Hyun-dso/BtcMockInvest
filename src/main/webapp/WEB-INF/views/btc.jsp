@@ -132,6 +132,7 @@
 				<div class="tabs">
 					<button data-tab="balance" class="active">지갑</button>
 					<button data-tab="history">체결내역</button>
+					<button data-tab="orders">주문내역</button>
 				</div>
 				<div class="tab-content">
 					<div class="balance active">
@@ -150,6 +151,9 @@
 					</div>
 					<div class="history">
 						<ul id="mini-history"></ul>
+					</div>
+					<div class="orders">
+						<ul id="mini-orders"></ul>
 					</div>
 				</div>
 			</div>
@@ -216,16 +220,16 @@
 		<div class="trade-area">
 			<div class="trade-ui">
 				<h3>호가</h3>
-						<select id="tick-size">
-							<option value="0.01">0.01</option>
-							<option value="0.1">0.1</option>
-							<option value="1">1</option>
-							<option value="10">10</option>
-							<option value="100">100</option>
-						</select>
+				<select id="tick-size">
+					<option value="0.01">0.01</option>
+					<option value="0.1">0.1</option>
+					<option value="1">1</option>
+					<option value="10">10</option>
+					<option value="100">100</option>
+				</select>
 				<div id="mid-price"
 					style="margin: 0.5rem 0; font-weight: bold; color: #333;">가격:-
-						</div>
+				</div>
 
 				<div id="orderbook"
 					style="display: flex; flex-direction: column; font-family: monospace;">
