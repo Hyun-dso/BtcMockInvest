@@ -127,11 +127,23 @@
 		#{price}
 	</select>
 
+	<!-- Pending quantity grouped by price for both bid and ask -->
+	<select id="findPendingQuantityGroupedByPrice"
+		resultType="kim.donghyun.model.dto.PriceQuantityDTO">
+		SELECT price, SUM(amount) AS totalQuantity
+		FROM trade_order
+		WHERE order_mode = 'LIMIT'
+		AND status = 'PENDING'
+		GROUP BY price
+		ORDER BY price
+	</select>
+
 	<select id="findPendingBidQuantityInRange"
 		resultType="java.math.BigDecimal">
 		SELECT COALESCE(SUM(amount), 0)
 		FROM trade_order
-		WHERE order_mode = 'LIMIT'
+		WHERE
+		order_mode = 'LIMIT'
 		AND status = 'PENDING'
 		AND type = 'BUY'
 		AND price
