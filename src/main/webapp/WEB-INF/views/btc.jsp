@@ -47,6 +47,12 @@
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/btc.css">
 <link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/orderbook.css">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/trade-history.css">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/mini-wallet.css">
+<link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/tvchart.css">
 
 <!-- ✅ noUiSlider CSS -->
