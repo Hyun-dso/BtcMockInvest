@@ -168,7 +168,18 @@ document.addEventListener("DOMContentLoaded", () => {
 		client.subscribe("/topic/price", (message) => {
 			const { price, timestamp } = JSON.parse(message.body);
 			const nowSec = Number(timestamp);
-			const candleTime = Math.floor(nowSec / 60) * 60;
+
+			// interval마다 캔들 시작 시간 계산
+			const intervalSecondsMap = {
+				"1m": 60,
+				"15m": 60 * 15,
+				"1h": 60 * 60,
+				"1d": 86400,
+				"1w": 86400 * 7,
+				"1M": 2629743, // 평균 한 달
+			};
+			const step = intervalSecondsMap[currentInterval] || 60;
+			const candleTime = Math.floor(nowSec / step) * step;
 
 			if (!window.lastCandle || window.lastCandle.time !== candleTime) {
 				window.lastCandle = {
@@ -203,6 +214,7 @@ document.addEventListener("DOMContentLoaded", () => {
 					window.lastCandle.time <= lastKnown.time + allowance)
 			) {
 				realtimeSeries.update({ ...window.lastCandle });
+				chart.timeScale().scrollToRealTime();
 				updateMA();
 			} else {
 				console.warn("⚠️ 실시간 캔들이 정식 봉 범위를 벗어났습니다 → update 생략");
@@ -224,6 +236,7 @@ document.addEventListener("DOMContentLoaded", () => {
 						close: Number(candle.close),
 					};
 					candleSeries.update(newCandle);
+					chart.timeScale().scrollToRealTime();
 					window.candleSeries._lastBar = newCandle;
 					window.candleSeries._data = (window.candleSeries._data || []).concat([newCandle]);
 					realtimeSeries.setData([]);
@@ -268,13 +281,15 @@ function subscribeToInterval(interval) {
 			const filtered = data.filter(isValidCandle).sort((a, b) => a.time - b.time);
 			if (filtered.length === 0) {
 				console.warn("⚠️ 유효한 캔들 없음 → 빈 데이터로 초기화 진행");
-				window.candleSeries.setData([]);                    // ✅ 이거 추가!!
+				window.candleSeries.setData([]);
+				chart.timeScale().scrollToRealTime();
 				window.candleSeries._lastBar = null;                // ✅ 명시적으로 초기화
 				window.candleSeries._data = [];                     // ✅ MA도 비우기
 				if (maSeries) maSeries.setData([]);
 				return;
 			}
 			window.candleSeries.setData(filtered);
+			chart.timeScale().scrollToRealTime();
 			window.candleSeries._lastBar = filtered[filtered.length - 1];
 
 			window.candleSeries._data = filtered;  // ✅ MA 계산용 데이터 저장
