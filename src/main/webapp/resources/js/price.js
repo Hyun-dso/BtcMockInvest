@@ -92,7 +92,7 @@ window.websocket.connect((client) => {
 	       bp.value = price.toFixed(2);
 	   if (sp && !(sellLimitBtn && sellLimitBtn.classList.contains('active')))
 	       sp.value = price.toFixed(2);
-      console.log("📡 실시간 가격 수신:", price);
+      // console.log("📡 실시간 가격 수신:", price);
     } catch (e) {
       console.error("📛 실시간 가격 수신 처리 에러:", e);
     }

@@ -254,7 +254,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	document.querySelectorAll('#timeframe-selector button').forEach(btn => {
 		btn.addEventListener('click', () => {
 			const interval = btn.dataset.timeframe;
-			console.log("🖱️ 버튼 클릭됨:", interval);
+			// console.log("🖱️ 버튼 클릭됨:", interval);
 			subscribeToInterval(interval);
 		});
 	});

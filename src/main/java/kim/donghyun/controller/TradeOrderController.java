@@ -15,6 +15,7 @@ import kim.donghyun.model.entity.User;
 import kim.donghyun.model.enums.OrderMode;
 import kim.donghyun.model.enums.OrderType;
 import kim.donghyun.service.OrderService;
+import kim.donghyun.service.TradeOrderHistoryService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -23,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 public class TradeOrderController {
 
     private final OrderService orderService;
+    private final TradeOrderHistoryService orderHistoryService;
 
     @PostMapping("/market")
     public ResponseEntity<TradeOrder> executeMarketOrder(
@@ -72,5 +74,12 @@ public class TradeOrderController {
     public ResponseEntity<Void> cancelOrder(@RequestParam("orderId") Long orderId) {
         orderService.cancelOrder(orderId);
         return ResponseEntity.ok().build();
+    }
+    
+    @GetMapping("/history")
+    public ResponseEntity<java.util.List<TradeOrder>> getOrderHistory(
+            @RequestParam("userId") Long userId,
+            @RequestParam(value = "limit", required = false, defaultValue = "30") int limit) {
+        return ResponseEntity.ok(orderHistoryService.getHistory(userId, limit));
     }
 }
