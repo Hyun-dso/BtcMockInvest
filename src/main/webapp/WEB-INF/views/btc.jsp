@@ -76,7 +76,6 @@
 		window.contextPath = document.body.getAttribute("data-context");
 		window.loginUserId = "${sessionScope.loginUser.id}"; // ✅ 이 값이 "6"이 되도록!
 	</script>
-	<p>로그인 유저 ID: ${sessionScope.loginUser.id}</p>
 	<div class="main-container">
 		<!-- 왼쪽: 커뮤니티 채팅 영역 -->
 		<div class="chat-area">
