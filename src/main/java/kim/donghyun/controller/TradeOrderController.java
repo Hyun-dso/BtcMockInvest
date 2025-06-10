@@ -16,6 +16,7 @@ import kim.donghyun.model.enums.OrderMode;
 import kim.donghyun.model.enums.OrderType;
 import kim.donghyun.service.OrderService;
 import kim.donghyun.service.TradeOrderHistoryService;
+import kim.donghyun.util.PendingOrderCache;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -25,6 +26,7 @@ public class TradeOrderController {
 
     private final OrderService orderService;
     private final TradeOrderHistoryService orderHistoryService;
+    private final PendingOrderCache pendingOrderCache;
 
     @PostMapping("/market")
     public ResponseEntity<TradeOrder> executeMarketOrder(
@@ -74,6 +76,11 @@ public class TradeOrderController {
     public ResponseEntity<Void> cancelOrder(@RequestParam("orderId") Long orderId) {
         orderService.cancelOrder(orderId);
         return ResponseEntity.ok().build();
+    }
+    
+    @GetMapping("/recent")
+    public ResponseEntity<java.util.List<TradeOrder>> getRecentPendingOrders() {
+        return ResponseEntity.ok(pendingOrderCache.getRecentOrders());
     }
     
     @GetMapping("/history")

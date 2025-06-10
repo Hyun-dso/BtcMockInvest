@@ -14,6 +14,7 @@ import kim.donghyun.model.enums.OrderType;
 import kim.donghyun.repository.TradeExecutionRepository;
 import kim.donghyun.repository.TradeOrderRepository;
 import kim.donghyun.service.strategy.OrderExecutionStrategy;
+import kim.donghyun.util.PendingOrderCache;
 import kim.donghyun.util.PriceCache;
 import kim.donghyun.websocket.PendingOrderBroadcaster;
 
@@ -27,6 +28,7 @@ public class OrderService {
     private final TradeExecutionRepository tradeExecutionRepository;
     private final WalletService walletService;
     private final PendingOrderBroadcaster pendingOrderBroadcaster;
+    private final PendingOrderCache pendingOrderCache;
 
     private final Map<OrderMode, OrderExecutionStrategy> strategyMap = new EnumMap<>(OrderMode.class);
 
@@ -37,6 +39,7 @@ public class OrderService {
                         TradeExecutionRepository tradeExecutionRepository,
                         WalletService walletService,
                         PendingOrderBroadcaster pendingOrderBroadcaster,
+                        PendingOrderCache pendingOrderCache,
                         java.util.List<OrderExecutionStrategy> strategies) {
         this.priceCache = priceCache;
         this.orderBookService = orderBookService;
@@ -45,6 +48,7 @@ public class OrderService {
         this.tradeExecutionRepository = tradeExecutionRepository;
         this.walletService = walletService;
         this.pendingOrderBroadcaster = pendingOrderBroadcaster;
+        this.pendingOrderCache = pendingOrderCache;
         for (OrderExecutionStrategy s : strategies) {
             if (s instanceof kim.donghyun.service.strategy.MarketOrderProcessor) {
                 strategyMap.put(OrderMode.MARKET, s);
@@ -135,6 +139,7 @@ public class OrderService {
         }
         order.setStatus(OrderStatus.CANCELED);
         orderRepository.updateStatus(order);
+        pendingOrderCache.removeOrder(orderId);
         pendingOrderBroadcaster.broadcast(order);
     }
 }
