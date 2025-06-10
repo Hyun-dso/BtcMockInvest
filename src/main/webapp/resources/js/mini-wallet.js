@@ -40,8 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	}
 
 	if (userId) {
-		refreshWallet();
-		setInterval(refreshWallet, 5000);
+	        refreshWallet();
 
 		if (orderUl) orderUl.innerHTML = '';
 		if (historyUl) historyUl.innerHTML = '';
@@ -73,19 +72,38 @@ document.addEventListener('DOMContentLoaded', () => {
 		                setHistoryHeight();
 		        });
 
-		window.websocket.connect(client => {
-		        client.subscribe('/topic/pending', msg => {
-		                const data = JSON.parse(msg.body);
-		                if (!orderUl || data.userId !== userId) return;
-		                if (data.status === 'PENDING') {
-		                        orderUl.appendChild(createOrderLi(data));
-		                } else {
-		                        const el = orderUl.querySelector(`li[data-id="${data.orderId}"]`);
-		                        if (el) el.remove();
-		                }
-		                setHistoryHeight();
-		        });
-		});
+				window.websocket.connect(client => {
+				        client.subscribe('/topic/pending', msg => {
+				                const data = JSON.parse(msg.body);
+				                if (!orderUl || data.userId !== userId) return;
+				                if (data.status === 'PENDING') {
+				                        orderUl.appendChild(createOrderLi(data));
+				                } else {
+				                        const el = orderUl.querySelector(`li[data-id="${data.orderId}"]`);
+				                        if (el) el.remove();
+				                }
+				                setHistoryHeight();
+				        });
+				        client.subscribe('/topic/trade', msg => {
+				                const data = JSON.parse(msg.body);
+				                if (data.userId !== userId) return;
+				                if (historyUl) {
+				                        const li = document.createElement('li');
+				                        const typeText = data.type === 'BUY' ? '매수' : '매도';
+				                        const d = new Date(data.createdAt.replace(' ', 'T') + '+09:00');
+				                        const time = d.toLocaleTimeString('ko-KR', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+				                        const price = parseFloat(data.price).toFixed(2);
+				                        const amount = parseFloat(data.amount).toFixed(5);
+				                        li.classList.add(data.type === 'BUY' ? 'buy' : 'sell');
+				                        li.innerHTML = `<span>${typeText}</span><span>${price}</span><span>${amount}</span><span>${time}</span>`;
+				                        historyUl.insertBefore(li, historyUl.firstChild);
+				                        const max = 20;
+				                        while (historyUl.children.length > max) historyUl.removeChild(historyUl.lastChild);
+				                }
+				                refreshWallet();
+				                setHistoryHeight();
+				        });
+				});
 
 		fetch(`${ctx}/api/trade/history?userId=${userId}&limit=20`)
 			.then(res => res.json())
