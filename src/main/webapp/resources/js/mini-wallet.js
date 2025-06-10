@@ -145,12 +145,43 @@ document.addEventListener('DOMContentLoaded', () => {
 		});
 
 		fetch(`${ctx}/api/trade/history?userId=${userId}&limit=20`)
-		         .then(res => res.json())
-		         .then(list => {
-		                 if (!historyUl) return;
-		                 list.forEach(t => {
-		                         const li = document.createElement('li');
-		                         const { display: displayTime, tooltip } = formatTime(t.createdAt || t.date);
+			.then(res => res.json())
+			.then(list => {
+				if (!historyUl) return;
+				list.forEach(t => {
+					const li = document.createElement('li');
+					let timeData = t.createdAt || t.date;
+					let displayTime = '';
+					let tooltip = '';
+
+					if (Array.isArray(timeData)) {
+						const [y, mon, d, h, m, s] = timeData;
+						const date = new Date(y, mon - 1, d, h, m, s);
+						displayTime = date.toLocaleTimeString('ko-KR', {
+							hour12: false,
+							hour: '2-digit',
+							minute: '2-digit',
+							second: '2-digit'
+						});
+						tooltip = `${y}년 ${String(mon).padStart(2, '0')}월 ${String(d).padStart(2, '0')}일 ` +
+							`${String(h).padStart(2, '0')}시 ${String(m).padStart(2, '0')}분 ${String(s).padStart(2, '0')}초`;
+					} else if (typeof timeData === 'string') {
+						const date = new Date(timeData.replace(' ', 'T') + '+09:00');
+						displayTime = date.toLocaleTimeString('ko-KR', {
+							hour12: false,
+							hour: '2-digit',
+							minute: '2-digit',
+							second: '2-digit'
+						});
+						const y = date.getFullYear();
+						const mon = date.getMonth() + 1;
+						const d = date.getDate();
+						const h = date.getHours();
+						const m = date.getMinutes();
+						const s = date.getSeconds();
+						tooltip = `${y}년 ${String(mon).padStart(2, '0')}월 ${String(d).padStart(2, '0')}일 ` +
+							`${String(h).padStart(2, '0')}시 ${String(m).padStart(2, '0')}분 ${String(s).padStart(2, '0')}초`;
+					}
 
 					const type = t.userType === 'BUY' ? '매수' : '매도';
 					li.classList.add(t.userType === 'BUY' ? 'buy' : 'sell');
