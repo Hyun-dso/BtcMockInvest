@@ -2,6 +2,7 @@ import { renderAsks } from './asks.js';
 import { renderBids } from './bids.js';
 
 let tickSize = 0.01;
+let orderbooks = {};
 let lastAsks = {};
 let lastBids = {};
 let lastPrice = 0;
@@ -11,6 +12,10 @@ document.addEventListener('DOMContentLoaded', () => {
   if (select) {
     select.addEventListener('change', () => {
       tickSize = parseFloat(select.value);
+	  if (orderbooks[tickSize]) {
+	    lastAsks = orderbooks[tickSize].asks || {};
+	    lastBids = orderbooks[tickSize].bids || {};
+	  }
 	  renderAsks(lastAsks, tickSize, lastPrice);
 	  renderBids(lastBids, tickSize, lastPrice);
     });
@@ -24,8 +29,14 @@ window.websocket.connect((client) => {
       const data = JSON.parse(message.body);
       const price = parseFloat(data.price);
 	  lastPrice = price;
-      const asks = data.asks || {};
-      const bids = data.bids || {};
+	  orderbooks = data.ticks || {};
+	  if (orderbooks[tickSize]) {
+	    lastAsks = orderbooks[tickSize].asks || {};
+	    lastBids = orderbooks[tickSize].bids || {};
+	  } else {
+	    lastAsks = {};
+	    lastBids = {};
+	  }
       const prevClose = parseFloat(data.prevClose);
       const prevCloseTime = data.prevCloseTime;
       const changeRate = ((price - prevClose) / prevClose * 100).toFixed(2);
@@ -52,8 +63,6 @@ window.websocket.connect((client) => {
 	      sp.value = price.toFixed(2);
 
 	  // 호가창 데이터 저장 및 렌더링
-	  lastAsks = asks;
-	  lastBids = bids;
 	  lastPrice = price;
 	  renderAsks(lastAsks, tickSize, lastPrice);
 	  renderBids(lastBids, tickSize, lastPrice);

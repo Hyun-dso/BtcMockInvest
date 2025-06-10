@@ -1,10 +1,10 @@
 package kim.donghyun.websocket;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -38,30 +38,20 @@ public class OrderBookBroadcaster {
 //        System.out.println("📡 브로드캐스트 직전 가격: " + currentPrice);
 
         int depth = 6;
-        BigDecimal step = new BigDecimal("0.01");
 
         Map<String, Object> orderbook = new HashMap<>();
       
         Map<BigDecimal, BigDecimal> grouped = orderBookService.getGroupedPendingQuantities();
-        
-        Map<BigDecimal, BigDecimal> asks = new LinkedHashMap<>();
-        for (int i = depth; i > 0; i--) {
-            BigDecimal priceLevel = currentPrice.add(step.multiply(BigDecimal.valueOf(i))).setScale(2, RoundingMode.HALF_UP);
-            BigDecimal qty = grouped.getOrDefault(priceLevel, BigDecimal.ZERO);
-            asks.put(priceLevel, qty);
-        }
+        Map<String, Object> tickData = new LinkedHashMap<>();
+        for (BigDecimal tick : Arrays.asList(new BigDecimal("0.01"), new BigDecimal("0.1"),
+                                            new BigDecimal("1"), new BigDecimal("10"),
+                                            new BigDecimal("100"))) {
+            Map<String, Map<BigDecimal, BigDecimal>> levels = orderBookService.getOrderBookByTick(grouped, tick, currentPrice, depth);
+            orderBookCache.update(tick, levels.get("asks"), levels.get("bids"));
+            tickData.put(tick.toPlainString(), levels);
+    }
 
-        Map<BigDecimal, BigDecimal> bids = new LinkedHashMap<>();
-        for (int i = 0; i < depth; i++) {
-            BigDecimal priceLevel = currentPrice.subtract(step.multiply(BigDecimal.valueOf(i + 1))).setScale(2, RoundingMode.HALF_UP);
-            BigDecimal qty = grouped.getOrDefault(priceLevel, BigDecimal.ZERO);
-            bids.put(priceLevel, qty);
-        }
-
-        orderBookCache.update(asks, bids);
-        
-        orderbook.put("asks", asks);
-        orderbook.put("bids", bids);
+        orderbook.put("ticks", tickData);
         orderbook.put("price", currentPrice);
         
 //        System.out.println("📡 호가창 데이터 - 매도 (asks): " + orderbook.get("asks"));
