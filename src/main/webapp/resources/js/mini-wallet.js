@@ -11,6 +11,34 @@ document.addEventListener('DOMContentLoaded', () => {
 	const orderSection = document.querySelector('#mini-wallet .orders');
 	const historySection = document.querySelector('#mini-wallet .history');
 
+	function formatTime(timeData) {
+	        if (!timeData) return { display: '', tooltip: '' };
+	        let date;
+	        if (Array.isArray(timeData)) {
+	                const [y, mon, d, h, m, s] = timeData;
+	                date = new Date(y, mon - 1, d, h, m, s);
+	        } else if (typeof timeData === 'string') {
+	                date = new Date(timeData.replace(' ', 'T') + '+09:00');
+	        } else {
+	                return { display: '', tooltip: '' };
+	        }
+	        const display = date.toLocaleTimeString('ko-KR', {
+	                hour12: false,
+	                hour: '2-digit',
+	                minute: '2-digit',
+	                second: '2-digit'
+	        });
+	        const y = date.getFullYear();
+	        const mon = date.getMonth() + 1;
+	        const d = date.getDate();
+	        const h = date.getHours();
+	        const m = date.getMinutes();
+	        const s = date.getSeconds();
+	        const tooltip = `${y}년 ${String(mon).padStart(2, '0')}월 ${String(d).padStart(2, '0')}일 ` +
+	                `${String(h).padStart(2, '0')}시 ${String(m).padStart(2, '0')}분 ${String(s).padStart(2, '0')}초`;
+	        return { display, tooltip };
+	}
+
 	function setHistoryHeight() {
 		const sections = [balanceSection, orderSection, historySection].filter(Boolean);
 		if (sections.length > 0) {
@@ -49,18 +77,13 @@ document.addEventListener('DOMContentLoaded', () => {
 		        const li = document.createElement('li');
 		        li.setAttribute('data-id', o.orderId);
 		        const type = o.type === 'BUY' ? '매수' : '매도';
-		        const d = new Date(o.createdAt.replace(' ', 'T') + '+09:00');
-		        const time = d.toLocaleTimeString(undefined, {
-		                hour12: false,
-		                hour: '2-digit',
-		                minute: '2-digit',
-		                second: '2-digit'
-		        });
+		        const { display: time, tooltip } = formatTime(o.createdAt);
 		        const price = parseFloat(o.price).toFixed(2);
 		        const total = parseFloat(o.total).toFixed(2);
 		        const status = o.status;
 		        li.classList.add(o.type === 'BUY' ? 'buy' : 'sell');
 		        li.innerHTML = `<span>${type}</span><span>${price}</span><span>${total}</span><span>${status}</span><span>${time}</span>`;
+		        if (tooltip) li.title = tooltip;
 		        if (status === 'PENDING') {
 		                const btn = document.createElement('button');
 		                btn.className = 'cancel-btn';
@@ -75,15 +98,19 @@ document.addEventListener('DOMContentLoaded', () => {
 		        return li;
 		}
 
-		fetch(`${ctx}/api/order/history?userId=${userId}&limit=20`)
-		        .then(res => res.json())
+		fetch(`${ctx}/api/order/pending`)
+		        .then(res => {
+		                if (!res.ok) throw new Error('failed');
+		                return res.json();
+		        })
 		        .then(list => {
 		                if (!orderUl) return;
 		                list.forEach(o => {
 		                        orderUl.appendChild(createOrderLi(o));
 		                });
 		                setHistoryHeight();
-		        });
+		        })
+		        .catch(() => {});
 		
 		window.websocket.connect(client => {
 			client.subscribe('/topic/pending', msg => {
@@ -118,43 +145,12 @@ document.addEventListener('DOMContentLoaded', () => {
 		});
 
 		fetch(`${ctx}/api/trade/history?userId=${userId}&limit=20`)
-			.then(res => res.json())
-			.then(list => {
-				if (!historyUl) return;
-				list.forEach(t => {
-					const li = document.createElement('li');
-					let timeData = t.createdAt || t.date;
-					let displayTime = '';
-					let tooltip = '';
-
-					if (Array.isArray(timeData)) {
-						const [y, mon, d, h, m, s] = timeData;
-						const date = new Date(y, mon - 1, d, h, m, s);
-						displayTime = date.toLocaleTimeString('ko-KR', {
-							hour12: false,
-							hour: '2-digit',
-							minute: '2-digit',
-							second: '2-digit'
-						});
-						tooltip = `${y}년 ${String(mon).padStart(2, '0')}월 ${String(d).padStart(2, '0')}일 ` +
-							`${String(h).padStart(2, '0')}시 ${String(m).padStart(2, '0')}분 ${String(s).padStart(2, '0')}초`;
-					} else if (typeof timeData === 'string') {
-						const date = new Date(timeData.replace(' ', 'T') + '+09:00');
-						displayTime = date.toLocaleTimeString('ko-KR', {
-							hour12: false,
-							hour: '2-digit',
-							minute: '2-digit',
-							second: '2-digit'
-						});
-						const y = date.getFullYear();
-						const mon = date.getMonth() + 1;
-						const d = date.getDate();
-						const h = date.getHours();
-						const m = date.getMinutes();
-						const s = date.getSeconds();
-						tooltip = `${y}년 ${String(mon).padStart(2, '0')}월 ${String(d).padStart(2, '0')}일 ` +
-							`${String(h).padStart(2, '0')}시 ${String(m).padStart(2, '0')}분 ${String(s).padStart(2, '0')}초`;
-					}
+		         .then(res => res.json())
+		         .then(list => {
+		                 if (!historyUl) return;
+		                 list.forEach(t => {
+		                         const li = document.createElement('li');
+		                         const { display: displayTime, tooltip } = formatTime(t.createdAt || t.date);
 
 					const type = t.userType === 'BUY' ? '매수' : '매도';
 					li.classList.add(t.userType === 'BUY' ? 'buy' : 'sell');
