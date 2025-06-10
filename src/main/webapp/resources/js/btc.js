@@ -25,13 +25,13 @@ if (!isLoggedIn) {
 } else {
   buyBtn.addEventListener('click', () => {
     tradeMode = '매수';
-    buyBtn.style.border = '2px solid blue';
+    buyBtn.style.border = '2px solid #00b386';
     sellBtn.style.border = '2px solid transparent';
   });
 
   sellBtn.addEventListener('click', () => {
     tradeMode = '매도';
-    sellBtn.style.border = '2px solid red';
+    sellBtn.style.border = '2px solid #ff4d4f';
     buyBtn.style.border = '2px solid transparent';
   });
 

@@ -59,8 +59,8 @@ document.addEventListener('DOMContentLoaded', () => {
 				if (profitEl) {
 					const rate = parseFloat(w.profitRateValue || w.profitRateSafe);
 					profitEl.textContent = `${w.profitRateSafe}%`;
-					if (rate > 0) profitEl.style.color = 'red';
-					else if (rate < 0) profitEl.style.color = 'blue';
+					if (rate > 0) profitEl.style.color = '#F6465D';
+					else if (rate < 0) profitEl.style.color = '#0ECB81';
 					else profitEl.style.color = '';
 				}
 				setHistoryHeight();

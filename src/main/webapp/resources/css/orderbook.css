@@ -49,11 +49,11 @@
 }
 
 #asks li {
-  color: #d9534f; /* ✅ 진한 빨강 */
+  color: #ff4d4f; /* ✅  빨강 */
 }
 
 #bids li {
-  color: #007bff; /* ✅ 진한 파랑 → 흰 배경에 어울리는 파랑 */
+  color: #00b386; /* ✅  초록 */
 }
 
 #orderbook li:hover {

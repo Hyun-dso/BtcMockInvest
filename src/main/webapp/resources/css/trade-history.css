@@ -52,7 +52,7 @@
 }
 
 #trade-history li.buy span:nth-child(1) {
-  color: #007bff;
+  color: #00b386;
 }
 
 #trade-history li.sell span:nth-child(1) {

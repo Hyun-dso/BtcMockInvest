@@ -38,7 +38,7 @@
 
 	<!-- 수익률 -->
 	<div class="profit-rate"
-		style="color: ${wallet.profitRateValue >= 0 ? 'green' : 'red'};">
+		style="color: ${wallet.profitRateValue >= 0 ? '#ff4d4f' : '#00b386'};">
 		수익률: ${wallet.profitRateSafe}%</div>
 
 	<span class="value">평가 금액: ${wallet.totalValue} USDT</span>

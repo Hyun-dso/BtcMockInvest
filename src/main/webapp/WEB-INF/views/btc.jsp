@@ -244,7 +244,7 @@
 				<div id="orderbook"
 					style="display: flex; flex-direction: column; font-family: monospace;">
 					<ul id="asks"
-						style="color: red; list-style: none; padding: 0; margin: 0;"></ul>
+						style="color: #ff4d4f; list-style: none; padding: 0; margin: 0;"></ul>
 
 					<div
 						style="display: flex; align-items: center; justify-content: center; gap: 4px; margin: 1rem 0;">
@@ -253,7 +253,7 @@
 					</div>
 
 					<ul id="bids"
-						style="color: blue; list-style: none; padding: 0; margin: 0;"></ul>
+						style="color: #00b386; list-style: none; padding: 0; margin: 0;"></ul>
 				</div>
 
 				<div id="trade-volume" style="margin-top: 10px; font-weight: bold;">거래내역:
