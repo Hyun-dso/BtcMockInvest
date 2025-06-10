@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 import kim.donghyun.model.entity.BtcPrice;
 import kim.donghyun.repository.BtcPriceRepository;
 import kim.donghyun.service.OrderBookService;
+import kim.donghyun.util.OrderBookCache;
 import kim.donghyun.util.PriceCache;
 import lombok.RequiredArgsConstructor;
 
@@ -28,6 +29,7 @@ public class OrderBookBroadcaster {
     private final OrderBookService orderBookService;
     private final PriceCache priceCache;
     private final BtcPriceRepository btcPriceRepository;
+    private final OrderBookCache orderBookCache;
 
     @Scheduled(fixedDelay = 1000)
     public void broadcastOrderBook() {
@@ -42,16 +44,20 @@ public class OrderBookBroadcaster {
         Map<BigDecimal, BigDecimal> asks = new LinkedHashMap<>();
         for (int i = depth; i > 0; i--) {
             BigDecimal priceLevel = currentPrice.add(step.multiply(BigDecimal.valueOf(i))).setScale(2, RoundingMode.HALF_UP);
-            BigDecimal qty = orderBookService.getPendingAskQuantity(priceLevel);
+            BigDecimal lower = priceLevel.subtract(step);
+            BigDecimal qty = orderBookService.getPendingAskQuantityInRange(lower, priceLevel);
             asks.put(priceLevel, qty);
         }
 
         Map<BigDecimal, BigDecimal> bids = new LinkedHashMap<>();
         for (int i = 0; i < depth; i++) {
             BigDecimal priceLevel = currentPrice.subtract(step.multiply(BigDecimal.valueOf(i + 1))).setScale(2, RoundingMode.HALF_UP);
-            BigDecimal qty = orderBookService.getPendingBidQuantity(priceLevel);
+            BigDecimal upper = priceLevel.add(step);
+            BigDecimal qty = orderBookService.getPendingBidQuantityInRange(priceLevel, upper);
             bids.put(priceLevel, qty);
         }
+
+        orderBookCache.update(asks, bids);
         
         orderbook.put("asks", asks);
         orderbook.put("bids", bids);

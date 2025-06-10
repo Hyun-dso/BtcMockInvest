@@ -27,5 +27,11 @@ public interface TradeOrderRepository {
     BigDecimal findPendingBidQuantityAtPrice(@Param("price") BigDecimal price);
     BigDecimal findPendingAskQuantityAtPrice(@Param("price") BigDecimal price);
     
+    
     List<TradeOrder> findPendingOrdersByPrice ( @Param("price") BigDecimal price ) ;
+
+    BigDecimal findPendingBidQuantityInRange(@Param("low") BigDecimal low,
+                                             @Param("high") BigDecimal high);
+    BigDecimal findPendingAskQuantityInRange(@Param("low") BigDecimal low,
+                                             @Param("high") BigDecimal high);
 }
