@@ -68,8 +68,8 @@ document.addEventListener('DOMContentLoaded', () => {
 			return li;
 		}
 
-		fetch(`${ctx}/api/order/pending?userId=${userId}`)
-			.then(res => res.json())
+		fetch(`${ctx}/api/order/pending`)
+		        .then(res => res.json())
 			.then(list => {
 				if (!orderUl) return;
 				list.forEach(o => {

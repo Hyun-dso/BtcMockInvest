@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.servlet.http.HttpSession;
 import kim.donghyun.model.entity.TradeOrder;
+import kim.donghyun.model.entity.User;
 import kim.donghyun.model.enums.OrderMode;
 import kim.donghyun.model.enums.OrderType;
 import kim.donghyun.service.OrderService;
@@ -58,8 +60,12 @@ public class TradeOrderController {
     
 
     @GetMapping("/pending")
-    public ResponseEntity<java.util.List<TradeOrder>> getPendingOrders(@RequestParam("userId") Long userId) {
-        return ResponseEntity.ok(orderService.getPendingOrders(userId));
+    public ResponseEntity<java.util.List<TradeOrder>> getPendingOrders(HttpSession session) {
+        User loginUser = (User) session.getAttribute("loginUser");
+        if (loginUser == null) {
+            return ResponseEntity.status(401).build();
+        }
+        return ResponseEntity.ok(orderService.getPendingOrders(loginUser.getId()));
     }
 
     @PostMapping("/cancel")
