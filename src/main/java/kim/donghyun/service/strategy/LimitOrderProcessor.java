@@ -36,6 +36,8 @@ public class LimitOrderProcessor implements OrderExecutionStrategy {
         order.setAmount(amount);
         order.setPrice(price);
         order.setTotal(price.multiply(amount));
+        // 지정가 주문임을 명시적으로 저장한다
+        order.setOrderMode(OrderMode.LIMIT);
         order.setCreatedAt(java.time.LocalDateTime.now());
         
         if (price.compareTo(marketPrice) == 0) {
