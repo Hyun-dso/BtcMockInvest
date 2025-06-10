@@ -19,7 +19,8 @@ public class VolumeBroadcaster {
     private final SimpMessagingTemplate messagingTemplate;
     private final TradeExecutionRepository tradeExecutionRepository;
 
-    @Scheduled(fixedDelay = 1000)
+    // 거래량 정보도 0.25초 간격으로 전송
+    @Scheduled(fixedDelay = 250)
     public void broadcastVolume() {
         LocalDateTime since = LocalDateTime.now().minusSeconds(1);
         BigDecimal volume = tradeExecutionRepository.findVolumeSince(since);

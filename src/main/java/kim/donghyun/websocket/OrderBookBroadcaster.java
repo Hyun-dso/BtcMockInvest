@@ -31,7 +31,8 @@ public class OrderBookBroadcaster {
     private final BtcPriceRepository btcPriceRepository;
     private final OrderBookCache orderBookCache;
 
-    @Scheduled(fixedDelay = 1000)
+    // 호가창 업데이트 주기도 0.25초로 단축
+    @Scheduled(fixedDelay = 250)
     public void broadcastOrderBook() {
         BigDecimal currentPrice = BigDecimal.valueOf(priceCache.getLatestPrice());
 //        System.out.println("📡 브로드캐스트 직전 가격: " + currentPrice);
