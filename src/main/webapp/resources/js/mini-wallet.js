@@ -89,10 +89,17 @@ document.addEventListener('DOMContentLoaded', () => {
 		                btn.className = 'cancel-btn';
 		                btn.textContent = '취소';
 		                btn.setAttribute('data-id', o.orderId);
-		                btn.addEventListener('click', e => {
-		                        const id = e.target.getAttribute('data-id');
-		                        fetch(`${ctx}/api/order/cancel?orderId=${id}`, { method: 'POST' });
-		                });
+						btn.addEventListener('click', e => {
+						        const id = e.target.getAttribute('data-id');
+						        fetch(`${ctx}/api/order/cancel?orderId=${id}`, { method: 'POST' })
+						                .then(res => {
+						                        if (!res.ok) throw new Error('fail');
+						                        if (typeof showToast === 'function') showToast('취소 요청을 보냈습니다.');
+						                })
+						                .catch(() => {
+						                        if (typeof showToast === 'function') showToast('취소 요청 실패');
+						                });
+						});
 		                li.appendChild(btn);
 		        }
 		        return li;
@@ -118,9 +125,17 @@ document.addEventListener('DOMContentLoaded', () => {
 			        if (!orderUl || data.userId !== userId) return;
 			        const existing = orderUl.querySelector(`li[data-id="${data.orderId}"]`);
 			        if (existing) existing.remove();
-			        orderUl.insertBefore(createOrderLi(data), orderUl.firstChild);
-			        const max = 20;
-			        while (orderUl.children.length > max) orderUl.removeChild(orderUl.lastChild);
+			        if (data.status === 'PENDING') {
+			                orderUl.insertBefore(createOrderLi(data), orderUl.firstChild);
+			                const max = 20;
+			                while (orderUl.children.length > max) orderUl.removeChild(orderUl.lastChild);
+			        } else {
+			                const text = data.status === 'CANCELED'
+			                        ? '주문이 취소되었습니다.'
+			                        : '주문이 체결되었습니다.';
+			                if (typeof showToast === 'function') showToast(text);
+			                refreshWallet();
+			        }
 			        setHistoryHeight();
 			});
 			client.subscribe('/topic/trade', msg => {
