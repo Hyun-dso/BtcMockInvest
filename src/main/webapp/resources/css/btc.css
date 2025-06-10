@@ -358,6 +358,7 @@ input[type="range"]::before {
 .mini-wallet .orders.active,
 .mini-wallet .history.active {
   display: block;
+  height: 100%;
 }
 
 #mini-history {
@@ -410,7 +411,8 @@ input[type="range"]::before {
 }
 
 #mini-orders li span:nth-child(2),
-#mini-orders li span:nth-child(3) {
+#mini-orders li span:nth-child(3),
+#mini-orders li span:nth-child(4) {
   text-align: center;
 }
 
@@ -418,7 +420,7 @@ input[type="range"]::before {
   text-align: right;
 }
 
-#mini-orders li span:nth-child(4) {
+#mini-orders li span:nth-child(5) {
   text-align: right;
 }
 
