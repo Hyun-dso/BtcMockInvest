@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
 	const ctx = window.contextPath || '';
-	const userId = window.loginUserId;
+	const userId = Number(window.loginUserId);
 	const usdtEl = document.getElementById('mini-usdt');
 	const btcEl = document.getElementById('mini-btc');
 	const totalEl = document.getElementById('mini-total');
