@@ -18,13 +18,13 @@ export function renderBids(bids, tickSize = 0.01, currentPrice = 0) {
 	const price = (startPrice - tickSize * (i + 1)).toFixed(2);
 	const qty = aggregated[price];
     const li = document.createElement("li");
-	if (qty) {
-	  li.innerHTML = `<span>${parseFloat(price).toFixed(2)}</span><span>${qty.toFixed(5)} BTC</span>`;
+	if (qty !== undefined) {
+	  li.innerHTML = `<span>${parseFloat(price).toFixed(2)}</span><span>${parseFloat(qty).toFixed(6)} BTC</span>`;
 	  li.addEventListener("click", () => {
 	    if (window.handleOrderbookClick) window.handleOrderbookClick("BID", parseFloat(price));
 	  });
     } else {
-      li.innerHTML = `<span>${parseFloat(price).toFixed(2)}</span><span>-</span>`;
+           li.innerHTML = `<span>${parseFloat(price).toFixed(2)}</span><span>0.000000 BTC</span>`;
     }
     bidsList.appendChild(li);
   }
