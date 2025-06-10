@@ -30,6 +30,8 @@ public interface TradeOrderRepository {
     
     List<TradeOrder> findPendingOrdersByPrice ( @Param("price") BigDecimal price ) ;
 
+    List<PriceQuantityDTO> findPendingQuantityGroupedByPrice();
+    
     BigDecimal findPendingBidQuantityInRange(@Param("low") BigDecimal low,
                                              @Param("high") BigDecimal high);
     BigDecimal findPendingAskQuantityInRange(@Param("low") BigDecimal low,

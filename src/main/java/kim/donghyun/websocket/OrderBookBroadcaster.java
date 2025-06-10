@@ -40,20 +40,20 @@ public class OrderBookBroadcaster {
         BigDecimal step = new BigDecimal("0.01");
 
         Map<String, Object> orderbook = new HashMap<>();
+      
+        Map<BigDecimal, BigDecimal> grouped = orderBookService.getGroupedPendingQuantities();
         
         Map<BigDecimal, BigDecimal> asks = new LinkedHashMap<>();
         for (int i = depth; i > 0; i--) {
             BigDecimal priceLevel = currentPrice.add(step.multiply(BigDecimal.valueOf(i))).setScale(2, RoundingMode.HALF_UP);
-            BigDecimal lower = priceLevel.subtract(step);
-            BigDecimal qty = orderBookService.getPendingAskQuantityInRange(lower, priceLevel);
+            BigDecimal qty = grouped.getOrDefault(priceLevel, BigDecimal.ZERO);
             asks.put(priceLevel, qty);
         }
 
         Map<BigDecimal, BigDecimal> bids = new LinkedHashMap<>();
         for (int i = 0; i < depth; i++) {
             BigDecimal priceLevel = currentPrice.subtract(step.multiply(BigDecimal.valueOf(i + 1))).setScale(2, RoundingMode.HALF_UP);
-            BigDecimal upper = priceLevel.add(step);
-            BigDecimal qty = orderBookService.getPendingBidQuantityInRange(priceLevel, upper);
+            BigDecimal qty = grouped.getOrDefault(priceLevel, BigDecimal.ZERO);
             bids.put(priceLevel, qty);
         }
 

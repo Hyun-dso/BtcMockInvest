@@ -56,4 +56,13 @@ public class OrderBookService {
         BigDecimal qty = tradeOrderRepository.findPendingAskQuantityInRange(low, high);
         return qty != null ? qty : BigDecimal.ZERO;
     }
+
+    public Map<BigDecimal, BigDecimal> getGroupedPendingQuantities() {
+        List<PriceQuantityDTO> rows = tradeOrderRepository.findPendingQuantityGroupedByPrice();
+        Map<BigDecimal, BigDecimal> result = new LinkedHashMap<>();
+        for (PriceQuantityDTO dto : rows) {
+            result.put(dto.getPrice(), dto.getTotalQuantity());
+        }
+        return result;
+    }
 }

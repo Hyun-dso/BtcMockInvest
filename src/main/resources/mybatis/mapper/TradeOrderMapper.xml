@@ -119,10 +119,12 @@
 	</select>
 
 	<select id="findPendingOrdersByPrice" resultMap="orderMap">
-		SELECT * FROM trade_order
+		SELECT * FROM
+		trade_order
 		WHERE order_mode = 'LIMIT'
 		AND status = 'PENDING'
-		AND price = #{price}
+		AND price =
+		#{price}
 	</select>
 
 	<select id="findPendingBidQuantityInRange"
@@ -132,7 +134,8 @@
 		WHERE order_mode = 'LIMIT'
 		AND status = 'PENDING'
 		AND type = 'BUY'
-		AND price &gt;= #{low}
+		AND price
+		&gt;= #{low}
 		AND price &lt; #{high}
 	</select>
 
@@ -140,10 +143,12 @@
 		resultType="java.math.BigDecimal">
 		SELECT COALESCE(SUM(amount), 0)
 		FROM trade_order
-		WHERE order_mode = 'LIMIT'
+		WHERE
+		order_mode = 'LIMIT'
 		AND status = 'PENDING'
 		AND type = 'SELL'
-		AND price &gt; #{low}
+		AND price
+		&gt; #{low}
 		AND price &lt;= #{high}
 	</select>
 
