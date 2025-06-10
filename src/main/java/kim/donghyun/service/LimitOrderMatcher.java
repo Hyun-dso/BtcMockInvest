@@ -12,6 +12,7 @@ import kim.donghyun.model.enums.OrderType;
 import kim.donghyun.repository.TradeExecutionRepository;
 import kim.donghyun.repository.TradeOrderRepository;
 import kim.donghyun.util.PriceCache;
+import kim.donghyun.websocket.PendingOrderBroadcaster;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -23,6 +24,7 @@ public class LimitOrderMatcher {
     private final WalletService walletService;
     private final TradePushService tradePushService;
     private final PriceCache priceCache;
+    private final PendingOrderBroadcaster pendingOrderBroadcaster;
 
     public void match() {
         BigDecimal price = BigDecimal.valueOf(priceCache.getLatestPrice());
@@ -49,6 +51,7 @@ public class LimitOrderMatcher {
             executionRepository.insert(exe);
 
             tradePushService.broadcastTrade(order);
+            pendingOrderBroadcaster.broadcast(order);
         }
     }
 }

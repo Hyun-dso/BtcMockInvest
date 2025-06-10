@@ -14,6 +14,7 @@ import kim.donghyun.repository.TradeOrderRepository;
 import kim.donghyun.service.TradePushService;
 import kim.donghyun.service.WalletService;
 import kim.donghyun.util.PriceCache;
+import kim.donghyun.websocket.PendingOrderBroadcaster;
 import lombok.RequiredArgsConstructor;
 
 @Component
@@ -25,6 +26,7 @@ public class LimitOrderProcessor implements OrderExecutionStrategy {
     private final TradePushService tradePushService;
     private final WalletService walletService;
     private final PriceCache priceCache;
+    private final PendingOrderBroadcaster pendingOrderBroadcaster;
 
     @Override
     public TradeOrder execute(Long userId, OrderType type, BigDecimal amount, BigDecimal price) {
@@ -69,6 +71,7 @@ public class LimitOrderProcessor implements OrderExecutionStrategy {
         } else {
         	order.setStatus(OrderStatus.PENDING);
             orderRepository.insert(order);
+            pendingOrderBroadcaster.broadcast(order);
         }
         return order;
     }

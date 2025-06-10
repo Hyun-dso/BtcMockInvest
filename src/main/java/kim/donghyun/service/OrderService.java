@@ -1,24 +1,21 @@
 package kim.donghyun.service;
 
 import java.math.BigDecimal;
-
-import org.springframework.stereotype.Service;
-
 import java.util.EnumMap;
 import java.util.Map;
 
-import kim.donghyun.model.entity.TradeOrder;
+import org.springframework.stereotype.Service;
+
 import kim.donghyun.model.entity.TradeExecution;
+import kim.donghyun.model.entity.TradeOrder;
 import kim.donghyun.model.enums.OrderMode;
 import kim.donghyun.model.enums.OrderStatus;
 import kim.donghyun.model.enums.OrderType;
-import kim.donghyun.service.strategy.OrderExecutionStrategy;
-import kim.donghyun.repository.TradeOrderRepository;
 import kim.donghyun.repository.TradeExecutionRepository;
+import kim.donghyun.repository.TradeOrderRepository;
+import kim.donghyun.service.strategy.OrderExecutionStrategy;
 import kim.donghyun.util.PriceCache;
-import kim.donghyun.service.OrderBookService;
-import kim.donghyun.service.TradePushService;
-import kim.donghyun.service.WalletService;
+import kim.donghyun.websocket.PendingOrderBroadcaster;
 
 @Service
 public class OrderService {
@@ -29,6 +26,7 @@ public class OrderService {
     private final TradePushService tradePushService;
     private final TradeExecutionRepository tradeExecutionRepository;
     private final WalletService walletService;
+    private final PendingOrderBroadcaster pendingOrderBroadcaster;
 
     private final Map<OrderMode, OrderExecutionStrategy> strategyMap = new EnumMap<>(OrderMode.class);
 
@@ -38,6 +36,7 @@ public class OrderService {
                         TradePushService tradePushService,
                         TradeExecutionRepository tradeExecutionRepository,
                         WalletService walletService,
+                        PendingOrderBroadcaster pendingOrderBroadcaster,
                         java.util.List<OrderExecutionStrategy> strategies) {
         this.priceCache = priceCache;
         this.orderBookService = orderBookService;
@@ -45,6 +44,7 @@ public class OrderService {
         this.tradePushService = tradePushService;
         this.tradeExecutionRepository = tradeExecutionRepository;
         this.walletService = walletService;
+        this.pendingOrderBroadcaster = pendingOrderBroadcaster;
         for (OrderExecutionStrategy s : strategies) {
             if (s instanceof kim.donghyun.service.strategy.MarketOrderProcessor) {
                 strategyMap.put(OrderMode.MARKET, s);
@@ -135,5 +135,6 @@ public class OrderService {
         }
         order.setStatus(OrderStatus.CANCELED);
         orderRepository.updateStatus(order);
+        pendingOrderBroadcaster.broadcast(order);
     }
 }

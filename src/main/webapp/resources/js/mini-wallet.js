@@ -46,28 +46,46 @@ document.addEventListener('DOMContentLoaded', () => {
 		if (orderUl) orderUl.innerHTML = '';
 		if (historyUl) historyUl.innerHTML = '';
 
+		function createOrderLi(o) {
+		        const li = document.createElement('li');
+		        li.setAttribute('data-id', o.orderId);
+		        const type = o.type === 'BUY' ? '매수' : '매도';
+		        const d = new Date(o.createdAt.replace(' ', 'T') + '+09:00');
+		        const time = d.toLocaleTimeString('ko-KR', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+		        const price = parseFloat(o.price).toFixed(2);
+		        const amount = parseFloat(o.amount).toFixed(5);
+		        li.classList.add(o.type === 'BUY' ? 'buy' : 'sell');
+		        li.innerHTML = `<span>${type}</span><span>${price}</span><span>${amount}</span><span>${time}</span><button class="cancel-btn" data-id="${o.orderId}">취소</button>`;
+		        li.querySelector('.cancel-btn').addEventListener('click', e => {
+		                const id = e.target.getAttribute('data-id');
+		                fetch(`${ctx}/api/order/cancel?orderId=${id}`, { method: 'POST' });
+		        });
+		        return li;
+		}
+
 		fetch(`${ctx}/api/order/pending?userId=${userId}`)
-			.then(res => res.json())
-			.then(list => {
-				if (!orderUl) return;
-				list.forEach(o => {
-					const li = document.createElement('li');
-					const type = o.type === 'BUY' ? '매수' : '매도';
-					const d = new Date(o.createdAt.replace(' ', 'T') + '+09:00');
-					const time = d.toLocaleTimeString('ko-KR', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
-					const price = parseFloat(o.price).toFixed(2);
-					const amount = parseFloat(o.amount).toFixed(5);
-					li.classList.add(o.type === 'BUY' ? 'buy' : 'sell');
-					li.innerHTML = `<span>${type}</span><span>${price}</span><span>${amount}</span><span>${time}</span><button class="cancel-btn" data-id="${o.orderId}">취소</button>`;
-					li.querySelector('.cancel-btn').addEventListener('click', e => {
-						const id = e.target.getAttribute('data-id');
-						fetch(`${ctx}/api/order/cancel?orderId=${id}`, { method: 'POST' })
-							.then(r => { if (r.ok) li.remove(); });
-					});
-					orderUl.appendChild(li);
-				});
-				setHistoryHeight();
-			});
+		        .then(res => res.json())
+		        .then(list => {
+		                if (!orderUl) return;
+		                list.forEach(o => {
+		                        orderUl.appendChild(createOrderLi(o));
+		                });
+		                setHistoryHeight();
+		        });
+
+		window.websocket.connect(client => {
+		        client.subscribe('/topic/pending', msg => {
+		                const data = JSON.parse(msg.body);
+		                if (!orderUl || data.userId !== userId) return;
+		                if (data.status === 'PENDING') {
+		                        orderUl.appendChild(createOrderLi(data));
+		                } else {
+		                        const el = orderUl.querySelector(`li[data-id="${data.orderId}"]`);
+		                        if (el) el.remove();
+		                }
+		                setHistoryHeight();
+		        });
+		});
 
 		fetch(`${ctx}/api/trade/history?userId=${userId}&limit=20`)
 			.then(res => res.json())
