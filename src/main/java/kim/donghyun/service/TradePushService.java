@@ -23,7 +23,12 @@ public class TradePushService {
         message.put("amount", order.getAmount());
         message.put("type", order.getType()); // BUY or SELL
         message.put("userId", order.getUserId());
-        message.put("createdAt", order.getCreatedAt());
+        
+        if (order.getCreatedAt() != null) {
+            java.time.format.DateTimeFormatter fmt =
+                java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            message.put("createdAt", fmt.format(order.getCreatedAt()));
+        }
 
         messagingTemplate.convertAndSend("/topic/trade", message);
         tradeHistoryCache.addTrade(message);

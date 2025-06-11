@@ -139,23 +139,31 @@ document.addEventListener('DOMContentLoaded', () => {
 			        setHistoryHeight();
 			});
 			client.subscribe('/topic/trade', msg => {
-				const data = JSON.parse(msg.body);
-				if (data.userId !== userId) return;
-				if (historyUl) {
-					const li = document.createElement('li');
-					const typeText = data.type === 'BUY' ? '매수' : '매도';
-					const d = new Date(data.createdAt.replace(' ', 'T') + '+09:00');
-					const time = d.toLocaleTimeString('ko-KR', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
-					const price = parseFloat(data.price).toFixed(2);
-					const amount = parseFloat(data.amount).toFixed(5);
-					li.classList.add(data.type === 'BUY' ? 'buy' : 'sell');
-					li.innerHTML = `<span>${typeText}</span><span>${price}</span><span>${amount}</span><span>${time}</span>`;
-					historyUl.insertBefore(li, historyUl.firstChild);
-					const max = 20;
-					while (historyUl.children.length > max) historyUl.removeChild(historyUl.lastChild);
-				}
-				refreshWallet();
-				setHistoryHeight();
+			        const data = JSON.parse(msg.body);
+			        if (data.userId !== userId) return;
+			        if (historyUl) {
+			                const li = document.createElement('li');
+			                const typeText = data.type === 'BUY' ? '매수' : '매도';
+
+			                let date;
+			                if (Array.isArray(data.createdAt)) {
+			                        const [y, mon, d, h, m, s] = data.createdAt;
+			                        date = new Date(y, mon - 1, d, h, m, s);
+			                } else if (typeof data.createdAt === 'string') {
+			                        date = new Date(data.createdAt.replace(' ', 'T') + '+09:00');
+			                }
+			                const time = date ? date.toLocaleTimeString('ko-KR', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' }) : '';
+
+			                const price = parseFloat(data.price).toFixed(2);
+			                const amount = parseFloat(data.amount).toFixed(5);
+			                li.classList.add(data.type === 'BUY' ? 'buy' : 'sell');
+			                li.innerHTML = `<span>${typeText}</span><span>${price}</span><span>${amount}</span><span>${time}</span>`;
+			                historyUl.insertBefore(li, historyUl.firstChild);
+			                const max = 20;
+			                while (historyUl.children.length > max) historyUl.removeChild(historyUl.lastChild);
+			        }
+			        refreshWallet();
+			        setHistoryHeight();
 			});
 		});
 
