@@ -123,8 +123,11 @@
 		trade_order
 		WHERE order_mode = 'LIMIT'
 		AND status = 'PENDING'
-		AND price =
-		#{price}
+		AND (
+		(type = 'BUY' AND price &gt;= #{price})
+		OR
+		(type = 'SELL' AND price &lt;= #{price})
+		)
 	</select>
 
 	<!-- Pending quantity grouped by price for both bid and ask -->
@@ -135,7 +138,8 @@
 		WHERE order_mode = 'LIMIT'
 		AND status = 'PENDING'
 		GROUP BY price
-		ORDER BY price
+		ORDER BY
+		price
 	</select>
 
 	<select id="findPendingBidQuantityInRange"
