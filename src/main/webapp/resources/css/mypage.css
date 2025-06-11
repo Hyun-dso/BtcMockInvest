@@ -1,90 +1,117 @@
 @charset "UTF-8";
 
 .mypage-container {
-	max-width: 600px;
-	margin: 100px auto;
-	padding: 30px;
-	background: #f9f9f9;
-	border-radius: 10px;
-	border: 1px solid #ccc;
+	max-width: 400px;  /* ✅ 폭 줄이기 */
+	margin: 80px auto;
+	padding: 24px;
+	background: #fdfdfd;
+	border-radius: 12px;
+	border: 1px solid #ddd;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+	line-height: 1.6;
 }
+
 
 h2 {
 	text-align: center;
 	margin-bottom: 30px;
+	color: #333;
 }
 
 .form-group {
-	margin-bottom: 20px;
+	margin-bottom: 24px;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
 }
 
 .form-inline {
 	display: flex;
-	gap: 10px;
 	align-items: center;
-}
-
-label {
-	font-weight: bold;
-	margin-bottom: 5px;
-	display: block;
+	gap: 10px;
 }
 
 input[type="text"],
 input[type="password"] {
-	padding: 8px;
-	border: 1px solid #ccc;
-	border-radius: 4px;
+	width: 250px;
+	padding: 8px 10px;
+	border: 1px solid #bbb;
+	border-radius: 6px;
+	font-size: 14px;
+	transition: border-color 0.2s;
 }
 
-input.nickname {
-	width: 60%;
+input[type="text"]:focus,
+input[type="password"]:focus {
+	border-color: #7aa7ff;
+	outline: none;
+}
+
+label {
+	font-weight: 600;
+	margin-bottom: 6px;
+	color: #444;
 }
 
 .btn {
-	padding: 8px 12px;
+	padding: 8px 14px;
 	border: none;
-	border-radius: 5px;
+	border-radius: 6px;
 	cursor: pointer;
-	font-weight: bold;
+	font-weight: 600;
+	transition: all 0.2s ease-in-out;
+	background: linear-gradient(90deg, #8e9eab, #eef2f3);
+	color: #333;
 }
 
-.btn-check {
-	background-color: #ccc;
+.btn:hover {
+	filter: brightness(1.05);
+	transform: translateY(-1px);
 }
 
 .btn-submit {
-	width: 100%;
-	background-color: #333;
+	width: 250px;
+	background: linear-gradient(90deg, #667eea, #764ba2);
 	color: white;
-	margin-top: 30px;
+	margin-top: 10px;
 }
 
 .btn-submit:hover {
-	background-color: #555;
+	filter: brightness(1.1);
+	transform: translateY(-1px);
 }
 
 .btn-wallet {
 	display: inline-block;
-	margin-top: 10px;
-	background-color: #4CAF50;
+	margin-top: 12px;
+	background: #00b894;
 	color: white;
 	text-align: center;
-	padding: 8px 14px;
+	padding: 9px 16px;
 	text-decoration: none;
-	border-radius: 5px;
+	border-radius: 6px;
 	font-size: 14px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.btn-wallet:hover {
+	background: #019875;
 }
 
 .btn-delete {
-	background-color: red;
+	width: 250px;
+	background: linear-gradient(90deg, #ff6b6b, #ff8787);
 	color: white;
-	width: 100%;
-	margin-top: 30px;
+	margin-top: 25px;
+}
+
+.btn-delete:hover {
+	background: #e74c3c;
 }
 
 #pwMatch {
 	color: red;
 	font-size: 13px;
-	margin-top: 5px;
+	margin-top: 6px;
+	margin-left: 2px;
 }
