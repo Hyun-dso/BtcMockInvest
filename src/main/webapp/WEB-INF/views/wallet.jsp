@@ -35,7 +35,7 @@
 					${String.format("%.2f", wallet.usdtBalance)} USDT
 				</span>
 			</div>
-			<div class="profit-rate" style="margin-top: 10px; color: ${wallet.profitRateValue >= 0 ? '#ff4d4f' : '#00b386'};">
+			<div class="profit-rate" style="margin-top: 10px; color: ${wallet.profitRateValue >= 0 ? '#00b386' : '#ff4d4f'};">
 				수익률: ${wallet.profitRateSafe}%
 			</div>
 		</div>

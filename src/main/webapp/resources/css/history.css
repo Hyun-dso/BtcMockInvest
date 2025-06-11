@@ -46,9 +46,9 @@ tr:hover {
  * 다른 페이지의 색상과 통일하기 위해 btc.css의 색상을 사용한다.
  */
 .buy {
-    color: #ff4d4f; /* 빨강 */
+    color: #00b386; /* 빨강 */
 }
 
 .sell {
-    color: #00b386; /* 파랑 */
+    color: #ff4d4f; /* 파랑 */
 }

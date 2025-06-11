@@ -73,12 +73,12 @@ document.addEventListener("DOMContentLoaded", () => {
 	// ✅ 정식봉 시리즈
 	// 메인 차트 봉 색상 명시적으로 지정 (상승 시 초록, 하락 시 빨강)
 	const candleSeries = chart.addCandlestickSeries({
-	        upColor:  '#ff4d4f',
-	        downColor: '#00b386',
-	        borderUpColor: '#ff4d4f',
-	        borderDownColor: '#00b386',
-	        wickUpColor: '#ff4d4f',
-	        wickDownColor: '#00b386'
+	        upColor:  '#00b386',
+	        downColor: '#ff4d4f',
+	        borderUpColor: '#00b386',
+	        borderDownColor: '#ff4d4f',
+	        wickUpColor: '#00b386',
+	        wickDownColor: '#ff4d4f'
 	});
 
 	// ✅ 툴팁 DOM 생성
@@ -130,8 +130,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	// ✅ 실시간 임시봉 시리즈
 	const realtimeSeries = chart.addCandlestickSeries({
-		upColor: 'rgba(200, 0, 0, 0.4)',
-		downColor: 'rgba(0, 200, 0, 0.4)',
+		upColor: 'rgba(0, 200, 0, 0.4)',
+		downColor: 'rgba(200, 0, 0, 0.4)',
 		borderVisible: false,
 		wickVisible: false,
 		crossHairMarkerVisible: true

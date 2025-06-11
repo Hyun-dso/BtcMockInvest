@@ -124,36 +124,20 @@
   padding: 2px 4px;
 }
 
-#mini-history li.buy span:nth-child(1) {
-    color: #ff4d4f;
-}
-
-#mini-orders li.buy span:nth-child(1) {
-    color: #ff4d4f;
-}
-
-#mini-history li.sell span:nth-child(1) {
-    color: #00b386;
-}
-
-#mini-orders li.sell span:nth-child(1) {
-    color: #00b386;
-}
-
-#mini-history li.buy span:nth-child(3) {
-    color: #ff4d4f;
-}
-	
+/* 매수 - 초록색 */
+#mini-history li.buy span:nth-child(1),
+#mini-orders li.buy span:nth-child(1),
+#mini-history li.buy span:nth-child(3),
 #mini-orders li.buy span:nth-child(3) {
-    color: #ff4d4f;
+    color: #00b386;
 }
 
-#mini-history li.sell span:nth-child(3) {
-    color: #00b386;
-  }
-
+/* 매도 - 빨간색 */
+#mini-history li.sell span:nth-child(1),
+#mini-orders li.sell span:nth-child(1),
+#mini-history li.sell span:nth-child(3),
 #mini-orders li.sell span:nth-child(3) {
-    color: #00b386;
+    color: #ff4d4f;
 }
 
 #mini-orders li.canceled span:nth-child(1) {

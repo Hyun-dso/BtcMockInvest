@@ -40,7 +40,7 @@ window.websocket.connect((client) => {
       const prevClose = parseFloat(data.prevClose);
       const prevCloseTime = data.prevCloseTime;
       const changeRate = ((price - prevClose) / prevClose * 100).toFixed(2);
-      const color = changeRate > 0 ? "#F6465D" : changeRate < 0 ? "#0ECB81" : "#EAECEF";
+      const color = changeRate > 0 ? "#0ECB81" : changeRate < 0 ? "#F6465D" : "#EAECEF";
       const icon = changeRate > 0 ? "▲" : changeRate < 0 ? "▼" : "-";
 
       // 가격 표시
