@@ -1,48 +1,46 @@
-package kim.donghyun.controller;
+ package kim.donghyun.controller;
+ 
+ import kim.donghyun.model.entity.Post;
+ import kim.donghyun.model.entity.Comment;
+ import kim.donghyun.service.PostService;
+ import org.springframework.beans.factory.annotation.Autowired;
+ import org.springframework.stereotype.Controller;
+ import org.springframework.ui.Model;
+ import org.springframework.web.bind.annotation.*;
+ 
+ import java.util.List;
+ 
+ @Controller
+ @RequestMapping("/post")
+ public class PostController {
+ 
+     private final PostService postService;
+ 
+     @Autowired
+     public PostController(PostService postService) {
+         this.postService = postService;
+     }
+ 
+     @GetMapping("/{id}")
+     public String showPost(@PathVariable int id, Model model) {
+         Post post = postService.getPostById(id);
+         List<Comment> commentList = postService.getCommentsByPostId(id);
 
-import kim.donghyun.model.entity.Post; 
-import kim.donghyun.model.entity.Comment;
-import kim.donghyun.service.PostService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-
-@Controller
-@RequestMapping("/post")
-public class PostController {
-
-    private final PostService postService;
-
-    @Autowired
-    public PostController(PostService postService) {
-        this.postService = postService;
-    }
-
-    @GetMapping("/{id}")
-    public String showPost(@PathVariable int id, Model model) {
-        Post post = postService.getPostById(id);
-        List<Comment> commentList = postService.getCommentsByPostId(id);
-
-        model.addAttribute("post", post);
-        model.addAttribute("commentList", commentList);
-        return "postDetail";
-    }
-
-    @GetMapping("/list")
-    @ResponseBody
-    public List<Post> getAllPosts() {
-        return postService.getAllPosts();
-    }
-
-    @GetMapping("/{id}/comments")
-    @ResponseBody
-    public List<Comment> getComments(@PathVariable int id) {
-        return postService.getCommentsByPostId(id);
-    }
-  }
-
-   
-    
+         model.addAttribute("post", post);
+         model.addAttribute("commentList", commentList);
+         return "postDetail";
+     }
+ 
+     @GetMapping("/list")
+     @ResponseBody
+     public List<Post> getAllPosts() {
+         return postService.getAllPosts();
+     }
+ 
+     @GetMapping("/{id}/comments")
+     @ResponseBody
+     public List<Comment> getComments(@PathVariable int id) {
+         return postService.getCommentsByPostId(id);
+     }
+}
+ 
