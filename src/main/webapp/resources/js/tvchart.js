@@ -19,12 +19,22 @@ let loadingPrev = false; // 이전 구간 로딩 여부
 
 // 각 interval별 초(second) 단위 길이
 const INTERVAL_SECONDS = {
-	"1m": 60,
-	"15m": 60 * 15,
-	"1h": 60 * 60,
-	"1d": 86400,
-	"1w": 86400 * 7,
-	"1M": 2629743, // 평균 한 달
+	        "1m": 60,
+	        "15m": 60 * 15,
+	        "1h": 60 * 60,
+	        "1d": 86400,
+	        "1w": 86400 * 7,
+	        "1M": 2629743, // 평균 한 달
+	};
+
+	const INITIAL_LIMITS = {
+	        "1M": 30,
+	        "default": 300,
+	};
+
+	const LOAD_LIMITS = {
+	        "1M": 300,
+	        "default": 600,
 };
 
 // interval별 기본 bar spacing 설정
@@ -97,8 +107,9 @@ function clampVisibleRange() {
 
 	         if (range.from <= first + threshold) {
 	                 loadingPrev = true;
-	                 const contextPath = window.contextPath || "";
-	                 fetch(`${contextPath}/api/candle?interval=${currentInterval}&limit=100&before=${first}`)
+					 const contextPath = window.contextPath || "";
+					 const loadLimit = LOAD_LIMITS[currentInterval] || LOAD_LIMITS.default;
+					 fetch(`${contextPath}/api/candle?interval=${currentInterval}&limit=${loadLimit}&before=${first}`)
 	                         .then(res => res.json())
 	                         .then(extra => {
 	                                 const filtered = extra.filter(isValidCandle).sort((a,b) => a.time - b.time);
@@ -148,6 +159,15 @@ function calculateMA(data, period = 10) {
 
 document.addEventListener("DOMContentLoaded", () => {
 	const chartContainer = document.getElementById("tv-chart");
+
+	if (window.chart) {
+	        window.chart.remove();
+	        chartContainer.innerHTML = "";
+	        window.chart = null;
+	        window.candleSeries = null;
+	        window.realtimeSeries = null;
+	        maSeries = null;
+	}
 
 	const chart = LightweightCharts.createChart(chartContainer, {
 		width: chartContainer.clientWidth || 800,
@@ -378,9 +398,13 @@ function subscribeToInterval(interval) {
 	const contextPath = window.contextPath || "";
 	currentInterval = interval;
 	loadingPrev = false; // interval 변경 시 초기화
+	if (window.candleSeries) window.candleSeries.setData([]);
+	if (window.realtimeSeries) window.realtimeSeries.setData([]);
+	window.lastCandle = null;
 	console.log("📡 구독 시작:", interval);
 
-	fetch(`${contextPath}/api/candle?interval=${interval}&limit=100`)
+	const initLimit = INITIAL_LIMITS[interval] || INITIAL_LIMITS.default;
+	fetch(`${contextPath}/api/candle?interval=${interval}&limit=${initLimit}`)
 		.then(res => res.json())
 		.then(data => {
 			const filtered = data.filter(isValidCandle).sort((a, b) => a.time - b.time);
