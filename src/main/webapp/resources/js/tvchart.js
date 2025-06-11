@@ -55,34 +55,32 @@ function clampVisibleRange() {
 	const range = window.chart.timeScale().getVisibleRange();
 	if (!range) return;
 	let { from, to } = range;
-	const width = to - from;
+	let width = to - from;
 
-	const maxTo = last + step * 3;
-	const minWidth = step * 30;
-	let changed = false;
+	 const maxTo = last + step; // allow only one-candle margin on the right
+	 let changed = false;
 
-	if (width < minWidth) {
-		to = last;
-		from = to - minWidth;
-		changed = true;
-		width = to - from;
-	}
+	 if (to > maxTo) {
+	         to = maxTo;
+	         from = to - width;
+	         changed = true;
+	 }
 
-	if (to > maxTo) {
-		to = maxTo;
-		from = to - width;
-		changed = true;
-	}
+	 if (from < first) {
+	         from = first;
+	         to = from + width;
+	         changed = true;
+	 }
 
-	if (from < first) {
-		from = first;
-		to = from + width;
-		changed = true;
-	}
+	 if (to > maxTo) {
+	         to = maxTo;
+	         from = to - width;
+	         changed = true;
+	 }
 
-	if (changed) {
-		window.chart.timeScale().setVisibleRange({ from, to });
-	}
+	 if (changed) {
+	         window.chart.timeScale().setVisibleRange({ from, to });
+	 }
 }
 
 // MA 갱신을 위한 헬퍼 함수
