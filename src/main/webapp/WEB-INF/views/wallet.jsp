@@ -22,29 +22,31 @@
 		<div class="section-title">잔액 정보</div>
 		<div class="balance-wrapper vertical">
 			<div class="balance-row">
-				<span class="label">평가 금액 (Total)</span>
-				<span class="value">${wallet.totalValue} USDT</span>
+				<span class="label">평가 금액 (Total)</span> <span class="value">${wallet.totalValue}
+					USDT</span>
 			</div>
 			<div class="balance-row">
-				<span class="label">BTC 보유 수량</span>
-				<span class="value">${String.format("%.8f", wallet.btcBalance)} BTC</span>
+				<span class="label">BTC 보유 수량</span> <span class="value">${String.format("%.8f", wallet.btcBalance)}
+					BTC</span>
 			</div>
 			<div class="balance-row">
-				<span class="label">주문 가능 금액</span>
-				<span class="value" style="margin-left: auto;">
-					${String.format("%.2f", wallet.usdtBalance)} USDT
-				</span>
+				<span class="label">주문 가능 금액</span> <span class="value"
+					style="margin-left: auto;"> ${String.format("%.2f", wallet.usdtBalance)}
+					USDT </span>
 			</div>
-			<div class="profit-rate" style="margin-top: 10px; color: ${wallet.profitRateValue >= 0 ? '#ff4d4f' : '#00b386'};">
-				수익률: ${wallet.profitRateSafe}%
-			</div>
+			<div class="profit-rate"
+				style="margin-top: 10px; color: ${wallet.profitRateValue >= 0 ? '#ff4d4f' : '#00b386'};">
+				수익률: ${wallet.profitRateSafe}%</div>
 		</div>
 
 		<!-- 버튼 + 충전 금액 -->
 		<div class="wallet-summary">
 			<div class="wallet-buttons">
-				<button id="openDepositModalBtn" class="btn-deposit">💰 충전하기</button>
-				<button onclick="openResetModal()" class="btn-reset">🧨 지갑 초기화</button>
+				<button id="openDepositModalBtn" class="btn-deposit">💰
+					충전하기</button>
+				<button onclick="openResetModal()" class="btn-reset">🧨 지갑
+					초기화</button>
+				<a href="history" class="btn-history">내 거래내역 보기</a>
 			</div>
 			<div class="deposit-amount">충전 금액: ${wallet.totalValue} USDT</div>
 		</div>
@@ -53,7 +55,8 @@
 		<div id="depositModal" class="modal">
 			<div class="modal-content">
 				<h3>시드머니 충전</h3>
-				<input type="number" id="depositAmount" placeholder="100 ~ 1,000,000 USDT" />
+				<input type="number" id="depositAmount"
+					placeholder="100 ~ 1,000,000 USDT" />
 				<div class="modal-buttons">
 					<button onclick="submitDeposit()">💰충전하기</button>
 					<button onclick="closeDepositModal()">닫기</button>
@@ -78,8 +81,6 @@
 			</div>
 		</div>
 
-		<!-- 거래내역 버튼 -->
-		<a href="history" class="btn-history">내 거래내역 보기</a>
 	</div>
 
 	<!-- js 연결 -->
