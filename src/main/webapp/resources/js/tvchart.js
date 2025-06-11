@@ -16,6 +16,22 @@ let websocketClient = null;
 let maVisible = false;
 let maSeries = null;
 
+// interval별 기본 bar spacing 설정
+function adjustBarSpacing(interval) {
+    const spacingMap = {
+        "1m": 6,
+        "15m": 3,
+        "1h": 3,
+        "1d": 2,
+        "1w": 2,
+        "1M": 2,
+    };
+    const spacing = spacingMap[interval] || 3;
+    if (window.chart) {
+        window.chart.timeScale().applyOptions({ barSpacing: spacing });
+    }
+}
+
 // 차트 범위를 첫 캔들과 마지막 캔들+3칸 사이로 제한
 function clampVisibleRange() {
     const data = window.candleSeries._data || [];
@@ -338,6 +354,7 @@ function subscribeToInterval(interval) {
 			        const first = filtered[0].time;
 			        const last = filtered[filtered.length - 1].time;
 			        window.chart.timeScale().setVisibleRange({ from: first, to: last });
+			        adjustBarSpacing(interval);
 			}
 			clampVisibleRange();
 			window.candleSeries._lastBar = filtered[filtered.length - 1];
