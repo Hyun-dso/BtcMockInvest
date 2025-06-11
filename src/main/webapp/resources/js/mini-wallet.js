@@ -140,6 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
 						if (btn) btn.remove();
 						const spans = existing.querySelectorAll('span');
 						if (spans[0]) spans[0].textContent = data.type === 'BUY' ? '매수 취소' : '매도 취소';
+						if (spans[3]) spans[3].textContent = 'CANCELED';
 					}
 					if (typeof showToast === 'function') showToast('주문이 취소되었습니다.');
 					refreshWallet();
