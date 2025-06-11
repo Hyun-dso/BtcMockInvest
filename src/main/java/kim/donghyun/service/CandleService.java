@@ -154,14 +154,78 @@ public class CandleService {
 		return fillMissingCandles(raw, 604800); // 7일
 	}
 
-	public List<CandleDTO> get1MCandleDTO(int limit) {
-		List<CandleDTO> raw = btcCandle1MRepository.findRecentCandles(limit).stream().map(this::mapToDTO)
-				.filter(Objects::nonNull) // ✅ null 제거
-				.sorted(java.util.Comparator.comparingLong(CandleDTO::getTime)) // 시간 오름차순 정렬
-				.collect(Collectors.toList());
+    public List<CandleDTO> get1MCandleDTO(int limit) {
+        List<CandleDTO> raw = btcCandle1MRepository.findRecentCandles(limit).stream().map(this::mapToDTO)
+                        .filter(Objects::nonNull) // ✅ null 제거
+                        .sorted(java.util.Comparator.comparingLong(CandleDTO::getTime)) // 시간 오름차순 정렬
+                        .collect(Collectors.toList());
 
-		return fillMissingCandles(raw, 2629743); // 1달
-	}
+        return fillMissingCandles(raw, 2629743); // 1달
+}
+
+// 이전 시점(before) 기준 과거 캔들 조회 메서드들
+public List<CandleDTO> get1MinCandleDTOBefore(long before, int limit) {
+        LocalDateTime end = LocalDateTime.ofEpochSecond(before, 0, ZoneOffset.UTC)
+                        .atZone(ZoneOffset.UTC).withZoneSameInstant(ZoneId.of("Asia/Seoul")).toLocalDateTime();
+        return btcCandle1MinRepository.findBefore(end, limit).stream()
+                        .map(this::mapToDTO)
+                        .filter(Objects::nonNull)
+                        .sorted(java.util.Comparator.comparingLong(CandleDTO::getTime))
+                        .collect(Collectors.toList());
+}
+
+public List<CandleDTO> get15MinCandleDTOBefore(long before, int limit) {
+        LocalDateTime end = LocalDateTime.ofEpochSecond(before, 0, ZoneOffset.UTC)
+                        .atZone(ZoneOffset.UTC).withZoneSameInstant(ZoneId.of("Asia/Seoul")).toLocalDateTime();
+        return btcCandle15MinRepository.findBefore(end, limit).stream()
+                        .map(this::mapToDTO)
+                        .filter(Objects::nonNull)
+                        .sorted(java.util.Comparator.comparingLong(CandleDTO::getTime))
+                        .collect(Collectors.toList());
+}
+
+public List<CandleDTO> get1HCandleDTOBefore(long before, int limit) {
+        LocalDateTime end = LocalDateTime.ofEpochSecond(before, 0, ZoneOffset.UTC)
+                        .atZone(ZoneOffset.UTC).withZoneSameInstant(ZoneId.of("Asia/Seoul")).toLocalDateTime();
+        return btcCandle1HRepository.findBefore(end, limit).stream()
+                        .map(this::mapToDTO)
+                        .filter(Objects::nonNull)
+                        .sorted(java.util.Comparator.comparingLong(CandleDTO::getTime))
+                        .collect(Collectors.toList());
+}
+
+public List<CandleDTO> get1DCandleDTOBefore(long before, int limit) {
+        LocalDateTime end = LocalDateTime.ofEpochSecond(before, 0, ZoneOffset.UTC)
+                        .atZone(ZoneOffset.UTC).withZoneSameInstant(ZoneId.of("Asia/Seoul")).toLocalDateTime();
+        List<CandleDTO> raw = btcCandle1DRepository.findBefore(end, limit).stream()
+                        .map(this::mapToDTO)
+                        .filter(Objects::nonNull)
+                        .sorted(java.util.Comparator.comparingLong(CandleDTO::getTime))
+                        .collect(Collectors.toList());
+        return fillMissingCandles(raw, 86400);
+}
+
+public List<CandleDTO> get1WCandleDTOBefore(long before, int limit) {
+        LocalDateTime end = LocalDateTime.ofEpochSecond(before, 0, ZoneOffset.UTC)
+                        .atZone(ZoneOffset.UTC).withZoneSameInstant(ZoneId.of("Asia/Seoul")).toLocalDateTime();
+        List<CandleDTO> raw = btcCandle1WRepository.findBefore(end, limit).stream()
+                        .map(this::mapToDTO)
+                        .filter(Objects::nonNull)
+                        .sorted(java.util.Comparator.comparingLong(CandleDTO::getTime))
+                        .collect(Collectors.toList());
+        return fillMissingCandles(raw, 604800);
+}
+
+public List<CandleDTO> get1MCandleDTOBefore(long before, int limit) {
+        LocalDateTime end = LocalDateTime.ofEpochSecond(before, 0, ZoneOffset.UTC)
+                        .atZone(ZoneOffset.UTC).withZoneSameInstant(ZoneId.of("Asia/Seoul")).toLocalDateTime();
+        List<CandleDTO> raw = btcCandle1MRepository.findBefore(end, limit).stream()
+                        .map(this::mapToDTO)
+                        .filter(Objects::nonNull)
+                        .sorted(java.util.Comparator.comparingLong(CandleDTO::getTime))
+                        .collect(Collectors.toList());
+        return fillMissingCandles(raw, 2629743);
+}
 
 	private List<CandleDTO> fillMissingCandles(List<CandleDTO> originalList, long intervalSeconds) {
 		if (originalList == null || originalList.size() < 2)
@@ -305,5 +369,5 @@ public class CandleService {
 		System.out.println("✅ [1D] 임시 캔들 생성 완료: " + dto);
 		return dto;
 	}
-
+	
 }

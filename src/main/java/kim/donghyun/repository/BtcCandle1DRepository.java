@@ -12,5 +12,5 @@ public interface BtcCandle1DRepository {
     BtcCandle1D findByCandleTime(LocalDateTime candleTime);
     List<BtcCandle1D> findRecentCandles(int limit);
     List<BtcCandle1D> findCandlesBetween(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
-
+    List<BtcCandle1D> findBefore(@Param("end") LocalDateTime end, @Param("limit") int limit);
 }

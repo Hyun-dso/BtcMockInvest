@@ -15,6 +15,7 @@ let currentInterval = "1m";
 let websocketClient = null;
 let maVisible = false;
 let maSeries = null;
+let loadingPrev = false; // 이전 구간 로딩 여부
 
 // 각 interval별 초(second) 단위 길이
 const INTERVAL_SECONDS = {
@@ -78,9 +79,38 @@ function clampVisibleRange() {
 	         changed = true;
 	 }
 
-	 if (changed) {
-	         window.chart.timeScale().setVisibleRange({ from, to });
+	         if (changed) {
+	                 window.chart.timeScale().setVisibleRange({ from, to });
+	         }
 	 }
+
+	 // 차트 왼쪽 끝에 도달하면 이전 구간을 더 불러오기
+	 function checkLoadMore() {
+	         if (loadingPrev) return;
+	         const data = window.candleSeries._data || [];
+	         if (data.length === 0) return;
+
+	         const range = window.chart.timeScale().getVisibleRange();
+	         if (!range) return;
+	         const first = data[0].time;
+	         const threshold = INTERVAL_SECONDS[currentInterval] * 5; // 여유 5칸
+
+	         if (range.from <= first + threshold) {
+	                 loadingPrev = true;
+	                 const contextPath = window.contextPath || "";
+	                 fetch(`${contextPath}/api/candle?interval=${currentInterval}&limit=100&before=${first}`)
+	                         .then(res => res.json())
+	                         .then(extra => {
+	                                 const filtered = extra.filter(isValidCandle).sort((a,b) => a.time - b.time);
+	                                 if (filtered.length) {
+	                                         window.candleSeries.setData(filtered.concat(window.candleSeries._data));
+	                                         window.candleSeries._data = filtered.concat(window.candleSeries._data);
+	                                         updateMA();
+	                                 }
+	                         })
+	                         .catch(err => console.error("❌ 추가 캔들 fetch 실패:", err))
+	                         .finally(() => { loadingPrev = false; });
+	         }
 }
 
 // MA 갱신을 위한 헬퍼 함수
@@ -150,8 +180,10 @@ document.addEventListener("DOMContentLoaded", () => {
 		wickUpColor: '#00b386',
 		wickDownColor: '#ff4d4f'
 	});
-	chart.timeScale().subscribeVisibleTimeRangeChange(clampVisibleRange);
-
+	chart.timeScale().subscribeVisibleTimeRangeChange(() => {
+	        clampVisibleRange();
+	        checkLoadMore();
+	});
 
 	// ✅ 툴팁 DOM 생성
 	const tooltip = document.createElement('div');
@@ -345,6 +377,7 @@ function subscribeToInterval(interval) {
 
 	const contextPath = window.contextPath || "";
 	currentInterval = interval;
+	loadingPrev = false; // interval 변경 시 초기화
 	console.log("📡 구독 시작:", interval);
 
 	fetch(`${contextPath}/api/candle?interval=${interval}&limit=100`)

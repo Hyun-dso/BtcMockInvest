@@ -18,31 +18,44 @@ public class CandleApiController {
 
 	private final CandleService candleService;
 
-	@GetMapping
-	public List<CandleDTO> getCandles(@RequestParam(name = "interval") String interval,
-		    @RequestParam(name = "limit", defaultValue = "30") int limit) {
+    @GetMapping
+    public List<CandleDTO> getCandles(@RequestParam(name = "interval") String interval,
+                @RequestParam(name = "limit", defaultValue = "30") int limit,
+                @RequestParam(name = "before", required = false) Long before) {
 
-		System.out.println("📥 interval: " + interval + ", limit: " + limit);
+            System.out.println("📥 interval: " + interval + ", limit: " + limit + ", before: " + before);
 
-		return switch (interval) {
-		case "1m" -> candleService.get1MinCandleDTO(limit);
-		case "15m" -> {
-		    List<CandleDTO> candles = candleService.get15MinCandleDTO(limit);
+            if (before != null) {
+                    return switch (interval) {
+                    case "1m" -> candleService.get1MinCandleDTOBefore(before, limit);
+                    case "15m" -> candleService.get15MinCandleDTOBefore(before, limit);
+                    case "1h" -> candleService.get1HCandleDTOBefore(before, limit);
+                    case "1d" -> candleService.get1DCandleDTOBefore(before, limit);
+                    case "1w" -> candleService.get1WCandleDTOBefore(before, limit);
+                    case "1M" -> candleService.get1MCandleDTOBefore(before, limit);
+                    default -> throw new IllegalArgumentException("❌ 지원하지 않는 interval입니다: " + interval);
+                    };
+            }
 
-		    CandleDTO tempCandle = candleService.generateTemp15MinCandle();
-		    if (tempCandle != null) {
-		        candles.add(tempCandle); // 마지막에 임시 캔들 추가
-		    }
+            return switch (interval) {
+            case "1m" -> candleService.get1MinCandleDTO(limit);
+            case "15m" -> {
+                List<CandleDTO> candles = candleService.get15MinCandleDTO(limit);
 
-		    yield candles;
-		}
-		case "1h" -> candleService.get1HCandleDTO(limit);
-		case "1d" -> candleService.get1DCandleDTO(limit);
-		case "1w" -> candleService.get1WCandleDTO(limit);
-		case "1M" -> candleService.get1MCandleDTO(limit);
-		default -> throw new IllegalArgumentException("❌ 지원하지 않는 interval입니다: " + interval);
-		};
-	}
+                CandleDTO tempCandle = candleService.generateTemp15MinCandle();
+                if (tempCandle != null) {
+                    candles.add(tempCandle); // 마지막에 임시 캔들 추가
+                }
+
+                yield candles;
+            }
+            case "1h" -> candleService.get1HCandleDTO(limit);
+            case "1d" -> candleService.get1DCandleDTO(limit);
+            case "1w" -> candleService.get1WCandleDTO(limit);
+            case "1M" -> candleService.get1MCandleDTO(limit);
+            default -> throw new IllegalArgumentException("❌ 지원하지 않는 interval입니다: " + interval);
+            };
+    }
 }
 
 // 1분 봉 차트 api

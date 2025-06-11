@@ -36,6 +36,14 @@
 		#{limit}
 	</select>
 
+	<select id="findBefore" parameterType="map"
+		resultMap="candleMap">
+		SELECT * FROM btc_candle_1d
+		WHERE candle_time &lt; #{end}
+		ORDER BY candle_time DESC
+		LIMIT #{limit}
+	</select>
+
 	<!-- ✅ BtcCandle1DMapper.xml 에 추가 -->
 	<select id="findCandlesBetween"
 		resultType="kim.donghyun.model.entity.BtcCandle1D">
