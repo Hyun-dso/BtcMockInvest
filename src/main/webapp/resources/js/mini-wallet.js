@@ -109,48 +109,52 @@ document.addEventListener('DOMContentLoaded', () => {
 			return li;
 		}
 
-		fetch(`${ctx}/api/order/pending`)
-			.then(res => {
-				if (!res.ok) throw new Error('failed');
-				return res.json();
-			})
-			.then(list => {
-				if (!orderUl) return;
-				list.forEach(o => {
-					orderUl.appendChild(createOrderLi(o));
-				});
-				setHistoryHeight();
-			})
-			.catch(() => { });
-
+		fetch(`${ctx}/api/order/history?userId=${userId}&limit=20`)
+		         .then(res => {
+		                 if (!res.ok) throw new Error('failed');
+		                 return res.json();
+		         })
+		         .then(list => {
+		                 if (!orderUl) return;
+		                 list.forEach(o => {
+		                         orderUl.appendChild(createOrderLi(o));
+		                 });
+		                 setHistoryHeight();
+		         })
+		         .catch(() => { });
+				 
 		window.websocket.connect(client => {
 			client.subscribe('/topic/pending', msg => {
 				const data = JSON.parse(msg.body);
 				if (!orderUl || data.userId !== userId) return;
 				const existing = orderUl.querySelector(`li[data-id="${data.orderId}"]`);
 				if (data.status === 'PENDING') {
-					if (existing) existing.remove();
-					orderUl.insertBefore(createOrderLi(data), orderUl.firstChild);
-					const max = 20;
-					while (orderUl.children.length > max) orderUl.removeChild(orderUl.lastChild);
-				} else if (data.status === 'CANCELED') {
-					if (existing) {
-						existing.classList.add('canceled');
-						const btn = existing.querySelector('.cancel-btn');
-						if (btn) btn.remove();
-						const spans = existing.querySelectorAll('span');
-						if (spans[0]) spans[0].textContent = data.type === 'BUY' ? '매수 취소' : '매도 취소';
-						if (spans[3]) spans[3].textContent = 'CANCELED';
-					}
-					if (typeof showToast === 'function') showToast('주문이 취소되었습니다.');
-					refreshWallet();
+				        if (existing) existing.remove();
+				        orderUl.insertBefore(createOrderLi(data), orderUl.firstChild);
 				} else {
-					if (existing) existing.remove();
-					if (typeof showToast === 'function') showToast('주문이 체결되었습니다.');
-					refreshWallet();
+				        const li = existing || createOrderLi(data);
+				        li.classList.toggle('canceled', data.status === 'CANCELED');
+				        const btn = li.querySelector('.cancel-btn');
+				        if (btn) btn.remove();
+				        const spans = li.querySelectorAll('span');
+				        if (spans[0]) spans[0].textContent = data.status === 'CANCELED'
+				                ? (data.type === 'BUY' ? '매수 취소' : '매도 취소')
+				                : (data.type === 'BUY' ? '매수' : '매도');
+				        if (spans[3]) spans[3].textContent = data.status;
+				        if (!existing) {
+				                orderUl.insertBefore(li, orderUl.firstChild);
+				        }
+				        if (data.status === 'CANCELED') {
+				                if (typeof showToast === 'function') showToast('주문이 취소되었습니다.');
+				        } else {
+				                if (typeof showToast === 'function') showToast('주문이 체결되었습니다.');
+				        }
+				        refreshWallet();
 				}
+				const max = 20;
+				while (orderUl.children.length > max) orderUl.removeChild(orderUl.lastChild);
 				setHistoryHeight();
-			});
+						});
 			client.subscribe('/topic/trade', msg => {
 				const data = JSON.parse(msg.body);
 				if (data.userId !== userId) return;
