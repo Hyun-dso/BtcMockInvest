@@ -16,55 +16,73 @@ let websocketClient = null;
 let maVisible = false;
 let maSeries = null;
 
+// 각 interval별 초(second) 단위 길이
+const INTERVAL_SECONDS = {
+	"1m": 60,
+	"15m": 60 * 15,
+	"1h": 60 * 60,
+	"1d": 86400,
+	"1w": 86400 * 7,
+	"1M": 2629743, // 평균 한 달
+};
+
 // interval별 기본 bar spacing 설정
 function adjustBarSpacing(interval) {
-    const spacingMap = {
-        "1m": 6,
-        "15m": 3,
-        "1h": 3,
-        "1d": 2,
-        "1w": 2,
-        "1M": 2,
-    };
-    const spacing = spacingMap[interval] || 3;
-    if (window.chart) {
-        window.chart.timeScale().applyOptions({ barSpacing: spacing });
-    }
+	const spacingMap = {
+		"1m": 6,
+		"15m": 3,
+		"1h": 3,
+		"1d": 2,
+		"1w": 2,
+		"1M": 2,
+	};
+	const spacing = spacingMap[interval] || 3;
+	if (window.chart) {
+		window.chart.timeScale().applyOptions({ barSpacing: spacing });
+	}
 }
 
 // 차트 범위를 첫 캔들과 마지막 캔들+3칸 사이로 제한
 function clampVisibleRange() {
-    const data = window.candleSeries._data || [];
-    if (data.length === 0) return;
+	const data = window.candleSeries._data || [];
+	if (data.length === 0) return;
 
-    const step = data.length > 1 ? data[1].time - data[0].time : 60;
-    const first = data[0].time;
-    let last = data[data.length - 1].time;
-    if (window.lastCandle && window.lastCandle.time > last) last = window.lastCandle.time;
+	const step = data.length > 1 ? data[1].time - data[0].time : INTERVAL_SECONDS[currentInterval] || 60;
+	const first = data[0].time;
+	let last = data[data.length - 1].time;
+	if (window.lastCandle && window.lastCandle.time > last) last = window.lastCandle.time;
 
-    const range = window.chart.timeScale().getVisibleRange();
-    if (!range) return;
-    let { from, to } = range;
-    const width = to - from;
+	const range = window.chart.timeScale().getVisibleRange();
+	if (!range) return;
+	let { from, to } = range;
+	const width = to - from;
 
-    const maxTo = last + step * 3;
-    let changed = false;
+	const maxTo = last + step * 3;
+	const minWidth = step * 30;
+	let changed = false;
 
-    if (to > maxTo) {
-        to = maxTo;
-        from = to - width;
-        changed = true;
-    }
+	if (width < minWidth) {
+		to = last;
+		from = to - minWidth;
+		changed = true;
+		width = to - from;
+	}
 
-    if (from < first) {
-        from = first;
-        to = from + width;
-        changed = true;
-    }
+	if (to > maxTo) {
+		to = maxTo;
+		from = to - width;
+		changed = true;
+	}
 
-    if (changed) {
-        window.chart.timeScale().setVisibleRange({ from, to });
-    }
+	if (from < first) {
+		from = first;
+		to = from + width;
+		changed = true;
+	}
+
+	if (changed) {
+		window.chart.timeScale().setVisibleRange({ from, to });
+	}
 }
 
 // MA 갱신을 위한 헬퍼 함수
@@ -110,7 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			background: {
 				type: 'solid',
 				color: '#171717'
-				},
+			},
 			textColor: "#eee",
 		},
 		grid: {
@@ -127,12 +145,12 @@ document.addEventListener("DOMContentLoaded", () => {
 	// ✅ 정식봉 시리즈
 	// 메인 차트 봉 색상 명시적으로 지정 (상승 시 초록, 하락 시 빨강)
 	const candleSeries = chart.addCandlestickSeries({
-	        upColor:  '#00b386',
-	        downColor: '#ff4d4f',
-	        borderUpColor: '#00b386',
-	        borderDownColor: '#ff4d4f',
-	        wickUpColor: '#00b386',
-	        wickDownColor: '#ff4d4f'
+		upColor: '#00b386',
+		downColor: '#ff4d4f',
+		borderUpColor: '#00b386',
+		borderDownColor: '#ff4d4f',
+		wickUpColor: '#00b386',
+		wickDownColor: '#ff4d4f'
 	});
 	chart.timeScale().subscribeVisibleTimeRangeChange(clampVisibleRange);
 
@@ -234,15 +252,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			const nowSec = Number(timestamp);
 
 			// interval마다 캔들 시작 시간 계산
-			const intervalSecondsMap = {
-				"1m": 60,
-				"15m": 60 * 15,
-				"1h": 60 * 60,
-				"1d": 86400,
-				"1w": 86400 * 7,
-				"1M": 2629743, // 평균 한 달
-			};
-			const step = intervalSecondsMap[currentInterval] || 60;
+			const step = INTERVAL_SECONDS[currentInterval] || 60;
 			const candleTime = Math.floor(nowSec / step) * step;
 
 			if (!window.lastCandle || window.lastCandle.time !== candleTime) {
@@ -354,10 +364,14 @@ function subscribeToInterval(interval) {
 			}
 			window.candleSeries.setData(filtered);
 			if (window.chart) {
-			        const first = filtered[0].time;
-			        const last = filtered[filtered.length - 1].time;
-			        window.chart.timeScale().setVisibleRange({ from: first, to: last });
-			        adjustBarSpacing(interval);
+				const step = filtered.length > 1 ? filtered[1].time - filtered[0].time : INTERVAL_SECONDS[interval] || 60;
+				let from = filtered[0].time;
+				let to = filtered[filtered.length - 1].time;
+				if (filtered.length < 30) {
+					from = to - step * 30;
+				}
+				window.chart.timeScale().setVisibleRange({ from, to });
+				adjustBarSpacing(interval);
 			}
 			clampVisibleRange();
 			window.candleSeries._lastBar = filtered[filtered.length - 1];
