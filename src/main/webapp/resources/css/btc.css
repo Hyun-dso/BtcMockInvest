@@ -1,218 +1,249 @@
 @charset "UTF-8";
+
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
 }
 
 body {
-  font-family: sans-serif;
-  padding-top: 80px;
-  box-sizing: border-box;
+	font-family: sans-serif;
+	padding-top: 80px;
+	box-sizing: border-box;
+	background-color: #0B0E11; /* 어두운 배경 */
+	color: #EAECEF; /* 기본 글자색 */
 }
 
 .main-container {
-  display: flex;
-  height: calc(100vh - 80px);
+	display: flex;
+	height: calc(100vh - 80px);
+	background-color: #0B0E11;
 }
 
 .chat-area {
-  width: 20%;
-  border-right: 1px solid #ddd;
-  padding: 10px;
-    display: flex;
-  flex-direction: column;
+	width: 20%;
+	border-right: 1px solid #333;
+	background-color: #1E2026;
+	color: #EAECEF;
+	background-color: #1E2026;
+	color: #EAECEF;
+	padding: 10px;
+	display: flex;
+	flex-direction: column;
 }
 
 .chart-area {
-  width: 55%;
-  border-right: 1px solid #ddd;
-  padding: 10px;
+	width: 55%;
+	border-right: 1px solid #ddd;
+	padding: 10px;
 }
 
 .trade-area {
-  width: 25%;
-  padding: 10px;
+	width: 25%;
+	background-color: #1E2026;
+	color: #EAECEF;
+	padding: 10px;
 }
 
 .btn {
-  padding: 6px 12px;
-  border: 1px solid black;
-  background-color: white;
-  cursor: pointer;
+	padding: 6px 12px;
+	border: 1px solid #444;
+	background-color: #333;
+	color: #EAECEF;
+	cursor: pointer;
 }
 
 /* ✅ 차트 아래 바이낸스 스타일 매수/매도 UI */
 .order-panel {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  margin-top: 20px;
-  padding: 20px;
-  background-color: #111;
-  border-radius: 12px;
-  width: 100%;
+	display: flex;
+	justify-content: space-between;
+	gap: 20px;
+	margin-top: 20px;
+	padding: 20px;
+	background-color: #1E2026;
+	border: 1px solid #333;
+	border-radius: 12px;
+	width: 100%;
 }
 
 .order-box {
-  flex: 1;
-  padding: 20px;
-  border-radius: 8px;
-  background-color: #1e1e1e;
-  color: #fff;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+	flex: 1;
+	padding: 20px;
+	border-radius: 8px;
+	background-color: #1e1e1e;
+	color: #fff;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
 }
 
 .mode-toggle {
-  display: flex;
-  justify-content: flex-end;
+	display: flex;
+	justify-content: flex-end;
 }
 
 .limit-btn {
-  padding: 4px 8px;
-  background: #444;
-  color: #fff;
-  border: 1px solid #666;
-  border-radius: 4px;
-  font-size: 12px;
-  cursor: pointer;
+	padding: 4px 8px;
+	background: #444;
+	color: #fff;
+	border: 1px solid #666;
+	border-radius: 4px;
+	font-size: 12px;
+	cursor: pointer;
 }
 
 .limit-btn.active {
-  background: #666;
-  font-weight: bold;
+	background: #666;
+	font-weight: bold;
 }
 
 .order-box h4 {
-  margin-bottom: 10px;
-  font-size: 16px;
-  color: #ccc;
+	margin-bottom: 10px;
+	font-size: 16px;
+  color: #EAECEF;
 }
 
 .order-box label {
-  font-size: 13px;
-  margin-bottom: 4px;
+	font-size: 13px;
+	margin-bottom: 4px;
 }
 
 .order-box input {
-  padding: 8px;
-  border: none;
-  border-radius: 4px;
-  font-size: 14px;
-  background-color: #2a2a2a;
-  color: #fff;
+	padding: 8px;
+	border: none;
+	border-radius: 4px;
+	font-size: 14px;
+	background-color: #2a2a2a;
+	color: #fff;
 }
 
 .order-box button {
-  padding: 10px;
-  font-weight: bold;
-  font-size: 14px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  color: white;
+	padding: 10px;
+	font-weight: bold;
+	font-size: 14px;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	color: white;
 }
 
 .order-box.buy button {
-  background-color: #00b386;
+	background-color: #00b386;
 }
 
 .order-box.sell button {
-  background-color: #ff4d4f;
+	background-color: #ff4d4f;
 }
 
 input[type="range"] {
-  width: 100%;
-  margin-top: 4px;
-  height: 6px;
-  border-radius: 5px;
-  background: transparent;
-  accent-color: #00b386;
-  position: relative;
+	width: 100%;
+	margin-top: 4px;
+	height: 6px;
+	border-radius: 5px;
+	background: transparent;
+	accent-color: #00b386;
+	position: relative;
 }
 
 /* ✅ 눈금 표시용 배경 선 추가 */
 input[type="range"]::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: repeating-linear-gradient(
-    to right,
-    #666,
-    #666 1px,
-    transparent 1px,
-    transparent 24%
-  );
-  transform: translateY(-50%);
-  z-index: -1;
-  pointer-events: none;
+	content: "";
+	position: absolute;
+	top: 50%;
+	left: 0;
+	width: 100%;
+	height: 2px;
+	background: repeating-linear-gradient(to right, #666, #666 1px, transparent 1px,
+		transparent 24%);
+	transform: translateY(-50%);
+	z-index: -1;
+	pointer-events: none;
 }
 
 .slider-marks {
-  display: flex;
-  justify-content: space-between;
-  font-size: 12px;
-  color: #aaa;
-  margin-top: 4px;
-  padding: 0 2px;
+	display: flex;
+	justify-content: space-between;
+	font-size: 12px;
+	color: #ddd;
+	margin-top: 4px;
+	padding: 0 2px;
 }
 
 /* mini wallet styles */
 .community-chat {
-  flex: 1 1 50%;
-  background: #fff;
-  border: 1px solid #ccc;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-  overflow-y: auto;
-  padding: 15px;
-  margin-bottom: 10px;
+	flex: 1 1 50%;
+	background: #1E2026;
+	border: 1px solid #333;
+	color: #EAECEF;
+	box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+	overflow-y: auto;
+	padding: 15px;
+	margin-bottom: 10px;
 }
 
 /* Binance style slider */
 .bn-slider-wrapper {
-  display: flex;
-  position: relative;
-  width: 100%;
+	display: flex;
+	position: relative;
+	width: 100%;
 }
 
 .range-slider {
-  -webkit-appearance: none;
-  width: 100%;
-  height: 6px;
-  background: var(--color-Line, #2B3139);
-  border-radius: 3px;
-  outline: none;
-  margin: 2px 0;
-  cursor: pointer;
+	-webkit-appearance: none;
+	width: 100%;
+	height: 6px;
+	background: var(--color-Line, #2B3139);
+	border-radius: 3px;
+	outline: none;
+	margin: 2px 0;
+	cursor: pointer;
 }
 
 .range-slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: var(--color-primary, #FCD535);
-  cursor: pointer;
-  margin-top: -4px;
-  transition: background 0.2s ease;
+	-webkit-appearance: none;
+	width: 14px;
+	height: 14px;
+	border-radius: 50%;
+	background: var(--color-primary, #FCD535);
+	cursor: pointer;
+	margin-top: -4px;
+	transition: background 0.2s ease;
 }
 
 .range-slider::-moz-range-thumb {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: var(--color-primary, #FCD535);
-  cursor: pointer;
+	width: 14px;
+	height: 14px;
+	border-radius: 50%;
+	background: var(--color-primary, #FCD535);
+	cursor: pointer;
 }
 
-.range-slider::-webkit-slider-runnable-track,
-.range-slider::-moz-range-track {
-  height: 6px;
-  background: var(--color-Line, #2B3139);
-  border-radius: 3px;
+.range-slider::-webkit-slider-runnable-track, .range-slider::-moz-range-track
+	{
+	height: 6px;
+	background: var(--color-Line, #2B3139);
+	border-radius: 3px;
+}
+/* MA선 표시용 체크박스 */
+#toggle-ma {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 1px solid #555;
+  border-radius: 4px;
+  background: #1e1e1e;
+  vertical-align: middle;
+  cursor: pointer;
+  position: relative;
+  margin-right: 6px;
+}
+
+#toggle-ma:checked::after {
+  content: "\2714";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 14px;
+  color: #FCD535;
 }
