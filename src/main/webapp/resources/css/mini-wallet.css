@@ -155,3 +155,7 @@
 #mini-orders li.sell span:nth-child(3) {
     color: #00b386;
 }
+
+#mini-orders li.canceled span:nth-child(1) {
+    color: #888;
+}
