@@ -16,6 +16,41 @@ let websocketClient = null;
 let maVisible = false;
 let maSeries = null;
 
+// 차트 범위를 첫 캔들과 마지막 캔들+3칸 사이로 제한
+function clampVisibleRange() {
+    const data = window.candleSeries._data || [];
+    if (data.length === 0) return;
+
+    const step = data.length > 1 ? data[1].time - data[0].time : 60;
+    const first = data[0].time;
+    let last = data[data.length - 1].time;
+    if (window.lastCandle && window.lastCandle.time > last) last = window.lastCandle.time;
+
+    const range = window.chart.timeScale().getVisibleRange();
+    if (!range) return;
+    let { from, to } = range;
+    const width = to - from;
+
+    const maxTo = last + step * 3;
+    let changed = false;
+
+    if (to > maxTo) {
+        to = maxTo;
+        from = to - width;
+        changed = true;
+    }
+
+    if (from < first) {
+        from = first;
+        to = from + width;
+        changed = true;
+    }
+
+    if (changed) {
+        window.chart.timeScale().setVisibleRange({ from, to });
+    }
+}
+
 // MA 갱신을 위한 헬퍼 함수
 function updateMA() {
 	if (!maVisible || !maSeries) return;
@@ -80,6 +115,8 @@ document.addEventListener("DOMContentLoaded", () => {
 	        wickUpColor: '#00b386',
 	        wickDownColor: '#ff4d4f'
 	});
+	chart.timeScale().subscribeVisibleTimeRangeChange(clampVisibleRange);
+
 
 	// ✅ 툴팁 DOM 생성
 	const tooltip = document.createElement('div');
@@ -222,7 +259,7 @@ document.addEventListener("DOMContentLoaded", () => {
 					window.lastCandle.time <= lastKnown.time + allowance)
 			) {
 				realtimeSeries.update({ ...window.lastCandle });
-				chart.timeScale().scrollToRealTime();
+				clampVisibleRange();
 				updateMA();
 			} else {
 				console.warn("⚠️ 실시간 캔들이 정식 봉 범위를 벗어났습니다 → update 생략");
@@ -244,7 +281,7 @@ document.addEventListener("DOMContentLoaded", () => {
 						close: Number(candle.close),
 					};
 					candleSeries.update(newCandle);
-					chart.timeScale().scrollToRealTime();
+					clampVisibleRange();
 					window.candleSeries._lastBar = newCandle;
 					window.candleSeries._data = (window.candleSeries._data || []).concat([newCandle]);
 					realtimeSeries.setData([]);
@@ -290,14 +327,14 @@ function subscribeToInterval(interval) {
 			if (filtered.length === 0) {
 				console.warn("⚠️ 유효한 캔들 없음 → 빈 데이터로 초기화 진행");
 				window.candleSeries.setData([]);
-				chart.timeScale().scrollToRealTime();
+				clampVisibleRange();
 				window.candleSeries._lastBar = null;                // ✅ 명시적으로 초기화
 				window.candleSeries._data = [];                     // ✅ MA도 비우기
 				if (maSeries) maSeries.setData([]);
 				return;
 			}
 			window.candleSeries.setData(filtered);
-			chart.timeScale().scrollToRealTime();
+			clampVisibleRange();
 			window.candleSeries._lastBar = filtered[filtered.length - 1];
 
 			window.candleSeries._data = filtered;  // ✅ MA 계산용 데이터 저장

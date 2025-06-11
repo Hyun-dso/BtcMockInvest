@@ -30,7 +30,9 @@ public class BinanceBackfillService {
     private static final String BASE_URL = "https://api.binance.com/api/v3/klines";
     private static final String SYMBOL = "BTCUSDT";
     private static final long REQUEST_INTERVAL_MS = 300L;
-    private static final long TWO_YEARS_MS = 365L * 2 * 24 * 60 * 60 * 1000;
+    private static final long TWO_YEARS_MS = 365L * 5 * 24 * 60 * 60 * 1000;
+    // 5년
+    // private static final long FIVE_YEARS_MS = 365L * 5 * 24 * 60 * 60 * 1000;
 
     private final BtcCandle1MinRepository candle1MinRepo;
     private final BtcCandle15MinRepository candle15MinRepo;
