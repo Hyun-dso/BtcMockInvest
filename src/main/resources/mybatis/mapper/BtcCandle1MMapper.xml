@@ -16,20 +16,29 @@
 	</resultMap>
 
 	<insert id="insertCandle"
-		parameterType="kim.donghyun.model.entity.BtcCandle1M">
-		INSERT IGNORE INTO btc_candle_1m (open, high, low, close, volume,
-		candle_time)
-		VALUES (#{open}, #{high}, #{low}, #{close}, #{volume}, #{candleTime})
+		parameterType="kim.donghyun.model.entity.BtcCandle1Min">
+		INSERT INTO btc_candle_1min (open, high, low,
+		close, volume, candle_time)
+		VALUES (#{open}, #{high}, #{low}, #{close},
+		#{volume}, #{candleTime})
+		ON DUPLICATE KEY UPDATE
+		open = VALUES(open),
+		high = VALUES(high),
+		low = VALUES(low),
+		close = VALUES(close),
+		volume = VALUES(volume)
 	</insert>
 
 	<select id="findByCandleTime"
 		parameterType="java.time.LocalDateTime" resultMap="candleMap">
-		SELECT * FROM btc_candle_1m WHERE candle_time = #{candleTime}
+		SELECT * FROM
+		btc_candle_1m WHERE candle_time = #{candleTime}
 	</select>
 
 	<select id="findRecentCandles" parameterType="int"
 		resultMap="candleMap">
-		SELECT * FROM btc_candle_1m ORDER BY candle_time DESC LIMIT #{limit}
+		SELECT * FROM btc_candle_1m ORDER BY candle_time DESC LIMIT
+		#{limit}
 	</select>
 
 </mapper>

@@ -334,6 +334,11 @@ function subscribeToInterval(interval) {
 				return;
 			}
 			window.candleSeries.setData(filtered);
+			if (window.chart) {
+			        const first = filtered[0].time;
+			        const last = filtered[filtered.length - 1].time;
+			        window.chart.timeScale().setVisibleRange({ from: first, to: last });
+			}
 			clampVisibleRange();
 			window.candleSeries._lastBar = filtered[filtered.length - 1];
 
