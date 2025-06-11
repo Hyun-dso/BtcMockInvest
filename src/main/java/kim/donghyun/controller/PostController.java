@@ -1,6 +1,6 @@
 package kim.donghyun.controller;
 
-import kim.donghyun.model.entity.Post;
+import kim.donghyun.model.entity.Post; 
 import kim.donghyun.model.entity.Comment;
 import kim.donghyun.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,4 +30,19 @@ public class PostController {
         model.addAttribute("commentList", commentList);
         return "postDetail";
     }
-}
+
+    @GetMapping("/list")
+    @ResponseBody
+    public List<Post> getAllPosts() {
+        return postService.getAllPosts();
+    }
+
+    @GetMapping("/{id}/comments")
+    @ResponseBody
+    public List<Comment> getComments(@PathVariable int id) {
+        return postService.getCommentsByPostId(id);
+    }
+  }
+
+   
+    
