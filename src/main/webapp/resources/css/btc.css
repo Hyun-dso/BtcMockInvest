@@ -17,7 +17,13 @@ body {
 .main-container {
 	display: flex;
 	height: calc(100vh - 80px);
-	background-color: #0B0E11;
+	background-color: #1E2026;
+}
+
+#testest {
+	border: 1px solid #333;
+	border-radius: 12px;
+	padding: 10px;
 }
 
 .chat-area {
@@ -34,7 +40,7 @@ body {
 
 .chart-area {
 	width: 55%;
-	border-right: 1px solid #ddd;
+	border-right: 1px solid #333;
 	padding: 10px;
 }
 
@@ -70,7 +76,7 @@ body {
 	flex: 1;
 	padding: 20px;
 	border-radius: 8px;
-	background-color: #1e1e1e;
+	background-color: #1E2026;
 	color: #fff;
 	display: flex;
 	flex-direction: column;
@@ -100,7 +106,7 @@ body {
 .order-box h4 {
 	margin-bottom: 10px;
 	font-size: 16px;
-  color: #EAECEF;
+	color: #EAECEF;
 }
 
 .order-box label {
@@ -226,24 +232,24 @@ input[type="range"]::before {
 }
 /* MA선 표시용 체크박스 */
 #toggle-ma {
-  appearance: none;
-  width: 18px;
-  height: 18px;
-  border: 1px solid #555;
-  border-radius: 4px;
-  background: #1e1e1e;
-  vertical-align: middle;
-  cursor: pointer;
-  position: relative;
-  margin-right: 6px;
+	appearance: none;
+	width: 18px;
+	height: 18px;
+	border: 1px solid #555;
+	border-radius: 4px;
+	background: #1e1e1e;
+	vertical-align: middle;
+	cursor: pointer;
+	position: relative;
+	margin-right: 6px;
 }
 
 #toggle-ma:checked::after {
-  content: "\2714";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 14px;
-  color: #FCD535;
+	content: "\2714";
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	font-size: 14px;
+	color: #FCD535;
 }

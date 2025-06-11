@@ -107,12 +107,15 @@ document.addEventListener("DOMContentLoaded", () => {
 		width: chartContainer.clientWidth || 800,
 		height: 400,
 		layout: {
-			backgroundColor: "#fff",
-			textColor: "#000",
+			background: {
+				type: 'solid',
+				color: '#171717'
+				},
+			textColor: "#eee",
 		},
 		grid: {
-			vertLines: { color: "#eee" },
-			horzLines: { color: "#eee" },
+			vertLines: { color: "#333" },
+			horzLines: { color: "#333" },
 		},
 		timeScale: {
 			timeVisible: true,

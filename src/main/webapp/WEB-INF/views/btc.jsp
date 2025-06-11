@@ -171,17 +171,19 @@
 
 		<!-- 가운데 차트 영역 -->
 		<div class="chart-area">
-			<input type="checkbox" id="toggle-ma">📉 MA선 표시
-			<div id="tv-chart" style="width: 100%; height: 400px;"></div>
+			<div id="testest">
+				<input type="checkbox" id="toggle-ma">📉 MA선 표시
+				<div id="tv-chart" style="width: 100%; height: 400px;"></div>
 
-			<!-- ⬇️ 차트 바로 아래, 버튼 작게 -->
-			<div id="timeframe-selector">
-				<button data-timeframe="1m">1m</button>
-				<button data-timeframe="15m">15m</button>
-				<button data-timeframe="1h">1h</button>
-				<button data-timeframe="1d">1d</button>
-				<button data-timeframe="1w">1w</button>
-				<button data-timeframe="1M">1M</button>
+				<!-- ⬇️ 차트 바로 아래, 버튼 작게 -->
+				<div id="timeframe-selector">
+					<button data-timeframe="1m">1m</button>
+					<button data-timeframe="15m">15m</button>
+					<button data-timeframe="1h">1h</button>
+					<button data-timeframe="1d">1d</button>
+					<button data-timeframe="1w">1w</button>
+					<button data-timeframe="1M">1M</button>
+				</div>
 			</div>
 
 			<!-- 차트 아래 호가창 -->
@@ -238,7 +240,7 @@
 					<option value="100">100</option>
 				</select>
 				<div id="mid-price"
-					style="margin: 0.5rem 0; font-weight: bold; color: #333;">가격:-
+					style="margin: 0.5rem 0; font-weight: bold; color: #EAECEF;">가격:-
 				</div>
 
 				<div id="orderbook"
