@@ -16,6 +16,8 @@
 
 		<table>
 			<thead>
+				<table>
+					<thead>
 				<tr>
 					<th>날짜</th>
 					<th>종류</th>
@@ -54,8 +56,10 @@
 						</tr>
 					</c:otherwise>
 				</c:choose>
-			</tbody>
-		</table>
-	</div>
+			      </tbody>
+                </table>
+                <div class="pagination"></div>
+        </div>
+        <script src="${pageContext.request.contextPath}/resources/js/history.js" defer></script>
 </body>
 </html>

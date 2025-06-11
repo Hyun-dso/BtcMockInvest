@@ -27,7 +27,7 @@ public class PriceScheduler {
     private static final Logger log = LoggerFactory.getLogger(PriceScheduler.class);
 
     // 기존 1초 주기를 0.25초로 단축
-    @Scheduled(fixedDelay = 250)
+    @Scheduled(fixedDelay = 1000)
     public void fetchAndBroadcast() {
 //    	System.out.println("실행");
         try {

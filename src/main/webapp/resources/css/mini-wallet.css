@@ -1,8 +1,9 @@
 @charset "UTF-8";
 .mini-wallet {
   flex: 1 1 50%;
-  background: #fafafa;
-  border: 1px solid #ccc;
+  background: #1E2026;
+  border: 1px solid #333;
+  color: #EAECEF;
   padding: 10px;
   display: flex;
   flex-direction: column;
@@ -16,13 +17,14 @@
 .mini-wallet .tabs button {
   flex: 1;
   padding: 4px;
-  background: #eee;
-  border: 1px solid #ccc;
+  background: #333;
+  border: 1px solid #444;
+  color: #EAECEF;
   cursor: pointer;
 }
 
 .mini-wallet .tabs button.active {
-  background: #fff;
+  background: #444;
   font-weight: bold;
 }
 
@@ -65,7 +67,7 @@
 	          display: flex;
   justify-content: space-between;
   font-size: 0.85rem;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #444;
   padding: 2px 0;
   }
 
@@ -73,7 +75,7 @@
   display: flex;
   justify-content: space-between;
   font-size: 0.85rem;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #444;
   padding: 2px 0;
 }
 
@@ -141,5 +143,5 @@
 }
 
 #mini-orders li.canceled span:nth-child(1) {
-    color: #888;
+    color: #bbb;
 }
