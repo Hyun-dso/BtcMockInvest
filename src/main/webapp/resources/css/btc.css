@@ -79,8 +79,13 @@ body {
 	background-color: #1E2026;
 	color: #fff;
 	display: flex;
+	height: 200px;
 	flex-direction: column;
 	gap: 8px;
+}
+
+.order-box>* {
+	flex: 1;
 }
 
 .mode-toggle {

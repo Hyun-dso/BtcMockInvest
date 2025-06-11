@@ -186,8 +186,6 @@
 				</div>
 			</div>
 
-			<!-- 차트 아래 호가창 -->
-			<!-- ✅ 바이낸스 스타일 매수/매도 UI (chart-area 아래) -->
 			<div class="order-panel">
 				<div class="order-box buy">
 					<h4>매수 (Buy)</h4>
@@ -207,9 +205,11 @@
 				</div>
 
 				<div class="order-box sell">
-					<h4>매도 (Sell)</h4>
-					<div class="mode-toggle">
-						<button id="sell-limit-btn" class="limit-btn">지정가</button>
+					<div class="testestest">
+						<h4>매도 (Sell)</h4>
+						<div class="mode-toggle">
+							<button id="sell-limit-btn" class="limit-btn">지정가</button>
+						</div>
 					</div>
 					<label>가격 (USDT)</label> <input type="number" id="sell-price"
 						readonly step="0.01" placeholder="USDT">
@@ -226,9 +226,6 @@
 			</div>
 		</div>
 
-
-
-		<!-- 오른쪽: 거래 UI 영역 -->
 		<div class="trade-area">
 			<div class="trade-ui">
 				<h3>호가</h3>
@@ -267,6 +264,7 @@
 
 
 			</div>
+
 		</div>
 	</div>
 
