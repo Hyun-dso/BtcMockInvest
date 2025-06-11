@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -201,7 +202,15 @@
 					<label>수량 (BTC)</label> <input type="number" id="buy-amount"
 						step="0.00001" placeholder="BTC"> <label>총액 (USDT)</label>
 					<input type="number" id="buy-total" step="0.01" placeholder="USDT">
-					<button id="buy-submit">매수 주문 (Buy)</button>
+					<c:choose>
+						<c:when test="${empty sessionScope.loginUser}">
+							<button id="buy-submit"
+								onclick="location.href='${pageContext.request.contextPath}/signin'">Sign In</button>
+						</c:when>
+						<c:otherwise>
+							<button id="buy-submit">매수 주문 (Buy)</button>
+						</c:otherwise>
+					</c:choose>
 				</div>
 
 				<div class="order-box sell">
@@ -220,8 +229,15 @@
 					<label>수량 (BTC)</label> <input type="number" id="sell-amount"
 						step="0.00001" placeholder="BTC"> <label>총액 (USDT)</label>
 					<input type="number" id="sell-total" step="0.01" placeholder="USDT">
-
-					<button id="sell-submit">매도 주문 (Sell)</button>
+					<c:choose>
+						<c:when test="${empty sessionScope.loginUser}">
+							<button id="sell-submit"
+								onclick="location.href='${pageContext.request.contextPath}/signin'">Sign In</button>
+						</c:when>
+						<c:otherwise>
+							<button id="sell-submit">매도 주문 (Sell)</button>
+						</c:otherwise>
+					</c:choose>
 				</div>
 			</div>
 		</div>
