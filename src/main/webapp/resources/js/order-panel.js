@@ -4,18 +4,25 @@ const isLoggedIn = document.body.getAttribute('data-logged-in') === 'true';
 
 let walletUsdt = 0;
 let walletBtc = 0;
+let buyCalc = {};
+let sellCalc = {};
 
-if (isLoggedIn) {
+function refreshWallet(callback) {
+	if (!isLoggedIn) return;
 	const ctx = window.contextPath || '';
 	const uid = window.loginUserId;
-	if (uid) {
-		fetch(`${ctx}/api/wallet?userId=${uid}`)
-			.then(res => res.json())
-			.then(w => {
-				walletUsdt = parseFloat(w.usdtBalance);
-				walletBtc = parseFloat(w.btcBalance);
-			});
-	}
+	if (!uid) return;
+	fetch(`${ctx}/api/wallet?userId=${uid}`)
+		.then(res => res.json())
+		.then(w => {
+			walletUsdt = parseFloat(w.usdtBalance);
+			walletBtc = parseFloat(w.btcBalance);
+			if (typeof callback === 'function') callback();
+		});
+}
+
+if (isLoggedIn) {
+	refreshWallet();
 }
 
 function redirectLogin() {
@@ -32,6 +39,11 @@ function floorInput(el, step, decimals) {
 	if (!isNaN(v)) {
 		el.value = floorToStep(v, step).toFixed(decimals);
 	}
+}
+
+function setSliderBg(slider) {
+	const val = slider.value;
+	slider.style.background = `linear-gradient(to right, #0ECB81 0%, #0ECB81 ${val}%, #2B3139 ${val}%, #2B3139 100%)`;
 }
 
 function activateLimit(btnId, priceId) {
@@ -102,6 +114,17 @@ function sendOrder(type, priceId, amountId) {
 		})
 		.then(data => {
 			showToast(`✅ ${type} 주문 완료!\n체결가: ${data.price}\n수량: ${data.amount}`);
+			refreshWallet(() => {
+				if (type === 'BUY' && sellCalc.fromAmount) {
+					sellCalc.fromAmount();
+					sellCalc.fromTotal();
+				} else if (type === 'SELL' && buyCalc.fromAmount) {
+					buyCalc.fromAmount();
+					buyCalc.fromTotal();
+				}
+			});
+			if (type === 'BUY' && buyCalc.reset) buyCalc.reset();
+			if (type === 'SELL' && sellCalc.reset) sellCalc.reset();
 		})
 		.catch(err => {
 			console.error(err);
@@ -135,17 +158,12 @@ document.addEventListener('DOMContentLoaded', () => {
 	if (sellLimitBtn)
 		sellLimitBtn.addEventListener('click', () => toggleLimit(sellLimitBtn, 'sell-price'));
 
-	function setSliderBg(slider) {
-		const val = slider.value;
-		slider.style.background = `linear-gradient(to right, #0ECB81 0%, #0ECB81 ${val}%, #2B3139 ${val}%, #2B3139 100%)`;
-	}
-
 	function setupCalc(type, priceId, amountId, totalId, sliderId) {
 		const priceEl = document.getElementById(priceId);
 		const amountEl = document.getElementById(amountId);
 		const totalEl = document.getElementById(totalId);
 		const sliderEl = document.getElementById(sliderId);
-		if (!priceEl || !amountEl || !totalEl) return;
+		if (!priceEl || !amountEl || !totalEl) return {};
 
 		function fromAmount() {
 			const p = parseFloat(priceEl.value);
@@ -273,12 +291,44 @@ document.addEventListener('DOMContentLoaded', () => {
 				}
 			});
 		}
+		return {
+			fromAmount,
+			fromTotal,
+			reset: () => {
+				priceEl.value = '';
+				amountEl.value = '';
+				totalEl.value = '';
+				if (sliderEl) {
+					sliderEl.value = 0;
+					setSliderBg(sliderEl);
+				}
+			}
+		};
 	}
 
-	setupCalc('BUY', 'buy-price', 'buy-amount', 'buy-total', 'buy-slider');
-	setupCalc('SELL', 'sell-price', 'sell-amount', 'sell-total', 'sell-slider');
+	buyCalc = setupCalc('BUY', 'buy-price', 'buy-amount', 'buy-total', 'buy-slider');
+	sellCalc = setupCalc('SELL', 'sell-price', 'sell-amount', 'sell-total', 'sell-slider');
 	if (buyBtn)
 		buyBtn.addEventListener('click', () => sendOrder('BUY', 'buy-price', 'buy-amount'));
 	if (sellBtn)
 		sellBtn.addEventListener('click', () => sendOrder('SELL', 'sell-price', 'sell-amount'));
+
+	if (isLoggedIn) {
+		window.websocket.connect(client => {
+			client.subscribe('/topic/trade', msg => {
+				const data = JSON.parse(msg.body);
+				if (Number(data.userId) !== Number(window.loginUserId)) return;
+				refreshWallet(() => {
+					if (buyCalc.fromAmount) {
+						buyCalc.fromAmount();
+						buyCalc.fromTotal();
+					}
+					if (sellCalc.fromAmount) {
+						sellCalc.fromAmount();
+						sellCalc.fromTotal();
+					}
+				});
+			});
+		});
+	}
 });
