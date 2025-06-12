@@ -7,6 +7,8 @@
 	--color-border: #bbb;
 	--color-surface: #FFFFFF;
 	--color-error: #CC3333;
+	--header-height: 80px;
+	--header-background: rgba(255, 255, 255, 0.6);
 }
 
 /* 🌚 다크모드 설정 */
@@ -20,5 +22,6 @@
 		--color-border: #2b2b2b;
 		--color-surface: #1e1e1e;
 		--color-error: #FF6F6F;
+		--header-background: rgba(30, 30, 30, 0.6);
 	}
 }

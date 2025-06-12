@@ -3,7 +3,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%-- ✅ 이거 꼭 필요 --%>
 <link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/header.css">
+	href="${pageContext.request.contextPath}/resources/css/component.css">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/button.css">
 
 <header class="header">
 	<div class="container">
@@ -16,6 +18,12 @@
 	</svg>
 			<h1 class="brand">BtcMockInvest</h1>
 		</a>
+		<div class="dropdown">
+			<button class="dropdown-btn">거래하기 ▾</button>
+			<div class="dropdown-content">
+				<a href="${pageContext.request.contextPath}/btc">BTC</a>
+			</div>
+		</div>
 		<nav>
 			<c:choose>
 				<c:when test="${not empty sessionScope.loginUser}">

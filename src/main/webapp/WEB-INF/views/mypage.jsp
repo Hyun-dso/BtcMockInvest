@@ -5,8 +5,13 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>마이페이지</title>
-	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/mypage.css">
+        <title>마이페이지</title>
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/theme.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/base.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/button.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/component.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/responsive.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/mypage.css">
 	<script src="${pageContext.request.contextPath}/resources/js/mypage.js" defer></script>
 </head>
 <body>

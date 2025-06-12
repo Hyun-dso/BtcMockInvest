@@ -5,10 +5,12 @@
 <head>
 <meta charset="UTF-8">
 <title>BtcMockInvest</title>
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/theme.css">
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/main.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/theme.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/base.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/button.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/component.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/responsive.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/main.css">
 </head>
 <body>
         <jsp:include page="common/header.jsp" />
