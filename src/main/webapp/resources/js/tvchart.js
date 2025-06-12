@@ -49,48 +49,16 @@ function adjustBarSpacing(interval) {
 	}
 }
 
-// 차트 범위를 첫 캔들과 마지막 캔들+3칸 사이로 제한
 function clampVisibleRange() {
 	const data = window.candleSeries._data || [];
 	if (data.length === 0) return;
 
-	const step = data.length > 1 ? data[1].time - data[0].time : INTERVAL_SECONDS[currentInterval] || 60;
 	const first = data[0].time;
-	let last = data[data.length - 1].time;
-	if (window.lastCandle && window.lastCandle.time > last) last = window.lastCandle.time;
-
-	const range = window.chart.timeScale().getVisibleRange();
-	if (!range) return;
-	let { from, to } = range;
-	let width = to - from;
-
-	if (from <= first && currentLimit < MAX_LIMIT && !isLoadingMore) {
-		loadMoreCandles();
-	}
-
-	const maxTo = last + step; // allow only one-candle margin on the right
-	let changed = false;
-
-	if (to > maxTo) {
-		to = maxTo;
-		from = to - width;
-		changed = true;
-	}
-
-	if (from < first) {
-		from = first;
-		to = from + width;
-		changed = true;
-	}
-
-	if (to > maxTo) {
-		to = maxTo;
-		from = to - width;
-		changed = true;
-	}
-
-	if (changed) {
-		window.chart.timeScale().setVisibleRange({ from, to });
+	if (window.chart) {
+	        const range = window.chart.timeScale().getVisibleRange();
+	        if (range && range.from <= first && currentLimit < MAX_LIMIT && !isLoadingMore) {
+	                loadMoreCandles();
+	        }
 	}
 }
 
