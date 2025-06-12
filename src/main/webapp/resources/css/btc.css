@@ -55,15 +55,15 @@ body {
 
 /* tick size dropdown */
 #tick-size {
-  width: 100%;
+  width: 70px;
   margin: 4px 0;
-  padding: 4px 24px 4px 8px;
+  padding: 2px 20px 2px 6px;
   background: #1e1e1e;
   color: #EAECEF;
   border: 1px solid #444;
   border-radius: 4px;
   appearance: none;
-  font-size: 14px;
+  font-size: 12px;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23FCD535' d='M4 6l4 4 4-4H4z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 8px center;
@@ -102,8 +102,8 @@ display: flex;
 }
 
 .order-box {
-	flex: 1;
-	padding: 10px;
+        flex: 1 1 0;
+        padding: 10px;
 	border-radius: 8px;
 	background-color: #1e1e1e;
 	color: #fff;
@@ -144,22 +144,25 @@ display: flex;
 }
 
 .order-box input {
-	padding: 8px;
-	border: none;
-	border-radius: 4px;
-	font-size: 14px;
-	background-color: #2a2a2a;
-	color: #fff;
+        padding: 8px;
+        border: none;
+        border-radius: 4px;
+        font-size: 14px;
+        background-color: #2a2a2a;
+        color: #fff;
+        width: 100%;
+        box-sizing: border-box;
 }
 
 .order-box button {
-	padding: 10px;
-	font-weight: bold;
-	font-size: 14px;
-	border: none;
-	border-radius: 4px;
-	cursor: pointer;
-	color: white;
+        padding: 10px;
+        font-weight: bold;
+        font-size: 14px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        color: white;
+        width: 100%;
 }
 
 .order-box.buy button {

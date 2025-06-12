@@ -238,7 +238,7 @@
 					<option value="100">100</option>
 				</select>
 				<div id="mid-price"
-					style="margin: 0.5rem 0; font-weight: bold; color: #333;">가격:-
+					style="margin: 0.5rem 0; font-weight: bold; color: #FCD535;">가격:-
 				</div>
 
 				<div id="orderbook"

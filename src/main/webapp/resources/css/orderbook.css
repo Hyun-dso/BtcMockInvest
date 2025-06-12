@@ -1,79 +1,79 @@
 @charset "UTF-8";
+
 #orderbook {
- background: #20232b;
-  border: 1px solid #444;
-  border-radius: 10px;
-  padding: 15px;
-  font-family: 'Courier New', monospace;
-  color: #EAECEF;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
-  width: 100%;
+	background: #20232b;
+	border: 1px solid #444;
+	border-radius: 10px;
+	padding: 15px;
+	font-family: 'Courier New', monospace;
+	color: #EAECEF;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+	width: 100%;
 }
 
 #orderbook ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  width: 100%;
-  max-height: none;
-  overflow-y: visible;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	width: 100%;
+	max-height: none;
+	overflow-y: visible;
 }
 
 #orderbook ul::-webkit-scrollbar-thumb {
-  background-color: rgba(255, 255, 255, 0.3);
-  border-radius: 2px;
+	background-color: rgba(255, 255, 255, 0.3);
+	border-radius: 2px;
 }
 
 #orderbook li {
-  display: flex;
-  justify-content: space-between;
-  padding: 6px 0px;
-  margin-bottom: 4px;
-  font-size: 0.9rem;
-  border-radius: 4px;
-  background-color: rgba(255, 255, 255, 0.03);
-  transition: background 0.2s ease;
-    width: 100%;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	align-items: center;
+	padding: 6px 0px;
+	margin-bottom: 4px;
+	font-size: 0.9rem;
+	border-radius: 4px;
+	background-color: rgba(255, 255, 255, 0.03);
+	transition: background 0.2s ease;
+	width: 100%;
 }
 
 #orderbook li span {
-  flex: 1;
+	display: block;
 }
 
 #orderbook li span:first-child {
-  text-align: left;
+	text-align: left;
 }
 
 #orderbook li span:last-child {
-  text-align: right;
+	text-align: right;
 }
 
 #asks li {
-  color: #ff4d4f; /* ✅  빨강 */
+	color: #ff4d4f; /* ✅  빨강 */
 }
 
 #bids li {
-  color: #00b386; /* ✅  초록 */
+	color: #00b386; /* ✅  초록 */
 }
 
 #orderbook li:hover {
-   background-color: rgba(255, 255, 255, 0.08);
+	background-color: rgba(255, 255, 255, 0.08);
 }
 
 #btc-price {
-  font-size: 1.8rem;
-  font-weight: bold;
-  text-align: center;
-  margin: 10px 0;
-  padding: 10px;
-  background-color: #2B3139;
-  color: #EAECEF;
-  border: 1px solid #444;
-  border-radius: 8px;
-
+	font-size: 1.8rem;
+	font-weight: bold;
+	text-align: center;
+	margin: 10px 0;
+	padding: 10px;
+	background-color: #2B3139;
+	color: #EAECEF;
+	border: 1px solid #444;
+	border-radius: 8px;
 }
 
-#mid-price,
-#trade-volume {
-  color: #EAECEF;
+#mid-price, #trade-volume {
+	color: #FCD535;
 }
