@@ -20,3 +20,62 @@ body {
 .comment-author {
     font-weight: bold;
 }
+
+.post {
+  background-color: #A8FFF0; /* 연한 민트 */
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+  font-size: 15.5px;
+  line-height: 1.6;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.25s ease-in-out;
+  color: #1c1c1c; /* 글자색은 진회색으로 선명하게 */
+}
+
+.post:hover {
+  background-color: #94f0e3; /* 조금 더 진한 민트로 hover */
+  transform: scale(1.01); /* 살짝 커지는 느낌 */
+}
+
+.post p:first-child {
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 6px;
+  color: #003b46;
+}
+
+.post p:nth-child(2) {
+  font-size: 15px;
+  color: #333;
+  word-break: break-word;
+}
+
+/* 상단 유저 정보 */
+.post-header {
+  font-size: 13px;
+  color: #555;
+  margin-bottom: 6px;
+}
+
+/* 말풍선 꼬리 */
+.post {
+  position: relative;
+}
+
+.post::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 20px;
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 10px solid #A8FFF0; /* 배경색과 같게 */
+}
+
+.chat-area {
+  height: 60%; /* 또는 flex-grow 사용 */
+  overflow-y: auto;
+}

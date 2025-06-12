@@ -16,7 +16,7 @@ body {
 
 .main-container {
 	display: flex;
-	height: calc(100vh - 80px);
+	height: 100%;
 	background-color: #1E2026;
 }
 
@@ -24,6 +24,14 @@ body {
 	border: 1px solid #333;
 	border-radius: 12px;
 	padding: 10px;
+}
+
+.left-container {
+  display: flex;
+  flex-direction: column;
+  width: 20%;
+  height: calc(100vh - 80px); /* 헤더 고려 */
+  gap: 10px;
 }
 
 .chat-area {
@@ -35,7 +43,7 @@ body {
 	color: #EAECEF;
 	padding: 10px;
 	display: flex;
-	flex-direction: column;
+	flex-direction: column; 
 }
 
 .chart-area {
@@ -280,7 +288,6 @@ input[type="range"]::before {
 }
 
 /* ========================= Responsive Layout ========================= */
-
 @media ( max-width : 767px) {
 	.main-container {
 		flex-direction: column;
@@ -340,4 +347,3 @@ input[type="range"]::before {
 		font-size: 1.5rem;
 	}
 }
-
