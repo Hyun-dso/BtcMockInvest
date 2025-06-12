@@ -26,6 +26,9 @@ window.websocket = {
 	
     const socket = new SockJS(window.contextPath + "/ws-endpoint");
     this.stompClient = Stomp.over(socket);
+	
+	// STOMP 디버그 로그 비활성화
+	this.stompClient.debug = () => {};
 
     this.stompClient.connect({}, () => {
       this.connected = true;

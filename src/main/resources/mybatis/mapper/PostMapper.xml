@@ -25,6 +25,7 @@
 		FROM post p
 		JOIN user u ON p.user_id = u.id
 		ORDER BY p.post_id DESC
+		LIMIT 40
 	</select>
 
 	<select id="findById" parameterType="long" resultMap="postMap">

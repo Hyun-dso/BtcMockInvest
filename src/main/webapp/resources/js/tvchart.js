@@ -37,11 +37,11 @@ const INTERVAL_SECONDS = {
 function adjustBarSpacing(interval) {
 	const spacingMap = {
 		"1m": 6,
-		"15m": 3,
-		"1h": 3,
-		"1d": 2,
-		"1w": 2,
-		"1M": 2,
+		"15m": 5,
+		"1h": 5,
+		"1d": 5,
+		"1w": 4,
+		"1M": 4,
 	};
 	const spacing = spacingMap[interval] || 3;
 	if (window.chart) {
