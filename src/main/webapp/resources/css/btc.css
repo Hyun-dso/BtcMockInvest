@@ -10,7 +10,7 @@ body {
 	font-family: sans-serif;
 	padding-top: 80px;
 	box-sizing: border-box;
-	background-color: #0B0E11; /* 어두운 배경 */
+	background-color: #1E2026; /* 어두운 배경 */
 	color: #EAECEF; /* 기본 글자색 */
 }
 
@@ -70,7 +70,7 @@ body {
 	border: 1px solid #333;
 	border-radius: 12px;
 	width: 100%;
-	height: 326.5px;
+	height: 40%;
 }
 
 .order-box {
@@ -277,4 +277,66 @@ input[type="range"]::before {
 	transform: translate(-50%, -50%);
 	font-size: 14px;
 	color: #FCD535;
+}
+
+/* ========================= Responsive Layout ========================= */
+
+@media ( max-width : 767px) {
+	.main-container {
+		flex-direction: column;
+		height: auto;
+	}
+	.chat-area, .chart-area, .trade-area {
+		width: 100%;
+		height: auto;
+	}
+	.order-panel {
+		flex-direction: column;
+		height: auto;
+	}
+	.order-box {
+		height: auto;
+	}
+}
+
+@media ( min-width : 768px) and (max-width: 1279px) {
+	.chat-area {
+		width: 25%;
+	}
+	.chart-area {
+		width: 50%;
+	}
+	.trade-area {
+		width: 25%;
+	}
+}
+
+@media ( min-width : 1280px) and (max-width: 1919px) {
+	.chat-area {
+		width: 20%;
+	}
+	.chart-area {
+		width: 55%;
+	}
+	.trade-area {
+		width: 25%;
+	}
+}
+
+@media ( min-width : 1920px) and (max-width: 2559px) {
+	body {
+		font-size: 1.1rem;
+	}
+}
+
+@media ( min-width : 2560px) and (max-width: 3839px) {
+	body {
+		font-size: 1.25rem;
+	}
+}
+
+@media ( min-width : 3840px) {
+	body {
+		font-size: 1.5rem;
+	}
 }
