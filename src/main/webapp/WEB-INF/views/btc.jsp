@@ -19,7 +19,7 @@
   <script src="${pageContext.request.contextPath}/resources/js/price.js" defer></script>
   <script src="${pageContext.request.contextPath}/resources/js/tvchart.js" defer></script>
   <script src="${pageContext.request.contextPath}/resources/js/btc.js" defer></script>
-  <script src="${pageContext.request.contextPath}/resources/js/posts.js" defer></script>
+  <script src="${pageContext.request.contextPath}/resources/js/post.js" defer></script>
 
   <!-- ✅ CSS -->
   <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/btc.css">
@@ -27,7 +27,7 @@
   
 </head>
 
-<body data-context="${pageContext.request.contextPath}" data-logged-in="<%= session.getAttribute("user") != null %>">
+<body data-context="${pageContext.request.contextPath}" data-logged-in="<%= session.getAttribute("loginUser") != null %>">
 
   <div class="main-container">
     <!-- 왼쪽: 커뮤니티 채팅 영역 -->
@@ -37,14 +37,14 @@
         <div id="communityChatPanel"
              style="position: absolute; left: 0; top: 50px; width: 100%; height: calc(100% - 50px); background: #fff; border: 1px solid #ccc; box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); transform: translateX(-100%); transition: transform 0.3s ease; overflow-y: auto; padding: 15px;">
           <h3>커뮤니티채팅</h3>
+          
+           <div id="postList"></div>
 
-            <div id="postForm" style="margin-bottom: 10px;">
+          <div id="postForm" style="margin-top: 10px;">
             <input type="text" id="postTitle" placeholder="제목" style="width:100%; margin-bottom:5px;" />
             <textarea id="postContent" placeholder="내용" style="width:100%; height:60px;"></textarea>
             <button id="postSubmit" style="margin-top:5px;">작성</button>
           </div>
-
-           <div id="postList"></div>
         </div>
       </div>
     </div>
@@ -116,6 +116,5 @@
     </div>
   </div>
   
-</body>
 </body>
 </html>
