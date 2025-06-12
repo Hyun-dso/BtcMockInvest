@@ -5,8 +5,17 @@ function appendPost(post) {
 	div.style.border = '1px solid #ddd';
 	div.style.marginBottom = '15px';
 	div.style.padding = '10px';
-	div.innerHTML = `<p><strong>제목:</strong> ${post.title}</p>
-                    <p>${post.content}</p>`;
+
+	// ✅ 현재 시간 임시로 박기
+	const createdAt = new Date().toLocaleString();
+
+	// ✅ innerHTML 백틱(``)으로 감싸야 변수(${}) 적용됨!
+	div.innerHTML = `
+		<div class="post-header">익명 · ${createdAt}</div>
+		<p><strong>제목:</strong> ${post.title}</p>
+		<p>${post.content}</p>
+	`;
+
 	list.prepend(div);
 }
 
