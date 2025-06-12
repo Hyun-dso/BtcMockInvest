@@ -159,26 +159,32 @@
 						<div id="buy-slider" class="bn-slider">
 							<div class="bn-slider-track">
 								<div class="bn-slider-track-thumb" style="width: 0%;"></div>
-								<div class="bn-slider-track-step active" style="left: 0%;">
+								<div class="bn-slider-handle" style="left: 0%;"></div>
+								<div class="bn-slider-track-step active" style="left: 0%;"
+									data-percent="0">
 									<div class="bn-slider-track-step-dot"></div>
 								</div>
-								<div class="bn-slider-track-step" style="left: 25%;">
+								<div class="bn-slider-track-step" style="left: 25%;"
+									data-percent="25">
 									<div class="bn-slider-track-step-dot"></div>
 								</div>
-								<div class="bn-slider-track-step" style="left: 50%;">
+								<div class="bn-slider-track-step" style="left: 50%;"
+									data-percent="50">
 									<div class="bn-slider-track-step-dot"></div>
 								</div>
-								<div class="bn-slider-track-step" style="left: 75%;">
+								<div class="bn-slider-track-step" style="left: 75%;"
+									data-percent="75">
 									<div class="bn-slider-track-step-dot"></div>
 								</div>
-								<div class="bn-slider-track-step" style="left: 100%;">
+								<div class="bn-slider-track-step" style="left: 100%;"
+									data-percent="100">
 									<div class="bn-slider-track-step-dot"></div>
 								</div>
 							</div>
 						</div>
 					</div>
 					<label>수량 (BTC)</label> <input type="number" id="buy-amount"
-						step="0.00001" placeholder="BTC"> <label>총액 (USDT)</label>
+						step="0.00001" placeholder="BTC"> <label>가격 (USDT)</label>
 					<input type="number" id="buy-total" step="0.01" placeholder="USDT">
 					<c:choose>
 						<c:when test="${empty sessionScope.loginUser}">
@@ -205,19 +211,25 @@
 						<div id="sell-slider" class="bn-slider">
 							<div class="bn-slider-track">
 								<div class="bn-slider-track-thumb" style="width: 0%;"></div>
-								<div class="bn-slider-track-step active" style="left: 0%;">
+								<div class="bn-slider-handle" style="left: 0%;"></div>
+								<div class="bn-slider-track-step active" style="left: 0%;"
+									data-percent="0">
 									<div class="bn-slider-track-step-dot"></div>
 								</div>
-								<div class="bn-slider-track-step" style="left: 25%;">
+								<div class="bn-slider-track-step" style="left: 25%;"
+									data-percent="25">
 									<div class="bn-slider-track-step-dot"></div>
 								</div>
-								<div class="bn-slider-track-step" style="left: 50%;">
+								<div class="bn-slider-track-step" style="left: 50%;"
+									data-percent="50">
 									<div class="bn-slider-track-step-dot"></div>
 								</div>
-								<div class="bn-slider-track-step" style="left: 75%;">
+								<div class="bn-slider-track-step" style="left: 75%;"
+									data-percent="75">
 									<div class="bn-slider-track-step-dot"></div>
 								</div>
-								<div class="bn-slider-track-step" style="left: 100%;">
+								<div class="bn-slider-track-step" style="left: 100%;"
+									data-percent="100">
 									<div class="bn-slider-track-step-dot"></div>
 								</div>
 							</div>
@@ -276,6 +288,5 @@
 			</div>
 		</div>
 	</div>
-
 </body>
 </html>

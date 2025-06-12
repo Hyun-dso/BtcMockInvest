@@ -161,7 +161,7 @@ input[type="range"]::before {
 .bn-slider-track {
 	position: relative;
 	width: 100%;
-	height: 6px;
+	height: 2px;
 	background: var(--color-Line, #2B3139);
 	border-radius: 3px;
 }
@@ -182,10 +182,22 @@ input[type="range"]::before {
 }
 
 .bn-slider-track-step-dot {
-	width: 6px;
-	height: 6px;
-	border-radius: 50%;
-	background: #737a85;
+	width: 7px;
+	height: 7px;
+	background: #3b3f46;
+	transform: rotate(45deg);
+}
+
+.bn-slider-handle {
+	position: absolute;
+	top: 50%;
+	transform: translate(-50%, -50%) rotate(45deg);
+	width: 12px;
+	height: 12px;
+	background: #181A20;
+	border: 2px solid #EAECF0;
+	z-index: 10;
+	pointer-events: auto;
 }
 
 .bn-slider-track-step.active .bn-slider-track-step-dot {

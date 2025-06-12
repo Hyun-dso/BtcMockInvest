@@ -41,29 +41,45 @@ function floorInput(el, step, decimals) {
 	}
 }
 
-function setSliderBg(slider) {
-	const val = parseFloat(slider.value || slider.dataset.value || 0);
-	const thumb = slider.querySelector('.bn-slider-track-thumb');
-	if (thumb) thumb.style.width = `${val}%`;
+function setSliderBg(sliderElement, percent) {
+	const track = sliderElement.querySelector('.bn-slider-track-thumb');
+	const handle = sliderElement.querySelector('.bn-slider-handle');
+	const steps = sliderElement.querySelectorAll('.bn-slider-track-step');
+
+	if (track) track.style.width = `${percent}%`;
+	if (handle) handle.style.left = `${percent}%`;
+
+	// 마커 활성화 처리
+	steps.forEach(step => {
+		const stepPercent = parseFloat(step.dataset.percent);
+		if (stepPercent <= percent) {
+			step.classList.add('active');
+		} else {
+			step.classList.remove('active');
+		}
+	});
 }
 
-function initBnSlider(slider) {
-	if (!slider) return;
-	slider.value = parseFloat(slider.dataset.value) || 0;
+function initBnSlider(sliderElement) {
+	if (!sliderElement) return;
+
+	const track = sliderElement.querySelector('.bn-slider-track');
 
 	function update(e) {
-		const rect = slider.getBoundingClientRect();
+		const rect = track.getBoundingClientRect();
 		const clientX = e.touches ? e.touches[0].clientX : e.clientX;
 		const percent = ((clientX - rect.left) / rect.width) * 100;
 		const clamped = Math.min(100, Math.max(0, percent));
-		slider.value = clamped;
-		slider.dataset.value = clamped;
-		slider.dispatchEvent(new Event('input'));
+		setSliderBg(sliderElement, clamped);
 	}
 
-	slider.addEventListener('mousedown', e => {
+	track.addEventListener('mousedown', e => {
+		e.preventDefault(); // 🛑 ← 이거 꼭 필요
 		update(e);
-		const move = ev => update(ev);
+		const move = ev => {
+			e.preventDefault(); // 🛑 ← 이거 꼭 필요
+			update(ev);
+			};
 		const up = () => {
 			document.removeEventListener('mousemove', move);
 			document.removeEventListener('mouseup', up);
@@ -72,9 +88,13 @@ function initBnSlider(slider) {
 		document.addEventListener('mouseup', up);
 	});
 
-	slider.addEventListener('touchstart', e => {
+	track.addEventListener('touchstart', e => {
+		e.preventDefault(); // 🛑 ← 이거 꼭 필요
 		update(e);
-		const move = ev => update(ev);
+		const move = ev => {
+			e.preventDefault(); // 🛑 ← 이거 꼭 필요
+			update(ev);
+			};
 		const end = () => {
 			document.removeEventListener('touchmove', move);
 			document.removeEventListener('touchend', end);
@@ -202,7 +222,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		const sliderEl = document.getElementById(sliderId);
 		if (sliderEl) initBnSlider(sliderEl);
 		if (!priceEl || !amountEl || !totalEl) return {};
-		
+
 		function fromAmount() {
 			const p = parseFloat(priceEl.value);
 			let a = parseFloat(amountEl.value);
