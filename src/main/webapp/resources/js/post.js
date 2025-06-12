@@ -2,15 +2,17 @@ function appendPost(post) {
 	const list = document.getElementById('postList');
 	const div = document.createElement('div');
 	div.className = 'post';
-	div.style.border = '1px solid #ddd';
-	div.style.marginBottom = '15px';
-	div.style.padding = '10px';
+	if (window.loginUserId && Number(post.userId) === Number(window.loginUserId)) {
+		div.classList.add('mine');
+	} else {
+		div.classList.add('other');
+	}
 
 	// ✅ 서버에서 전달된 시간이 있으면 사용하고, 없으면 현재 시간 사용
 	const createdAt = post.createdAt
-	        ? new Date(post.createdAt).toLocaleString()
-	        : new Date().toLocaleString();
-	
+		? new Date(post.createdAt).toLocaleString()
+		: new Date().toLocaleString();
+
 	// ✅ innerHTML 백틱(``)으로 감싸야 변수(${}) 적용됨!
 	div.innerHTML = `
 	        <div class="post-header">${post.username} · ${createdAt}</div>
@@ -21,22 +23,24 @@ function appendPost(post) {
 	list.appendChild(div);
 	if (atBottom) {
 		setTimeout(() => {
-		  list.scrollTop = list.scrollHeight;
+			list.scrollTop = list.scrollHeight;
 		}, 0);
 	}
 }
 
 function loadPosts() {
 	fetch(window.contextPath + '/api/posts')
-	        .then(r => r.json())
-	        .then(list => {
-	                document.getElementById('postList').innerHTML = '';
-	                list.forEach(p => appendPost(p));
-	        });
+		.then(r => r.json())
+		.then(list => {
+			document.getElementById('postList').innerHTML = '';
+			list.forEach(p => appendPost(p));
+		});
 }
 
 document.addEventListener('DOMContentLoaded', () => {
 	const isLoggedIn = document.body.getAttribute('data-logged-in') === 'true';
+	const textarea = document.getElementById('postContent');
+	const submitBtn = document.getElementById('postSubmit');
 	loadPosts();
 
 	window.websocket.connect(client => {
@@ -67,6 +71,21 @@ document.addEventListener('DOMContentLoaded', () => {
 					document.getElementById('postContent').value = '';
 				}
 			});
+		});
+
+	}
+	if (textarea && submitBtn) {
+		textarea.addEventListener('keydown', function(e) {
+			if (e.key === 'Enter') {
+				if (e.shiftKey) {
+					// Shift+Enter는 줄바꿈
+					return;
+				} else {
+					// Enter만 누르면 전송
+					e.preventDefault();
+					submitBtn.click();
+				}
+			}
 		});
 	}
 });
