@@ -1,26 +1,26 @@
 @charset "UTF-8";
 
 :root {
-    --scroll-bg: transparent;
-    --color-DisableText: #999;
-    --scroll-color: var(--color-DisableText);
+	--scroll-bg: transparent;
+	--color-DisableText: #999;
+	--scroll-color: var(--color-DisableText);
 }
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    scrollbar-color: var(--scroll-color) var(--scroll-bg);
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	scrollbar-color: var(--scroll-color) var(--scroll-bg);
 }
 
 *::-webkit-scrollbar {
-    width: 8px;
-    background: var(--scroll-bg);
+	width: 8px;
+	background: var(--scroll-bg);
 }
 
 *::-webkit-scrollbar-thumb {
-    background-color: var(--scroll-color);
-    border-radius: 4px;
+	background-color: var(--scroll-color);
+	border-radius: 4px;
 }
 
 body {
@@ -51,30 +51,47 @@ body {
 	gap: 10px;
 }
 
-.chat-area {
-	width: 100%;
-	border-right: 1px solid #333;
+.right-container {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	width: 25%;
 	background-color: #1E2026;
 	color: #EAECEF;
+	padding: 10px;
+	height: auto;
+}
+
+.orderbook-area {
+	padding: 10px;
+	margin: 1px;
+	width: 100%;
+	border: 1px solid #333;
+	border-radius: 10px;
+}
+
+.history-section {
+	padding: 10px;
+	margin: 1px;
+	width: 100%;
+	border: 1px solid #333;
+	border-radius: 10px;
+}
+
+.chat-area {
+	width: 100%;
 	background-color: #1E2026;
 	color: #EAECEF;
 	padding: 10px;
 	display: flex;
 	flex-direction: column;
 	border: 1px solid #333;
+	border-radius: 10px;
 }
 
 .chart-area {
 	width: 55%;
 	padding: 10px;
-}
-
-.trade-area {
-	width: 25%;
-	background-color: #1E2026;
-	color: #EAECEF;
-	padding: 10px;
-	border-left: 1px solid #333;
 }
 
 .btn {
@@ -85,14 +102,13 @@ body {
 	cursor: pointer;
 }
 
-
 /* ========================= Responsive Layout ========================= */
 @media ( max-width : 767px) {
 	.main-container {
 		flex-direction: column;
 		height: auto;
 	}
-	.chat-area, .chart-area, .trade-area {
+	.chat-area, .chart-area, .orderbook-area {
 		width: 100%;
 		height: auto;
 	}
@@ -105,7 +121,7 @@ body {
 	.chart-area {
 		width: 50%;
 	}
-	.trade-area {
+	.orderbook-area {
 		width: 25%;
 	}
 }
@@ -117,7 +133,7 @@ body {
 	.chart-area {
 		width: 55%;
 	}
-	.trade-area {
+	.orderbook-area {
 		width: 25%;
 	}
 }

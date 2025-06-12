@@ -8,7 +8,7 @@
 	font-family: 'Courier New', monospace;
 	color: #EAECEF;
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-	width: 100%;
+	width: auto;
 }
 
 #orderbook ul {
@@ -73,8 +73,11 @@
 	border-radius: 8px;
 }
 
-.testestest {
-	display: flex;
+.order-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 10px;
 }
 
 #mid-price, #trade-volume {

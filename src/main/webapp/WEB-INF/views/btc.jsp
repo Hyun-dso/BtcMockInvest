@@ -89,8 +89,8 @@
 		<div class="left-container" style="height: auto">
 			<!-- 왼쪽: 커뮤니티 채팅 영역 -->
 			<div class="chat-area">
-			<div class="chat-name" style="padding: 7px">
-				<h3>커뮤니티 채팅</h3>
+				<div class="chat-name" style="padding: 7px">
+					<h3>커뮤니티 채팅</h3>
 				</div>
 				<div id="communityChatPanel" class="community-chat">
 
@@ -154,9 +154,11 @@
 
 			<div class="order-panel">
 				<div class="order-box buy">
-					<h4>매수 (Buy)</h4>
-					<div class="mode-toggle">
-						<input type="checkbox" id="buy-limit-btn" class="limit-switch" />
+					<div class="order-header">
+						<h4>매수 (Buy)</h4>
+						<div class="mode-toggle">
+							<input type="checkbox" id="buy-limit-btn" class="limit-switch" />
+						</div>
 					</div>
 					<div class="trade-inputs">
 						<div class="input-row">
@@ -244,7 +246,7 @@
 				</div>
 
 				<div class="order-box sell">
-					<div class="testestest">
+					<div class="order-header">
 						<h4>매도 (Sell)</h4>
 						<div class="mode-toggle">
 							<input type="checkbox" id="sell-limit-btn" class="limit-switch" />
@@ -338,8 +340,8 @@
 			</div>
 		</div>
 
-		<div class="trade-area">
-			<div class="orderbook-section">
+		<div class="right-container">
+			<div class="orderbook-area">
 				<div id="mid-price" <h3>호가</h3>
 					<select id="tick-size">
 					<option value="0.01">0.01</option>
