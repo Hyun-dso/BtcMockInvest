@@ -51,7 +51,10 @@ window.websocket.connect((client) => {
       document.getElementById("btc-price").style.color = color;
       document.getElementById("btc-price").title = `기준가: $${prevClose.toFixed(2)} (${prevCloseTime})\n등락률: ${icon} ${Math.abs(changeRate)}%`;
 
-      document.getElementById("mid-price").textContent = `가격: ${price.toFixed(2)} USDT`;
+	  const midPriceEl = document.getElementById("mid-price-value");
+	  if (midPriceEl) {
+	    midPriceEl.textContent = `가격: ${price.toFixed(2)} USDT`;
+	  }
 
 	  const bp = document.getElementById('buy-price');
 	  const sp = document.getElementById('sell-price');

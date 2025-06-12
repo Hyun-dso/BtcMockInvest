@@ -21,22 +21,25 @@
 	</insert>
 
 	<select id="findAll" resultMap="postMap">
-		SELECT p.*, u.username FROM post
-		p
+		SELECT p.*, u.username
+		FROM post p
 		JOIN user u ON p.user_id = u.id
 		ORDER BY p.post_id DESC
 	</select>
 
 	<select id="findById" parameterType="long" resultMap="postMap">
-		SELECT p.*, u.username FROM post p
+		SELECT p.*,
+		u.username FROM post p
 		JOIN user u ON p.user_id = u.id
-		WHERE p.post_id = #{postId}
+		WHERE p.post_id =
+		#{postId}
 	</select>
 
 	<select id="findByUserId" parameterType="long"
 		resultMap="postMap">
 		SELECT p.*, u.username FROM post p
-		JOIN user u ON p.user_id = u.id
+		JOIN user u ON p.user_id =
+		u.id
 		WHERE p.user_id = #{userId} ORDER BY p.post_id DESC
 	</select>
 

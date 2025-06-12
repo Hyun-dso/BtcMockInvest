@@ -95,8 +95,8 @@
 				<div id="communityChatPanel" class="community-chat">
 
 					<div id="postList"></div>
-
 					<div id="postForm"></div>
+
 				</div>
 				<div class="chat-input-wrapper">
 					<textarea id="postContent" placeholder="내용을 입력하세요"></textarea>
@@ -352,16 +352,16 @@
 
 		<div class="right-container">
 			<div class="orderbook-area">
+				<h3>호가</h3>
 				<div id="mid-price"
 					style="margin: 0.5rem 0; font-weight: bold; color: #EAECEF;">
-					<h3>호가</h3>
-					<select id="tick-size">
+					<span id="mid-price-value">가격:-</span> <select id="tick-size">
 						<option value="0.01">0.01</option>
 						<option value="0.1">0.1</option>
 						<option value="1">1</option>
 						<option value="10">10</option>
 						<option value="100">100</option>
-					</select> 가격:-
+					</select>
 				</div>
 
 				<div id="orderbook"
