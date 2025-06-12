@@ -3,7 +3,7 @@
   flex: 1 1 50%;
   background: #1E2026;
   border: 1px solid #333;
-  color: #e0e0e0;
+  color: #EAECEF;
   padding: 10px;
   display: flex;
   flex-direction: column;
@@ -47,10 +47,10 @@
   font-weight: 500;
 }
 
-.mini-wallet .balance span {
+/*.mini-wallet .balance span {
   color: #ffd266;
   font-weight: 600;
-}
+}*/
 
 #mini-profit {
   font-weight: bold;
@@ -194,4 +194,32 @@
 
 #mini-orders li.canceled span:nth-child(1) {
     color: #bbb;
+}
+.balance-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  white-space: nowrap; /* 전체 줄바꿈 방지 */
+}
+
+.balance-item .label {
+  flex: 1;
+  color: inherit; /* 노란색 제거, 기본색 유지 */
+}
+
+.balance-item .right-group {
+  flex: 1;
+  text-align: right;
+  white-space: nowrap; /* 숫자+단위 한 줄 유지 */
+}
+
+.balance-item .value{
+	color: #ffffff;
+	font-weight:600;
+}
+
+.balance-item .unit {
+  color: #999999 ;
+  font-weight: 500;
+  display: inline;
 }
