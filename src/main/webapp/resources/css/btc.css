@@ -20,7 +20,7 @@ body {
 	background-color: #1E2026;
 }
 
-#testest {
+.chart-section {
 	border: 1px solid #333;
 	border-radius: 12px;
 	padding: 10px;
@@ -40,7 +40,6 @@ body {
 
 .chart-area {
 	width: 55%;
-	border-right: 1px solid #333;
 	padding: 10px;
 }
 
@@ -49,6 +48,7 @@ body {
 	background-color: #1E2026;
 	color: #EAECEF;
 	padding: 10px;
+	border-left: 1px solid #333;
 }
 
 .btn {

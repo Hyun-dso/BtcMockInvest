@@ -21,14 +21,17 @@
 		VALUES (#{open}, #{high}, #{low}, #{close}, #{volume}, #{candleTime}) </insert> -->
 	<insert id="insertCandle"
 		parameterType="kim.donghyun.model.entity.BtcCandle1Min">
-		INSERT INTO btc_candle_1min (open, high, low, close, volume, candle_time)
-		VALUES (#{open}, #{high}, #{low}, #{close}, #{volume}, #{candleTime})
+		INSERT INTO btc_candle_1min (open, high, low, close,
+		volume, candle_time)
+		VALUES (#{open}, #{high}, #{low}, #{close},
+		#{volume}, #{candleTime})
 		ON DUPLICATE KEY UPDATE
 		open = VALUES(open),
 		high = VALUES(high),
 		low = VALUES(low),
 		close = VALUES(close),
-		volume = VALUES(volume)
+		volume =
+		VALUES(volume)
 	</insert>
 
 	<select id="findByCandleTime"
@@ -50,6 +53,16 @@
 		#{start}
 		AND candle_time &lt; #{end}
 		ORDER BY candle_time ASC
+	</select>
+
+	<select id="findEarliestCandleTime"
+		resultType="java.time.LocalDateTime">
+		SELECT MIN(candle_time) FROM btc_candle_1min
+	</select>
+
+	<select id="findLatestCandleTime"
+		resultType="java.time.LocalDateTime">
+		SELECT MAX(candle_time) FROM btc_candle_1min
 	</select>
 
 

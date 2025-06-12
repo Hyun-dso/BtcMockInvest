@@ -4,7 +4,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Main</title>
+    <title>자 이제 시작이야 내꿈은</title>
     <!-- ✅ 외부 CSS 연결 -->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/main.css">
 </head>

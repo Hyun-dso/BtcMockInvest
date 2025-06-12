@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>BTC 거래 홈</title>
+<title>코인을 좀 사볼까</title>
 
 <jsp:include page="common/header.jsp" />
 
@@ -172,7 +172,7 @@
 
 		<!-- 가운데 차트 영역 -->
 		<div class="chart-area">
-			<div id="testest">
+			<div class="chart-section">
 				<input type="checkbox" id="toggle-ma">📉 MA선 표시
 				<div id="tv-chart" style="width: 100%; height: 400px;"></div>
 
@@ -205,7 +205,8 @@
 					<c:choose>
 						<c:when test="${empty sessionScope.loginUser}">
 							<button id="buy-submit"
-								onclick="location.href='${pageContext.request.contextPath}/signin'">Sign In</button>
+								onclick="location.href='${pageContext.request.contextPath}/signin'">Sign
+								In</button>
 						</c:when>
 						<c:otherwise>
 							<button id="buy-submit">매수 주문 (Buy)</button>
@@ -232,7 +233,8 @@
 					<c:choose>
 						<c:when test="${empty sessionScope.loginUser}">
 							<button id="sell-submit"
-								onclick="location.href='${pageContext.request.contextPath}/signin'">Sign In</button>
+								onclick="location.href='${pageContext.request.contextPath}/signin'">Sign
+								In</button>
 						</c:when>
 						<c:otherwise>
 							<button id="sell-submit">매도 주문 (Sell)</button>
@@ -243,7 +245,7 @@
 		</div>
 
 		<div class="trade-area">
-			<div class="trade-ui">
+			<div class="orderbook-section">
 				<h3>호가</h3>
 				<select id="tick-size">
 					<option value="0.01">0.01</option>
@@ -260,29 +262,23 @@
 					style="display: flex; flex-direction: column; font-family: monospace;">
 					<ul id="asks"
 						style="color: #ff4d4f; list-style: none; padding: 0; margin: 0;"></ul>
-
 					<div
 						style="display: flex; align-items: center; justify-content: center; gap: 4px; margin: 1rem 0;">
 						<div id="btc-price"
 							style="font-size: 2rem; font-weight: bold; text-align: center;">$-</div>
 					</div>
-
 					<ul id="bids"
 						style="color: #00b386; list-style: none; padding: 0; margin: 0;"></ul>
 				</div>
-
+			</div>
+			<div class="history-section">
 				<div id="trade-volume" style="margin-top: 10px; font-weight: bold;">거래내역:
 					-</div>
 
 				<div id="trade-history">
 					<ul id="history-list"></ul>
 				</div>
-
-
 			</div>
-
 		</div>
-	</div>
-
 </body>
 </html>

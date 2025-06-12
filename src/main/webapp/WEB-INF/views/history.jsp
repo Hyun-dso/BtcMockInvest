@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>내 거래내역</title>
+<title>BTC MOCK INVEST | 거래내역</title>
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/history.css">
 </head>

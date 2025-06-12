@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>내 지갑</title>
+<title>내 돈이 얼마나 있지</title>
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/wallet.css">
 <script>

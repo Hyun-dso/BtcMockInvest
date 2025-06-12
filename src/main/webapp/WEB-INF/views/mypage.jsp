@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>마이페이지</title>
+<title>My Page</title>
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/mypage.css">
 <script src="${pageContext.request.contextPath}/resources/js/mypage.js"

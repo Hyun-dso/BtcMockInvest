@@ -16,6 +16,13 @@ let websocketClient = null;
 let maVisible = false;
 let maSeries = null;
 
+// 초기 데이터 및 추가 로딩 설정
+const INITIAL_LIMIT = 200;
+const LOAD_MORE_STEP = 50;
+const MAX_LIMIT = 500;
+let currentLimit = INITIAL_LIMIT;
+let isLoadingMore = false;
+
 // 각 interval별 초(second) 단위 길이
 const INTERVAL_SECONDS = {
 	"1m": 60,
@@ -57,30 +64,34 @@ function clampVisibleRange() {
 	let { from, to } = range;
 	let width = to - from;
 
-	 const maxTo = last + step; // allow only one-candle margin on the right
-	 let changed = false;
+	if (from <= first && currentLimit < MAX_LIMIT && !isLoadingMore) {
+		loadMoreCandles();
+	}
 
-	 if (to > maxTo) {
-	         to = maxTo;
-	         from = to - width;
-	         changed = true;
-	 }
+	const maxTo = last + step; // allow only one-candle margin on the right
+	let changed = false;
 
-	 if (from < first) {
-	         from = first;
-	         to = from + width;
-	         changed = true;
-	 }
+	if (to > maxTo) {
+		to = maxTo;
+		from = to - width;
+		changed = true;
+	}
 
-	 if (to > maxTo) {
-	         to = maxTo;
-	         from = to - width;
-	         changed = true;
-	 }
+	if (from < first) {
+		from = first;
+		to = from + width;
+		changed = true;
+	}
 
-	 if (changed) {
-	         window.chart.timeScale().setVisibleRange({ from, to });
-	 }
+	if (to > maxTo) {
+		to = maxTo;
+		from = to - width;
+		changed = true;
+	}
+
+	if (changed) {
+		window.chart.timeScale().setVisibleRange({ from, to });
+	}
 }
 
 // MA 갱신을 위한 헬퍼 함수
@@ -114,6 +125,43 @@ function calculateMA(data, period = 10) {
 	}
 
 	return result;
+}
+// 추가 데이터 로드
+function loadMoreCandles() {
+	if (isLoadingMore || currentLimit >= MAX_LIMIT) return;
+
+	const prevRange = window.chart.timeScale().getVisibleRange();
+	const prevFirst = (window.candleSeries._data && window.candleSeries._data[0]) ? window.candleSeries._data[0].time : null;
+
+	isLoadingMore = true;
+	currentLimit = Math.min(currentLimit + LOAD_MORE_STEP, MAX_LIMIT);
+	const contextPath = window.contextPath || "";
+
+	fetch(`${contextPath}/api/candle?interval=${currentInterval}&limit=${currentLimit}`)
+		.then(res => res.json())
+		.then(data => {
+			const filtered = data.filter(isValidCandle).sort((a, b) => a.time - b.time);
+			if (filtered.length === 0) return;
+
+			window.candleSeries.setData(filtered);
+			const newFirst = filtered[0].time;
+			if (prevRange && prevFirst !== null) {
+				const delta = prevFirst - newFirst;
+				window.chart.timeScale().setVisibleRange({
+					from: prevRange.from + delta,
+					to: prevRange.to + delta
+				});
+			}
+
+			window.candleSeries._lastBar = filtered[filtered.length - 1];
+			window.candleSeries._data = filtered;
+			updateMA();
+		})
+		.catch(err => console.error("❌ 추가 캔들 fetch 실패:", err))
+		.finally(() => {
+			isLoadingMore = false;
+			clampVisibleRange();
+		});
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -335,8 +383,8 @@ document.addEventListener("DOMContentLoaded", () => {
 // ✅ interval 변경 시 호출
 function subscribeToInterval(interval) {
 	if (!websocketClient) {
-		console.warn("❌ WebSocket 아직 연결되지 않음");
-		return;
+	        console.warn("❌ WebSocket 아직 연결되지 않음");
+	        return;
 	}
 
 	if (currentSubscription) {
@@ -345,9 +393,11 @@ function subscribeToInterval(interval) {
 
 	const contextPath = window.contextPath || "";
 	currentInterval = interval;
+	currentLimit = INITIAL_LIMIT;
+	isLoadingMore = false;
 	console.log("📡 구독 시작:", interval);
 
-	fetch(`${contextPath}/api/candle?interval=${interval}&limit=100`)
+	fetch(`${contextPath}/api/candle?interval=${interval}&limit=${currentLimit}`)
 		.then(res => res.json())
 		.then(data => {
 			const filtered = data.filter(isValidCandle).sort((a, b) => a.time - b.time);

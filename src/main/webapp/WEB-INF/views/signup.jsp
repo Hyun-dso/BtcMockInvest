@@ -3,7 +3,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>회원가입</title>
+	<title>부자가 되는 첫걸음</title>
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/signup.css">
 	<script src="${pageContext.request.contextPath}/resources/js/signup.js" defer></script>
 </head>

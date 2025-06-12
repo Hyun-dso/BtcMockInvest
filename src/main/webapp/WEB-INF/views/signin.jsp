@@ -3,7 +3,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>로그인</title>
+	<title>ID가 뭐였더라</title>
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/signin.css">
 </head>
 <body>
