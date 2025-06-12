@@ -11,9 +11,8 @@ function appendPost(post) {
 
 	// ✅ innerHTML 백틱(``)으로 감싸야 변수(${}) 적용됨!
 	div.innerHTML = `
-		<div class="post-header">익명 · ${createdAt}</div>
-		<p><strong>제목:</strong> ${post.title}</p>
-		<p>${post.content}</p>
+	        <div class="post-header">${post.username} · ${createdAt}</div>
+	        <p>${post.content}</p>
 	`;
 
 	list.prepend(div);
@@ -46,20 +45,17 @@ document.addEventListener('DOMContentLoaded', () => {
 				window.location.href = window.contextPath + '/signin';
 				return;
 			}
-
-			const title = document.getElementById('postTitle').value.trim();
 			const content = document.getElementById('postContent').value.trim();
-			if (!title || !content) {
-				alert('제목과 내용을 입력하세요.');
+			if (!content) {
+				alert('내용을 입력하세요.');
 				return;
 			}
 			fetch(window.contextPath + '/api/posts', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-				body: new URLSearchParams({ title, content })
+				body: new URLSearchParams({ content })
 			}).then(res => {
 				if (res.ok) {
-					document.getElementById('postTitle').value = '';
 					document.getElementById('postContent').value = '';
 				}
 			});

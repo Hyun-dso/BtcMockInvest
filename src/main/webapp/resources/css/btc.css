@@ -210,14 +210,17 @@ input[type="range"]::before {
 
 /* mini wallet styles */
 .community-chat {
-	flex: 1 1 50%;
-	background: #1E2026;
-	border: 1px solid #333;
-	color: #EAECEF;
-	box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-	overflow-y: auto;
-	padding: 15px;
-	margin-bottom: 10px;
+        flex: 1 1 50%;
+        background: #1E2026;
+        border: 1px solid #333;
+        color: #EAECEF;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+        overflow-y: auto;
+        padding: 15px;
+        margin-bottom: 10px;
+}
+.community-chat h3 {
+        margin-bottom: 10px;
 }
 
 /* Binance style slider */

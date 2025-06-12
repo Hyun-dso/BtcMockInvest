@@ -6,7 +6,7 @@ import lombok.Data;
 public class Post {
     private Long postId;
     private Long userId;
-    private String title;
+    private String username;
     private String content;
     private String createdAt;
 }

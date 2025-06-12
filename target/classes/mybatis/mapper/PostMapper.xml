@@ -7,29 +7,37 @@
 	<resultMap id="postMap" type="kim.donghyun.model.entity.Post">
 		<id property="postId" column="post_id" />
 		<result property="userId" column="user_id" />
-		<result property="title" column="title" />
+		<result property="username" column="username" />
 		<result property="content" column="content" />
 		<result property="createdAt" column="created_at" />
 	</resultMap>
 
-        <insert id="insert"
-                parameterType="kim.donghyun.model.entity.Post"
-                useGeneratedKeys="true" keyProperty="postId">
-                INSERT INTO post (user_id, title, content, created_at)
-                VALUES (#{userId}, #{title}, #{content}, NOW())
-        </insert>
+	<insert id="insert"
+		parameterType="kim.donghyun.model.entity.Post" useGeneratedKeys="true"
+		keyProperty="postId">
+		INSERT INTO post (user_id, content, created_at)
+		VALUES
+		(#{userId}, #{content}, NOW())
+	</insert>
 
 	<select id="findAll" resultMap="postMap">
-		SELECT * FROM post ORDER BY post_id DESC
+		SELECT p.*, u.username FROM post
+		p
+		JOIN user u ON p.user_id = u.id
+		ORDER BY p.post_id DESC
 	</select>
 
 	<select id="findById" parameterType="long" resultMap="postMap">
-		SELECT * FROM post WHERE post_id = #{postId}
+		SELECT p.*, u.username FROM post p
+		JOIN user u ON p.user_id = u.id
+		WHERE p.post_id = #{postId}
 	</select>
 
 	<select id="findByUserId" parameterType="long"
 		resultMap="postMap">
-		SELECT * FROM post WHERE user_id = #{userId} ORDER BY post_id DESC
+		SELECT p.*, u.username FROM post p
+		JOIN user u ON p.user_id = u.id
+		WHERE p.user_id = #{userId} ORDER BY p.post_id DESC
 	</select>
 
 </mapper>

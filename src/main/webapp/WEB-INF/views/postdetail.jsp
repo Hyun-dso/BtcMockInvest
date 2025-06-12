@@ -4,13 +4,13 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>${post.title}</title>
+    <title>chat</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/postDetail.css">
 </head>
 <body>
 
     <div class="post-box">
-        <h2>${post.title}</h2>
+        <h2>${post.username}</h2>
         <p>${post.content}</p>
     </div>
 
