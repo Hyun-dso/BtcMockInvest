@@ -1,0 +1,50 @@
+.binance-slider {
+	-webkit-appearance: none;
+	appearance: none;
+	width: calc(100% - 12px);
+	height: 2px;
+	background: #2B3139;
+	margin: 20px 6px;
+	position: relative;
+	cursor: pointer;
+}
+
+.binance-slider::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	appearance: none;
+	width: 12px;
+	height: 12px;
+	background: #181A20;
+	border: 2px solid #EAECF0;
+	transform: rotate(45deg);
+	margin-top: -6px;
+	z-index: 10;
+	position: relative;
+}
+
+.binance-slider::-moz-range-thumb {
+	width: 12px;
+	height: 12px;
+	background: transparent;
+	border: 2px solid white;
+	transform: rotate(45deg);
+	z-index: 10;
+	position: relative;
+	margin-left: 3px;
+}
+
+.slider-markers {
+	position: relative;
+	height: 10px;
+	margin-top: -27px;
+}
+
+.slider-markers .marker {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%) rotate(45deg);
+  width: 8px;
+  height: 8px;
+  background-color: #3b3f46;
+  z-index: 2;
+}
