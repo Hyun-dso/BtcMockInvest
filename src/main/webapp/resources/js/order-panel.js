@@ -52,8 +52,8 @@ function activateLimit(btnId, priceId) {
 	if (!btn || !priceEl) return;
 	if (!btn.classList.contains('active')) {
 		btn.classList.add('active');
+		btn.checked = true;
 		priceEl.removeAttribute('readonly');
-		btn.textContent = '현재시세';
 	}
 }
 
@@ -142,21 +142,20 @@ document.addEventListener('DOMContentLoaded', () => {
 		const priceEl = document.getElementById(priceId);
 		if (!priceEl) return;
 
-		btn.classList.toggle('active');
-		const active = btn.classList.contains('active');
+		const active = btn.checked;
 		if (active) {
 			priceEl.removeAttribute('readonly');
-			btn.textContent = '현재시세';
+			btn.classList.add('active');
 		} else {
 			priceEl.setAttribute('readonly', true);
-			btn.textContent = '지정가';
+			btn.classList.remove('active');
 		}
 	}
 
 	if (buyLimitBtn)
-		buyLimitBtn.addEventListener('click', () => toggleLimit(buyLimitBtn, 'buy-price'));
+		buyLimitBtn.addEventListener('change', () => toggleLimit(buyLimitBtn, 'buy-price'));
 	if (sellLimitBtn)
-		sellLimitBtn.addEventListener('click', () => toggleLimit(sellLimitBtn, 'sell-price'));
+		sellLimitBtn.addEventListener('change', () => toggleLimit(sellLimitBtn, 'sell-price'));
 
 	function setupCalc(type, priceId, amountId, totalId, sliderId) {
 		const priceEl = document.getElementById(priceId);

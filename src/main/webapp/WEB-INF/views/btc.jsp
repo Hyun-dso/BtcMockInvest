@@ -191,7 +191,7 @@
 				<div class="order-box buy">
 					<h4>매수 (Buy)</h4>
 					<div class="mode-toggle">
-						<button id="buy-limit-btn" class="limit-btn">지정가</button>
+						<input type="checkbox" id="buy-limit-btn" class="limit-switch" />
 					</div>
 					<label>가격 (USDT)</label> <input type="number" id="buy-price"
 						readonly step="0.01" placeholder="USDT">
@@ -218,7 +218,7 @@
 					<div class="testestest">
 						<h4>매도 (Sell)</h4>
 						<div class="mode-toggle">
-							<button id="sell-limit-btn" class="limit-btn">지정가</button>
+							<input type="checkbox" id="sell-limit-btn" class="limit-switch" />
 						</div>
 					</div>
 					<label>가격 (USDT)</label> <input type="number" id="sell-price"
