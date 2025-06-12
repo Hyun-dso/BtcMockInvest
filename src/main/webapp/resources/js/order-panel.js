@@ -66,11 +66,13 @@ function initBnSlider(sliderElement) {
 	const track = sliderElement.querySelector('.bn-slider-track');
 
 	function update(e) {
-		const rect = track.getBoundingClientRect();
-		const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-		const percent = ((clientX - rect.left) / rect.width) * 100;
-		const clamped = Math.min(100, Math.max(0, percent));
-		setSliderBg(sliderElement, clamped);
+	        const rect = track.getBoundingClientRect();
+	        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+	        const percent = ((clientX - rect.left) / rect.width) * 100;
+	        const clamped = Math.min(100, Math.max(0, percent));
+	        sliderElement.value = clamped;
+	        setSliderBg(sliderElement, clamped);
+	        sliderElement.dispatchEvent(new Event('input'));
 	}
 
 	track.addEventListener('mousedown', e => {

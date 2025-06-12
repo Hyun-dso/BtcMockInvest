@@ -86,11 +86,13 @@
 		window.loginUserId = "${sessionScope.loginUser.id}";
 	</script>
 	<div class="main-container">
-		<div class="left-container">
+		<div class="left-container" style="height: auto">
 			<!-- 왼쪽: 커뮤니티 채팅 영역 -->
 			<div class="chat-area">
+			<div class="chat-name" style="padding: 7px">
+				<h3>커뮤니티 채팅</h3>
+				</div>
 				<div id="communityChatPanel" class="community-chat">
-					<h3>커뮤니티채팅</h3>
 
 					<div id="postList" style="height: 80%"></div>
 
@@ -98,7 +100,7 @@
 				</div>
 				<div class="chat-input-wrapper">
 					<textarea id="postContent" placeholder="내용을 입력하세요"></textarea>
-					<button id="postSubmit">작성</button>
+					<button id="postSubmit">>></button>
 				</div>
 			</div>
 			<div id="mini-wallet" class="mini-wallet">
@@ -171,6 +173,21 @@
 								</div>
 							</div>
 						</div>
+
+						<div class="input-row">
+							<div class="input-wrapper">
+								<span class="floating-label">수량</span> <input type="number"
+									id="buy-amount" data-step="0.1" step="0.1">
+								<div class="unit-group">
+									<span class="unit">BTC</span>
+									<div class="step">
+										<button type="button" class="step-up" data-target="buy-amount">▲</button>
+										<button type="button" class="step-down"
+											data-target="buy-amount">▼</button>
+									</div>
+								</div>
+							</div>
+						</div>
 						<div class="bn-slider-wrapper">
 							<div id="buy-slider" class="bn-slider">
 								<div class="bn-slider-track">
@@ -201,27 +218,14 @@
 						</div>
 						<div class="input-row">
 							<div class="input-wrapper">
-								<span class="floating-label">수량</span> <input type="number"
-									id="buy-amount" data-step="0.1" step="0.1">
-								<div class="unit-group">
-									<span class="unit">BTC</span>
-									<div class="step">
-										<button type="button" class="step-up" data-target="buy-amount">▲</button>
-										<button type="button" class="step-down"
-											data-target="buy-amount">▼</button>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="input-row">
-							<div class="input-wrapper">
 								<span class="floating-label">금액</span> <input type="number"
 									id="buy-total" data-step="1" step="1">
 								<div class="unit-group">
 									<span class="unit">USDT</span>
 									<div class="step">
 										<button type="button" class="step-up" data-target="buy-total">▲</button>
-										<button type="button" class="step-down"	data-target="buy-total">▼</button>
+										<button type="button" class="step-down"
+											data-target="buy-total">▼</button>
 									</div>
 								</div>
 							</div>
@@ -261,6 +265,22 @@
 								</div>
 							</div>
 						</div>
+
+						<div class="input-row">
+							<div class="input-wrapper">
+								<span class="floating-label">수량</span> <input type="number"
+									id="sell-amount" data-step="0.00001" step="0.00001">
+								<div class="unit-group">
+									<span class="unit">BTC</span>
+									<div class="step">
+										<button type="button" class="step-up"
+											data-target="sell-amount">▲</button>
+										<button type="button" class="step-down"
+											data-target="sell-amount">▼</button>
+									</div>
+								</div>
+							</div>
+						</div>
 						<div class="bn-slider-wrapper">
 							<div id="sell-slider" class="bn-slider">
 								<div class="bn-slider-track">
@@ -285,21 +305,6 @@
 									<div class="bn-slider-track-step" style="left: 100%;"
 										data-percent="100">
 										<div class="bn-slider-track-step-dot"></div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="input-row">
-							<div class="input-wrapper">
-								<span class="floating-label">수량</span> <input type="number"
-									id="sell-amount" data-step="0.00001" step="0.00001">
-								<div class="unit-group">
-									<span class="unit">BTC</span>
-									<div class="step">
-										<button type="button" class="step-up"
-											data-target="sell-amount">▲</button>
-										<button type="button" class="step-down"
-											data-target="sell-amount">▼</button>
 									</div>
 								</div>
 							</div>

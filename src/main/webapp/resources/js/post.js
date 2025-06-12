@@ -17,8 +17,13 @@ function appendPost(post) {
 	        <p>${post.content}</p>
 	`;
 
+	const atBottom = list.scrollHeight - list.scrollTop <= list.clientHeight + 10;
 	list.appendChild(div);
-	list.scrollTop = list.scrollHeight;
+	if (atBottom) {
+		setTimeout(() => {
+		  list.scrollTop = list.scrollHeight;
+		}, 0);
+	}
 }
 
 function loadPosts() {
@@ -50,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			}
 			const content = document.getElementById('postContent').value.trim();
 			if (!content) {
-				alert('내용을 입력하세요.');
+				showToast('내용을 입력하세요.');
 				return;
 			}
 			fetch(window.contextPath + '/api/posts', {

@@ -3,10 +3,11 @@
   top: 0;
   left: 50%;
   transform: translate(-50%, -100%);
-  background: rgba(0, 0, 0, 0.8);
+  background: #444;
+  opacity:0.5;
   color: #fff;
   padding: 10px 20px;
-  border-radius: 4px;
+  border-radius: 10px;
   opacity: 0;
   transition: transform 0.3s ease, opacity 0.3s ease;
   z-index: 9999;
