@@ -1,21 +1,42 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
-<%@ page session="true"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
-<!--  세션 유지 확인용 jsp입니다!! -->
 <!DOCTYPE html>
-<head>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/slider.css">
-</head>
 <html>
+<head>
+<meta charset="UTF-8">
+<title>Input Demo</title>
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/input-style.css">
+</head>
 <body>
-    <input type="range" min="0" max="100" value="0" class="binance-slider">
-    <div class="slider-markers">
-        <div class="marker" style="left: 0%;"></div>
-        <div class="marker" style="left: 25%;"></div>
-        <div class="marker" style="left: 50%;"></div>
-        <div class="marker" style="left: 75%;"></div>
-        <div class="marker" style="left: 100%;"></div>
-    </div>
+	<div class="trade-inputs">
+		<div class="input-row">
+			<div class="input-wrapper">
+				<span class="floating-label">Price</span> <input type="number"
+					id="price" data-step="1" />
+				<div class="unit-group">
+					<span class="unit">USDT</span>
+					<div class="step">
+						<button type="button" class="step-up" data-target="price">▲</button>
+						<button type="button" class="step-down" data-target="price">▼</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="input-row">
+			<div class="input-wrapper">
+				<span class="floating-label">Amount</span> <input type="number"
+					id="amount" data-step="0.1" />
+				<div class="unit-group">
+					<span class="unit">BTC</span>
+					<div class="step">
+						<button type="button" class="step-up" data-target="amount">▲</button>
+						<button type="button" class="step-down" data-target="amount">▼</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+<script src="${pageContext.request.contextPath}/resources/js/step-control.js"></script>
 </body>
 </html>

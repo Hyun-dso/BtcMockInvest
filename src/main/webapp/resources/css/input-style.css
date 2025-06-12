@@ -1,0 +1,114 @@
+@charset "UTF-8";
+
+.trade-inputs {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	max-width: 300px;
+}
+
+.input-row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.input-row label {
+	width: 60px;
+	font-size: 13px;
+	color: #aaaaaa;
+	margin-right: 8px;
+	white-space: nowrap;
+}
+
+.input-wrapper {
+	flex: 1;
+	display: flex;
+	align-items: center;
+	background: #1e1e1e;
+	border: 1px solid #333;
+	border-radius: 4px;
+	padding: 0 8px;
+	height: 36px;
+	display: flex;
+	align-items: center;
+	padding-left: 60px; /* 라벨 영역 확보 */
+	padding-right: 60px; /* 단위 + 스텝버튼 영역 확보 */
+	position: relative;
+}
+
+.input-wrapper input[type="number"] {
+	flex: 1;
+	background: transparent;
+	border: none;
+	color: #ffffff;
+	font-size: 14px;
+	text-align: right; /* 입력값 오른쪽 정렬 */
+	padding: 0;
+	margin: 0;
+	height: 100%;
+	-moz-appearance: textfield; /* Firefox */
+}
+
+/* ▲▼ 스핀 버튼 제거 */
+input::-webkit-inner-spin-button,
+input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* 라벨을 내부에 절대 위치 */
+.input-wrapper .floating-label {
+  position: absolute;
+  left: 10px;
+  font-size: 13px;
+  color: #aaaaaa;
+}
+
+.unit-group {
+  position: absolute;
+  right: 5px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.unit {
+	font-size: 13px;
+	color: #aaaaaa;
+}
+
+.step {
+	display: flex;
+	flex-direction: column;
+}
+
+.step button {
+	width: 14px;
+	height: 14px;
+	font-size: 10px;
+	background: none;
+	border: none;
+	color: #aaaaaa;
+	cursor: pointer;
+	line-height: 1;
+}
+
+.step button:hover {
+	color: #ffffff;
+}
+
+.input-wrapper input:focus {
+  outline: none;
+}
+
+.input-wrapper:focus-within {
+  border: 1px solid #FFFFFF80; /* 원하는 포커스 색상 */
+  box-shadow: 0 0 0 1px #FFFFFF80;
+}
+
+@media ( max-width : 767px) {
+	.step {
+		display: none;
+	}
+}
