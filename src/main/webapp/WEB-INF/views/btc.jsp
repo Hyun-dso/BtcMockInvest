@@ -50,6 +50,10 @@
 <!-- ✅ CSS -->
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/btc.css">
+	<link rel="stylesheet"
+        href="${pageContext.request.contextPath}/resources/css/order-panel.css">
+<link rel="stylesheet"
+        href="${pageContext.request.contextPath}/resources/css/community-chat.css">
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/orderbook.css">
 <link rel="stylesheet"
@@ -87,11 +91,11 @@
 
 					<div id="postList" style="height: 80%"></div>
 
-					<div id="postForm" style="margin-top: 10px;">
-						<textarea id="postContent" placeholder="내용"
-							style="width: 100%; height: 60px;"></textarea>
-						<button id="postSubmit" style="margin-top: 5px;">작성</button>
-					</div>
+					<div id="postForm" style="margin-top: 10px;"></div>
+				</div>
+				<div class="chat-input-wrapper">
+					<textarea id="postContent" placeholder="내용을 입력하세요"></textarea>
+					<button id="postSubmit">작성</button>
 				</div>
 			</div>
 			<div id="mini-wallet" class="mini-wallet">
@@ -124,7 +128,6 @@
 				</div>
 			</div>
 		</div>
-
 
 
 		<!-- 가운데 차트 영역 -->
@@ -237,5 +240,6 @@
 				</div>
 			</div>
 		</div>
+	</div>
 </body>
 </html>

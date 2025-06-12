@@ -79,3 +79,32 @@ body {
   height: 60%; /* 또는 flex-grow 사용 */
   overflow-y: auto;
 }
+
+.chat-input-wrapper {
+  display: flex;
+  padding: 10px;
+  gap: 10px;
+  border-top: 1px solid #333;
+  background-color: #1E2026;
+}
+
+.chat-input-wrapper textarea {
+  flex: 1;
+  resize: none;
+  padding: 10px;
+  background-color: #2a2a2a;
+  color: #fff;
+  border: 1px solid #444;
+  border-radius: 6px;
+  height: 60px;
+  font-size: 14px;
+}
+
+.chat-input-wrapper button {
+  padding: 10px 16px;
+  background-color: #00b386;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}

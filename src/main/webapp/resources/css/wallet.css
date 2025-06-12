@@ -1,5 +1,9 @@
 @charset "UTF-8";
 
+body {
+    background: linear-gradient(to bottom, #000000, #2c2c2c);
+}
+
 .wallet-container {
 	max-width: 800px;
 	margin: 100px auto;

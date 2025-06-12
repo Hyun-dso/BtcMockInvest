@@ -32,10 +32,10 @@ public class PostService {
 		return commentRepository.findByPostId(postId);
 	}
 
-	public Post createPost(Long userId, String title, String content) {
+	public Post createPost(Long userId, String username, String content) {
 		Post post = new Post();
 		post.setUserId(userId);
-		post.setTitle(title);
+        post.setUsername(username);
 		post.setContent(content);
 		postRepository.insert(post);
 		postWebSocketSender.broadcast(post);
