@@ -19,6 +19,7 @@
   <script src="${pageContext.request.contextPath}/resources/js/price.js" defer></script>
   <script src="${pageContext.request.contextPath}/resources/js/tvchart.js" defer></script>
   <script src="${pageContext.request.contextPath}/resources/js/btc.js" defer></script>
+  <script src="${pageContext.request.contextPath}/resources/js/posts.js" defer></script>
 
   <!-- ✅ CSS -->
   <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/btc.css">
@@ -37,34 +38,13 @@
              style="position: absolute; left: 0; top: 50px; width: 100%; height: calc(100% - 50px); background: #fff; border: 1px solid #ccc; box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); transform: translateX(-100%); transition: transform 0.3s ease; overflow-y: auto; padding: 15px;">
           <h3>커뮤니티채팅</h3>
 
-          <div class="post" style="border: 1px solid #ddd; margin-bottom: 15px; padding: 10px;">
-            <p><strong>작성자:</strong> user123</p>
-            <p><strong>제목:</strong> 오늘의 BTC 전망</p>
-            <p>BTC가 오늘 상승 흐름을 타고 있습니다. 여러분의 생각은?</p>
-            <button class="like-btn">좋아요 ♥</button> <span>3</span>
-            <p class="toggle-comments" style="color: blue; cursor: pointer;">댓글 보기</p>
-            <div class="comments" style="display: none; margin-top: 10px; padding-left: 10px;">
-              <div class="comment-item" style="border-top: 1px solid #eee; padding-top: 5px;">
-                <p><strong>btcfan:</strong> 저도 동의합니다!</p>
-              </div>
-              <div class="comment-item" style="border-top: 1px solid #eee; padding-top: 5px;">
-                <p><strong>investKing:</strong> 조심해야 할 타이밍 같아요</p>
-              </div>
-            </div>
+            <div id="postForm" style="margin-bottom: 10px;">
+            <input type="text" id="postTitle" placeholder="제목" style="width:100%; margin-bottom:5px;" />
+            <textarea id="postContent" placeholder="내용" style="width:100%; height:60px;"></textarea>
+            <button id="postSubmit" style="margin-top:5px;">작성</button>
           </div>
 
-          <div class="post" style="border: 1px solid #ddd; margin-bottom: 15px; padding: 10px;">
-            <p><strong>작성자:</strong> traderKim</p>
-            <p><strong>제목:</strong> 신규 진입 시점인가요?</p>
-            <p>지금 매수 타이밍인지 고민되네요. 조언 부탁드립니다!</p>
-            <button class="like-btn">좋아요 ♥</button> <span>1</span>
-            <p class="toggle-comments" style="color: blue; cursor: pointer;">댓글 보기</p>
-            <div class="comments" style="display: none; margin-top: 10px; padding-left: 10px;">
-              <div class="comment-item" style="border-top: 1px solid #eee; padding-top: 5px;">
-                <p><strong>userA:</strong> 아직은 기다리는게 좋아보여요</p>
-              </div>
-            </div>
-          </div>
+           <div id="postList"></div>
         </div>
       </div>
     </div>

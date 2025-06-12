@@ -8,15 +8,6 @@ communityBtn.addEventListener("click", () => {
   communityBtn.textContent = isCommunityOpen ? "커뮤니티 닫기" : "커뮤니티 열기";
 });
 
-// 댓글 토글
-document.querySelectorAll('.toggle-comments').forEach(toggle => {
-  toggle.addEventListener('click', () => {
-    const comments = toggle.nextElementSibling;
-    const isOpen = comments.style.display === 'block';
-    comments.style.display = isOpen ? 'none' : 'block';
-    toggle.textContent = isOpen ? '댓글 보기' : '댓글 닫기';
-  });
-});
 
 // 거래 버튼 및 상태 처리
 const isLoggedIn = document.body.getAttribute("data-logged-in") === "true";

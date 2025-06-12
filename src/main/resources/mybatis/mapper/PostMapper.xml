@@ -12,11 +12,12 @@
 		<result property="createdAt" column="created_at" />
 	</resultMap>
 
-	<insert id="insert"
-		parameterType="kim.donghyun.model.entity.Post">
-		INSERT INTO post (user_id, title, content, created_at)
-		VALUES (#{userId}, #{title}, #{content}, NOW())
-	</insert>
+        <insert id="insert"
+                parameterType="kim.donghyun.model.entity.Post"
+                useGeneratedKeys="true" keyProperty="postId">
+                INSERT INTO post (user_id, title, content, created_at)
+                VALUES (#{userId}, #{title}, #{content}, NOW())
+        </insert>
 
 	<select id="findAll" resultMap="postMap">
 		SELECT * FROM post ORDER BY post_id DESC
