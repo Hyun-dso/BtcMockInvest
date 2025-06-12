@@ -29,13 +29,15 @@ public class PostApiController {
 
     @PostMapping
     public ResponseEntity<?> create(HttpSession session,
-                                    @RequestParam String title,
-                                    @RequestParam String content) {
+                                    @RequestParam("title") String title,
+                                    @RequestParam("content") String content) {
         User loginUser = (User) session.getAttribute("loginUser");
         if (loginUser == null) {
             return ResponseEntity.status(401).body("로그인이 필요합니다.");
         }
         Post post = postService.createPost(loginUser.getId(), title, content);
+        System.out.println("loginUser = " + loginUser);
+        System.out.println("userId = " + (loginUser != null ? loginUser.getId() : "null"));
         return ResponseEntity.ok(post);
     }
 }
