@@ -103,6 +103,8 @@
 					<button id="postSubmit">>></button>
 				</div>
 			</div>
+			<div class="divider-line"></div>
+			<div class="divider-line"></div>
 			<div id="mini-wallet" class="mini-wallet">
 				<div class="tabs">
 					<button data-tab="balance" class="active">지갑</button>
@@ -111,17 +113,25 @@
 				</div>
 				<div class="tab-content">
 					<div class="balance active">
-						<p>
-							평가 금액: <span id="mini-total">0</span> USDT
+						<p class="balance-item">
+							<span class="label">평가 금액:</span> <span class="right-group">
+								<span class="value" id="mini-total">0</span> <span class="unit">USDT</span>
+							</span>
 						</p>
-						<p>
-							수익률: <span id="mini-profit">0</span>
+						<p class="balance-item">
+							<span class="label">수익률:</span> <span class="right-group">
+								<span class="value" id="mini-profit">0</span>
+							</span>
 						</p>
-						<p>
-							BTC 보유 수량: <span id="mini-btc">0</span> BTC
+						<p class="balance-item">
+							<span class="label">BTC 보유 수량:</span> <span class="right-group">
+								<span class="value" id="mini-btc">0</span> <span class="unit">BTC</span>
+							</span>
 						</p>
-						<p>
-							주문 가능 금액: <span id="mini-usdt">0</span> USDT
+						<p class="balance-item">
+							<span class="label">주문 가능 금액:</span> <span class="right-group">
+								<span class="value" id="mini-usdt">0</span> <span class="unit">USDT</span>
+							</span>
 						</p>
 					</div>
 					<div class="history">
