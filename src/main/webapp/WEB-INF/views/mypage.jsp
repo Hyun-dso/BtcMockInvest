@@ -1,6 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<jsp:include page="common/header.jsp" />
 
 <!DOCTYPE html>
 <html>
@@ -11,7 +10,8 @@
 	<script src="${pageContext.request.contextPath}/resources/js/mypage.js" defer></script>
 </head>
 <body>
-	<div class="mypage-container">
+        <jsp:include page="common/header.jsp" />
+        <div class="mypage-container">
 		<h2>마이페이지</h2>
 
 		<form action="updateNickname" method="post">

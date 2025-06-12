@@ -5,7 +5,6 @@
   <meta charset="UTF-8">
   <title>BTC 거래 홈</title>
   
-  <jsp:include page="common/header.jsp" />
   
   <script src="https://unpkg.com/lightweight-charts@4.1.1/dist/lightweight-charts.standalone.production.js"></script>
   
@@ -27,6 +26,8 @@
 </head>
 
 <body data-context="${pageContext.request.contextPath}" data-logged-in="<%= session.getAttribute("user") != null %>">
+
+  <jsp:include page="common/header.jsp" />
 
   <div class="main-container">
     <!-- 왼쪽: 커뮤니티 채팅 영역 -->
@@ -136,6 +137,5 @@
     </div>
   </div>
   
-</body>
 </body>
 </html>

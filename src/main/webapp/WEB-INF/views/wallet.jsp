@@ -1,6 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<jsp:include page="common/header.jsp" />
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <!DOCTYPE html>
@@ -15,7 +14,8 @@
 </script>
 </head>
 <body>
-	<div class="wallet-container">
+        <jsp:include page="common/header.jsp" />
+        <div class="wallet-container">
 		<h2>내 지갑</h2>
 
 		<!-- ✅ 잔액 정보 -->

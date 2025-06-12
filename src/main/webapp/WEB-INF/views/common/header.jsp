@@ -5,7 +5,7 @@
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/header.css">
 
-<header class="hero-header">
+<header class="header">
 	<div class="container">
 		<a href="${pageContext.request.contextPath}/" class="brand-box"> <svg
 				class="logo" xmlns="http://www.w3.org/2000/svg"

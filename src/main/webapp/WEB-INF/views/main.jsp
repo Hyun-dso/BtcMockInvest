@@ -11,8 +11,8 @@
 	href="${pageContext.request.contextPath}/resources/css/main.css">
 </head>
 <body>
-	<div class="page-wrapper">
-		<jsp:include page="common/header.jsp" />
+        <jsp:include page="common/header.jsp" />
+        <div class="page-wrapper">
 		<main class="main-content">
 			<section class="hero-main">
 				<div class="container">
