@@ -53,8 +53,8 @@ document.addEventListener("DOMContentLoaded", () => {
 	const chartContainer = document.getElementById("tv-chart");
 
 	const chart = LightweightCharts.createChart(chartContainer, {
-		width: chartContainer.clientWidth || 800,
-		height: 400,
+	        width: chartContainer.clientWidth || 800,
+	        height: 400,
 		layout: {
 			backgroundColor: "#fff",
 			textColor: "#000",
@@ -69,6 +69,16 @@ document.addEventListener("DOMContentLoaded", () => {
 		},
 	});
 	window.chart = chart;
+
+	 window.addEventListener('resize', () => {
+	         const w = chartContainer.clientWidth || 800;
+	         const h = chartContainer.clientHeight || 400;
+	         chart.resize(w, h);
+	 });
+
+	 window.addEventListener('resize', () => {
+	         chart.resize(chartContainer.clientWidth, 400);
+	 });
 
 	// ✅ 정식봉 시리즈
 	// 메인 차트 봉 색상 명시적으로 지정 (상승 시 초록, 하락 시 빨강)
@@ -306,4 +316,5 @@ function subscribeToInterval(interval) {
 		.catch(err => {
 			console.error("❌ 캔들 fetch 실패:", err);
 		});
+
 }

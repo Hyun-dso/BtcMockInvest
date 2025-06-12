@@ -17,11 +17,22 @@
   margin: 0;
   max-height: 180px;
   overflow-y: auto;
-  scrollbar-width: none;
+  scrollbar-width: thin;
 }
 
 #trade-history ul::-webkit-scrollbar {
-  display: none;
+    width: 4px;
+}
+
+#trade-history ul::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+   
+}
+
+#trade-history ul::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
 }
 
 #trade-history li {

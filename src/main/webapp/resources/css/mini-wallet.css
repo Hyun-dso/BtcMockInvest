@@ -31,6 +31,8 @@
 .mini-wallet .tab-content {
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
 }
 
 .mini-wallet .balance,
@@ -42,6 +44,8 @@
 .mini-wallet .orders,
 .mini-wallet .history {
   overflow-y: auto;
+    overflow-x: hidden;
+  scrollbar-width: thin;
 }
 
 .mini-wallet .balance.active,
@@ -89,10 +93,14 @@
 
 #mini-history li span:nth-child(1) {
   text-align: left;
+    flex: 0 0 auto;
+  white-space: nowrap;
 }
 
 #mini-orders li span:nth-child(1) {
   text-align: left;
+    flex: 0 0 auto;
+  white-space: nowrap;
 }
 
 #mini-history li span:nth-child(2),
@@ -160,4 +168,19 @@
 
 #mini-orders li.canceled span:nth-child(1) {
     color: #bbb;
+}
+
+
+/* 간소화된 스크롤바 */
+.mini-wallet .tab-content::-webkit-scrollbar,
+.mini-wallet .orders::-webkit-scrollbar,
+.mini-wallet .history::-webkit-scrollbar {
+  width: 4px;
+}
+
+.mini-wallet .tab-content::-webkit-scrollbar-thumb,
+.mini-wallet .orders::-webkit-scrollbar-thumb,
+.mini-wallet .history::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
 }
