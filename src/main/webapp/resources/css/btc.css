@@ -140,26 +140,6 @@ body {
 }
 
 @media ( max-width : 768px) {
-	.order-panel {
-    grid-template-columns: 1fr;
-		gap: 10px;
-		padding: 10px;
-	}
-}
-
-.order-panel .order-box {
-        width: 48%;
-}
-
-.order-box {
-        border-radius: 8px;
-        background-color: #1e1e1e;
-        color: #fff;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        min-height: 100%;
-}
 
 @media ( min-width : 1280px) and (max-width: 1919px) {
 	.chat-area {
@@ -191,140 +171,6 @@ body {
 	}
 }
 
-.order-box h4 {
-	margin-bottom: 10px;
-	font-size: 16px;
-	color: #EAECEF;
-}
-
-.order-box label {
-	font-size: 13px;
-	margin-bottom: 4px;
-}
-
-.order-box input {
-        padding: 8px;
-        border: none;
-        border-radius: 4px;
-        font-size: 14px;
-        background-color: #2a2a2a;
-        color: #fff;
-        width: 100%;
-        box-sizing: border-box;
-        height: 40px;
-        margin-bottom: 10px;
-}
-
-.order-box button {
-        padding: 10px;
-        font-weight: bold;
-        font-size: 14px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        color: white;
-        width: 100%;
-        height: 40px;
-        margin-bottom: 10px;
-}
-
-.order-box.buy button {
-	background-color: #00b386;
-}
-
-.order-box.sell button {
-	background-color: #ff4d4f;
-}
-
-input[type="range"] {
-	width: 100%;
-	margin-top: 4px;
-	height: 6px;
-	border-radius: 5px;
-	background: transparent;
-	accent-color: #00b386;
-	position: relative;
-}
-
-/* ✅ 눈금 표시용 배경 선 추가 */
-input[type="range"]::before {
-	content: "";
-	position: absolute;
-	top: 50%;
-	left: 0;
-	width: 100%;
-	height: 2px;
-	background: repeating-linear-gradient(to right, #666, #666 1px, transparent 1px,
-		transparent 24%);
-	transform: translateY(-50%);
-	z-index: -1;
-	pointer-events: none;
-}
-
-.slider-marks {
-	display: flex;
-	justify-content: space-between;
-	font-size: 12px;
-	color: #ddd;
-	margin-top: 4px;
-	padding: 0 2px;
-}
-
-/* mini wallet styles */
-.community-chat {
-	flex: 1 1 50%;
-	background: #1E2026;
-	border: 1px solid #333;
-	color: #EAECEF;
-	box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-	overflow-y: auto;
-	padding: 15px;
-	margin-bottom: 10px;
-}
-
-/* Binance style slider */
-.bn-slider-wrapper {
-	display: flex;
-	position: relative;
-	width: 100%;
-}
-
-.range-slider {
-	-webkit-appearance: none;
-	width: 100%;
-	height: 6px;
-	background: var(--color-Line, #2B3139);
-	border-radius: 3px;
-	outline: none;
-	margin: 2px 0;
-	cursor: pointer;
-}
-
-.range-slider::-webkit-slider-thumb {
-	-webkit-appearance: none;
-	width: 14px;
-	height: 14px;
-	border-radius: 50%;
-	background: var(--color-primary, #FCD535);
-	cursor: pointer;
-	margin-top: -4px;
-	transition: background 0.2s ease;
-}
-
-.range-slider::-moz-range-thumb {
-	width: 14px;
-	height: 14px;
-	border-radius: 50%;
-	background: var(--color-primary, #FCD535);
-	cursor: pointer;
-}
-
-.range-slider::-webkit-slider-runnable-track, .range-slider::-moz-range-track
-	{
-	height: 6px;
-	background: var(--color-Line, #2B3139);
-	border-radius: 3px;
-}
 /* MA선 표시용 체크박스 */
 #toggle-ma {
 	appearance: none;
@@ -371,6 +217,7 @@ input[type="range"]::before {
 		width: 100%;
 	}
 }
+
 #mini-wallet {
     background: #1E2026;
     border: 1px solid #333;
@@ -378,6 +225,7 @@ input[type="range"]::before {
     margin-top: 10px; /* 커뮤니티창과 분리되는 여백 */
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }
+
 .divider-line {
     height: 1px;
     background-color: #444;
