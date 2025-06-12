@@ -42,8 +42,46 @@ function floorInput(el, step, decimals) {
 }
 
 function setSliderBg(slider) {
-	const val = slider.value;
-	slider.style.background = `linear-gradient(to right, #0ECB81 0%, #0ECB81 ${val}%, #2B3139 ${val}%, #2B3139 100%)`;
+	const val = parseFloat(slider.value || slider.dataset.value || 0);
+	const thumb = slider.querySelector('.bn-slider-track-thumb');
+	if (thumb) thumb.style.width = `${val}%`;
+}
+
+function initBnSlider(slider) {
+	if (!slider) return;
+	slider.value = parseFloat(slider.dataset.value) || 0;
+
+	function update(e) {
+		const rect = slider.getBoundingClientRect();
+		const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+		const percent = ((clientX - rect.left) / rect.width) * 100;
+		const clamped = Math.min(100, Math.max(0, percent));
+		slider.value = clamped;
+		slider.dataset.value = clamped;
+		slider.dispatchEvent(new Event('input'));
+	}
+
+	slider.addEventListener('mousedown', e => {
+		update(e);
+		const move = ev => update(ev);
+		const up = () => {
+			document.removeEventListener('mousemove', move);
+			document.removeEventListener('mouseup', up);
+		};
+		document.addEventListener('mousemove', move);
+		document.addEventListener('mouseup', up);
+	});
+
+	slider.addEventListener('touchstart', e => {
+		update(e);
+		const move = ev => update(ev);
+		const end = () => {
+			document.removeEventListener('touchmove', move);
+			document.removeEventListener('touchend', end);
+		};
+		document.addEventListener('touchmove', move);
+		document.addEventListener('touchend', end);
+	});
 }
 
 function activateLimit(btnId, priceId) {
@@ -162,8 +200,9 @@ document.addEventListener('DOMContentLoaded', () => {
 		const amountEl = document.getElementById(amountId);
 		const totalEl = document.getElementById(totalId);
 		const sliderEl = document.getElementById(sliderId);
+		if (sliderEl) initBnSlider(sliderEl);
 		if (!priceEl || !amountEl || !totalEl) return {};
-
+		
 		function fromAmount() {
 			const p = parseFloat(priceEl.value);
 			let a = parseFloat(amountEl.value);

@@ -18,11 +18,11 @@
 	width: 100%;
 	max-height: 180px;
 	overflow-y: auto;
-	scrollbar-width: none; /* ✅ Firefox */
+	scrollbar-width: thin; /* ✅ Firefox */
 }
 
 #orderbook ul::-webkit-scrollbar {
-	display: none; /* ✅ Chrome, Edge */
+	display: block; /* ✅ Chrome, Edge */
 }
 
 #orderbook li {

@@ -19,11 +19,11 @@
 	margin: 0;
 	max-height: 180px;
 	overflow-y: auto;
-	scrollbar-width: none;
+	scrollbar-width: thin;
 }
 
 #trade-history ul::-webkit-scrollbar {
-	display: none;
+	display: block;
 }
 
 #trade-history li {

@@ -1,9 +1,26 @@
 @charset "UTF-8";
 
+:root {
+    --scroll-bg: transparent;
+    --color-DisableText: #999;
+    --scroll-color: var(--color-DisableText);
+}
+
 * {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scrollbar-color: var(--scroll-color) var(--scroll-bg);
+}
+
+*::-webkit-scrollbar {
+    width: 8px;
+    background: var(--scroll-bg);
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: var(--scroll-color);
+    border-radius: 4px;
 }
 
 body {

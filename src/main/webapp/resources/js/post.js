@@ -15,16 +15,17 @@ function appendPost(post) {
 	        <p>${post.content}</p>
 	`;
 
-	list.prepend(div);
+	list.appendChild(div);
+	list.scrollTop = list.scrollHeight;
 }
 
 function loadPosts() {
 	fetch(window.contextPath + '/api/posts')
-		.then(r => r.json())
-		.then(list => {
-			document.getElementById('postList').innerHTML = '';
-			list.slice().reverse().forEach(p => appendPost(p));
-		});
+	        .then(r => r.json())
+	        .then(list => {
+	                document.getElementById('postList').innerHTML = '';
+	                list.forEach(p => appendPost(p));
+	        });
 }
 
 document.addEventListener('DOMContentLoaded', () => {

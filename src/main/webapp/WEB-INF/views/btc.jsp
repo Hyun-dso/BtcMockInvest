@@ -50,10 +50,10 @@
 <!-- ✅ CSS -->
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/btc.css">
-	<link rel="stylesheet"
-        href="${pageContext.request.contextPath}/resources/css/order-panel.css">
 <link rel="stylesheet"
-        href="${pageContext.request.contextPath}/resources/css/community-chat.css">
+	href="${pageContext.request.contextPath}/resources/css/order-panel.css">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/community-chat.css">
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/orderbook.css">
 <link rel="stylesheet"
@@ -156,8 +156,26 @@
 					<label>가격 (USDT)</label> <input type="number" id="buy-price"
 						readonly step="0.01" placeholder="USDT">
 					<div class="bn-slider-wrapper">
-						<input type="range" id="buy-slider" class="range-slider" min="0"
-							max="100" value="0" />
+						<div id="buy-slider" class="bn-slider">
+							<div class="bn-slider-track">
+								<div class="bn-slider-track-thumb" style="width: 0%;"></div>
+								<div class="bn-slider-track-step active" style="left: 0%;">
+									<div class="bn-slider-track-step-dot"></div>
+								</div>
+								<div class="bn-slider-track-step" style="left: 25%;">
+									<div class="bn-slider-track-step-dot"></div>
+								</div>
+								<div class="bn-slider-track-step" style="left: 50%;">
+									<div class="bn-slider-track-step-dot"></div>
+								</div>
+								<div class="bn-slider-track-step" style="left: 75%;">
+									<div class="bn-slider-track-step-dot"></div>
+								</div>
+								<div class="bn-slider-track-step" style="left: 100%;">
+									<div class="bn-slider-track-step-dot"></div>
+								</div>
+							</div>
+						</div>
 					</div>
 					<label>수량 (BTC)</label> <input type="number" id="buy-amount"
 						step="0.00001" placeholder="BTC"> <label>총액 (USDT)</label>
@@ -184,8 +202,26 @@
 					<label>가격 (USDT)</label> <input type="number" id="sell-price"
 						readonly step="0.01" placeholder="USDT">
 					<div class="bn-slider-wrapper">
-						<input type="range" id="sell-slider" class="range-slider" min="0"
-							max="100" value="0" />
+						<div id="sell-slider" class="bn-slider">
+							<div class="bn-slider-track">
+								<div class="bn-slider-track-thumb" style="width: 0%;"></div>
+								<div class="bn-slider-track-step active" style="left: 0%;">
+									<div class="bn-slider-track-step-dot"></div>
+								</div>
+								<div class="bn-slider-track-step" style="left: 25%;">
+									<div class="bn-slider-track-step-dot"></div>
+								</div>
+								<div class="bn-slider-track-step" style="left: 50%;">
+									<div class="bn-slider-track-step-dot"></div>
+								</div>
+								<div class="bn-slider-track-step" style="left: 75%;">
+									<div class="bn-slider-track-step-dot"></div>
+								</div>
+								<div class="bn-slider-track-step" style="left: 100%;">
+									<div class="bn-slider-track-step-dot"></div>
+								</div>
+							</div>
+						</div>
 					</div>
 					<label>수량 (BTC)</label> <input type="number" id="sell-amount"
 						step="0.00001" placeholder="BTC"> <label>총액 (USDT)</label>
@@ -206,15 +242,14 @@
 
 		<div class="trade-area">
 			<div class="orderbook-section">
-				<h3>호가</h3>
-				<select id="tick-size">
+				<div id="mid-price" <h3>호가</h3>
+					<select id="tick-size">
 					<option value="0.01">0.01</option>
 					<option value="0.1">0.1</option>
 					<option value="1">1</option>
 					<option value="10">10</option>
 					<option value="100">100</option>
 				</select>
-				<div id="mid-price"
 					style="margin: 0.5rem 0; font-weight: bold; color: #EAECEF;">가격:-
 				</div>
 
@@ -241,5 +276,6 @@
 			</div>
 		</div>
 	</div>
+
 </body>
 </html>
