@@ -1,12 +1,18 @@
 @charset "UTF-8";
 /* 헤더 전체 영역 */
+body {
+       padding-top: var(--header-height);
+}
+
 .header {
-	position: fixed;
-	top: 0;
-	width: 100%;
-	height: 80px;
-	background: linear-gradient(90deg, #1a1a1a, #333);
-	color: white;
+       position: fixed;
+       top: 0;
+       width: 100%;
+       height: var(--header-height);
+       background-color: var(--header-background);
+       backdrop-filter: blur(10px);
+       -webkit-backdrop-filter: blur(10px);
+       color: var(--color-on-background);
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
@@ -37,10 +43,10 @@
 }
 
 .logo img {
-	height: 80px;
-	transition: transform 2s ease;
-	transform-style: preserve-3d;
-	backface-visibility: hidden;
+       height: var(--header-height);
+       transition: transform 2s ease;
+       transform-style: preserve-3d;
+       backface-visibility: hidden;
 }
 
 .logo:hover .coin {
