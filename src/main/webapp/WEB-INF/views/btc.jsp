@@ -138,6 +138,7 @@
 					</div>
 				</div>
 			</div>
+			<div class="divider-line"></div>
 			<div id="mini-wallet" class="mini-wallet">
 				<div class="tabs">
 					<button data-tab="balance" class="active">지갑</button>

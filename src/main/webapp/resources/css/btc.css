@@ -312,3 +312,16 @@ input[type="range"]::before {
 		width: 100%;
 	}
 }
+#mini-wallet {
+    background: #1E2026;
+    border: 1px solid #333;
+    padding: 15px;
+    margin-top: 10px; /* 커뮤니티창과 분리되는 여백 */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+.divider-line {
+    height: 1px;
+    background-color: #444;
+    margin: 20px 0;
+    opacity: 0.6;
+}
