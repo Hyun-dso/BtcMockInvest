@@ -45,7 +45,8 @@
 	defer></script>
 <script src="${pageContext.request.contextPath}/resources/js/post.js"
 	defer></script>
-
+<script
+	src="${pageContext.request.contextPath}/resources/js/step-control.js"></script>
 
 <!-- ✅ CSS -->
 <link rel="stylesheet"
@@ -66,6 +67,8 @@
 	href="${pageContext.request.contextPath}/resources/css/toast.css">
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/postdetail.css">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/input-style.css">
 
 <!-- ✅ noUiSlider CSS -->
 <link rel="stylesheet"
@@ -153,39 +156,77 @@
 					<div class="mode-toggle">
 						<input type="checkbox" id="buy-limit-btn" class="limit-switch" />
 					</div>
-					<label>가격 (USDT)</label> <input type="number" id="buy-price"
-						readonly step="0.01" placeholder="USDT">
-					<div class="bn-slider-wrapper">
-						<div id="buy-slider" class="bn-slider">
-							<div class="bn-slider-track">
-								<div class="bn-slider-track-thumb" style="width: 0%;"></div>
-								<div class="bn-slider-handle" style="left: 0%;"></div>
-								<div class="bn-slider-track-step active" style="left: 0%;"
-									data-percent="0">
-									<div class="bn-slider-track-step-dot"></div>
+					<div class="trade-inputs">
+						<div class="input-row">
+							<div class="input-wrapper">
+								<span class="floating-label">가격</span> <input type="number"
+									id="buy-price" data-step="0.01" readonly step="0.01">
+								<div class="unit-group">
+									<span class="unit">USDT</span>
+									<div class="step">
+										<button type="button" class="step-up" data-target="buy-price">▲</button>
+										<button type="button" class="step-down"
+											data-target="buy-price">▼</button>
+									</div>
 								</div>
-								<div class="bn-slider-track-step" style="left: 25%;"
-									data-percent="25">
-									<div class="bn-slider-track-step-dot"></div>
+							</div>
+						</div>
+						<div class="bn-slider-wrapper">
+							<div id="buy-slider" class="bn-slider">
+								<div class="bn-slider-track">
+									<div class="bn-slider-track-thumb" style="width: 0%;"></div>
+									<div class="bn-slider-handle" style="left: 0%;"></div>
+									<div class="bn-slider-track-step active" style="left: 0%;"
+										data-percent="0">
+										<div class="bn-slider-track-step-dot"></div>
+									</div>
+									<div class="bn-slider-track-step" style="left: 25%;"
+										data-percent="25">
+										<div class="bn-slider-track-step-dot"></div>
+									</div>
+									<div class="bn-slider-track-step" style="left: 50%;"
+										data-percent="50">
+										<div class="bn-slider-track-step-dot"></div>
+									</div>
+									<div class="bn-slider-track-step" style="left: 75%;"
+										data-percent="75">
+										<div class="bn-slider-track-step-dot"></div>
+									</div>
+									<div class="bn-slider-track-step" style="left: 100%;"
+										data-percent="100">
+										<div class="bn-slider-track-step-dot"></div>
+									</div>
 								</div>
-								<div class="bn-slider-track-step" style="left: 50%;"
-									data-percent="50">
-									<div class="bn-slider-track-step-dot"></div>
+							</div>
+						</div>
+						<div class="input-row">
+							<div class="input-wrapper">
+								<span class="floating-label">수량</span> <input type="number"
+									id="buy-amount" data-step="0.1" step="0.1">
+								<div class="unit-group">
+									<span class="unit">BTC</span>
+									<div class="step">
+										<button type="button" class="step-up" data-target="buy-amount">▲</button>
+										<button type="button" class="step-down"
+											data-target="buy-amount">▼</button>
+									</div>
 								</div>
-								<div class="bn-slider-track-step" style="left: 75%;"
-									data-percent="75">
-									<div class="bn-slider-track-step-dot"></div>
-								</div>
-								<div class="bn-slider-track-step" style="left: 100%;"
-									data-percent="100">
-									<div class="bn-slider-track-step-dot"></div>
+							</div>
+						</div>
+						<div class="input-row">
+							<div class="input-wrapper">
+								<span class="floating-label">금액</span> <input type="number"
+									id="buy-total" data-step="1" step="1">
+								<div class="unit-group">
+									<span class="unit">USDT</span>
+									<div class="step">
+										<button type="button" class="step-up" data-target="buy-total">▲</button>
+										<button type="button" class="step-down"	data-target="buy-total">▼</button>
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-					<label>수량 (BTC)</label> <input type="number" id="buy-amount"
-						step="0.00001" placeholder="BTC"> <label>가격 (USDT)</label>
-					<input type="number" id="buy-total" step="0.01" placeholder="USDT">
 					<c:choose>
 						<c:when test="${empty sessionScope.loginUser}">
 							<button id="buy-submit"
@@ -205,39 +246,79 @@
 							<input type="checkbox" id="sell-limit-btn" class="limit-switch" />
 						</div>
 					</div>
-					<label>가격 (USDT)</label> <input type="number" id="sell-price"
-						readonly step="0.01" placeholder="USDT">
-					<div class="bn-slider-wrapper">
-						<div id="sell-slider" class="bn-slider">
-							<div class="bn-slider-track">
-								<div class="bn-slider-track-thumb" style="width: 0%;"></div>
-								<div class="bn-slider-handle" style="left: 0%;"></div>
-								<div class="bn-slider-track-step active" style="left: 0%;"
-									data-percent="0">
-									<div class="bn-slider-track-step-dot"></div>
+					<div class="trade-inputs">
+						<div class="input-row">
+							<div class="input-wrapper">
+								<span class="floating-label">가격</span> <input type="number"
+									id="sell-price" data-step="0.01" readonly step="0.01">
+								<div class="unit-group">
+									<span class="unit">USDT</span>
+									<div class="step">
+										<button type="button" class="step-up" data-target="sell-price">▲</button>
+										<button type="button" class="step-down"
+											data-target="sell-price">▼</button>
+									</div>
 								</div>
-								<div class="bn-slider-track-step" style="left: 25%;"
-									data-percent="25">
-									<div class="bn-slider-track-step-dot"></div>
+							</div>
+						</div>
+						<div class="bn-slider-wrapper">
+							<div id="sell-slider" class="bn-slider">
+								<div class="bn-slider-track">
+									<div class="bn-slider-track-thumb" style="width: 0%;"></div>
+									<div class="bn-slider-handle" style="left: 0%;"></div>
+									<div class="bn-slider-track-step active" style="left: 0%;"
+										data-percent="0">
+										<div class="bn-slider-track-step-dot"></div>
+									</div>
+									<div class="bn-slider-track-step" style="left: 25%;"
+										data-percent="25">
+										<div class="bn-slider-track-step-dot"></div>
+									</div>
+									<div class="bn-slider-track-step" style="left: 50%;"
+										data-percent="50">
+										<div class="bn-slider-track-step-dot"></div>
+									</div>
+									<div class="bn-slider-track-step" style="left: 75%;"
+										data-percent="75">
+										<div class="bn-slider-track-step-dot"></div>
+									</div>
+									<div class="bn-slider-track-step" style="left: 100%;"
+										data-percent="100">
+										<div class="bn-slider-track-step-dot"></div>
+									</div>
 								</div>
-								<div class="bn-slider-track-step" style="left: 50%;"
-									data-percent="50">
-									<div class="bn-slider-track-step-dot"></div>
+							</div>
+						</div>
+						<div class="input-row">
+							<div class="input-wrapper">
+								<span class="floating-label">수량</span> <input type="number"
+									id="sell-amount" data-step="0.00001" step="0.00001">
+								<div class="unit-group">
+									<span class="unit">BTC</span>
+									<div class="step">
+										<button type="button" class="step-up"
+											data-target="sell-amount">▲</button>
+										<button type="button" class="step-down"
+											data-target="sell-amount">▼</button>
+									</div>
 								</div>
-								<div class="bn-slider-track-step" style="left: 75%;"
-									data-percent="75">
-									<div class="bn-slider-track-step-dot"></div>
-								</div>
-								<div class="bn-slider-track-step" style="left: 100%;"
-									data-percent="100">
-									<div class="bn-slider-track-step-dot"></div>
+							</div>
+						</div>
+						<div class="input-row">
+							<div class="input-wrapper">
+								<span class="floating-label">총액</span> <input type="number"
+									id="sell-total" data-step="0.01" step="0.01">
+								<div class="unit-group">
+									<span class="unit">USDT</span>
+									<div class="step">
+										<button type="button" class="step-up" data-target="sell-total">▲</button>
+										<button type="button" class="step-down"
+											data-target="sell-total">▼</button>
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-					<label>수량 (BTC)</label> <input type="number" id="sell-amount"
-						step="0.00001" placeholder="BTC"> <label>총액 (USDT)</label>
-					<input type="number" id="sell-total" step="0.01" placeholder="USDT">
 					<c:choose>
 						<c:when test="${empty sessionScope.loginUser}">
 							<button id="sell-submit"
@@ -288,5 +369,6 @@
 			</div>
 		</div>
 	</div>
+
 </body>
 </html>
