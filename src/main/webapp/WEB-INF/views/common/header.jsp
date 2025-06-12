@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%-- ✅ 이거 꼭 필요 --%>
 <link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/header.css">
+        href="${pageContext.request.contextPath}/resources/css/component.css">
 
 <header class="header">
 	<div class="container">

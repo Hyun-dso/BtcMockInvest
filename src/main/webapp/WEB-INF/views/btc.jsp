@@ -20,6 +20,11 @@
   <script src="${pageContext.request.contextPath}/resources/js/btc.js" defer></script>
 
   <!-- ✅ CSS -->
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/theme.css">
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/base.css">
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/button.css">
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/component.css">
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/responsive.css">
   <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/btc.css">
   <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/tvchart.css">
   

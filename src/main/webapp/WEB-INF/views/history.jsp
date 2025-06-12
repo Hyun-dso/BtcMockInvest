@@ -5,6 +5,11 @@
 <head>
     <meta charset="UTF-8">
     <title>내 거래내역</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/theme.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/base.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/button.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/component.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/responsive.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/history.css">
 </head>
 <body>

@@ -1,0 +1,24 @@
+@charset "UTF-8";
+
+.btn {
+    padding: 0.6rem 1.2rem;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    background-color: var(--color-surface);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn:hover {
+    background-color: var(--color-secondary);
+}
+
+.btn-primary {
+    background-color: var(--color-primary);
+    color: var(--color-on-primary);
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #a59b86;
+}
