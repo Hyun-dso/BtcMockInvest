@@ -7,13 +7,12 @@
 
 body {
   font-family: sans-serif;
-  padding-top: 80px;
   box-sizing: border-box;
 }
 
 .main-container {
   display: flex;
-  height: calc(100vh - 80px);
+  height: calc(100vh - var(--header-height));
 }
 
 .chat-area {
