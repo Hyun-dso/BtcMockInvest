@@ -6,9 +6,11 @@ function appendPost(post) {
 	div.style.marginBottom = '15px';
 	div.style.padding = '10px';
 
-	// ✅ 현재 시간 임시로 박기
-	const createdAt = new Date().toLocaleString();
-
+	// ✅ 서버에서 전달된 시간이 있으면 사용하고, 없으면 현재 시간 사용
+	const createdAt = post.createdAt
+	        ? new Date(post.createdAt).toLocaleString()
+	        : new Date().toLocaleString();
+	
 	// ✅ innerHTML 백틱(``)으로 감싸야 변수(${}) 적용됨!
 	div.innerHTML = `
 	        <div class="post-header">${post.username} · ${createdAt}</div>

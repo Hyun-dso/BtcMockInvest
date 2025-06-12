@@ -1,23 +1,27 @@
 @charset "UTF-8";
 /* ✅ 차트 아래 바이낸스 스타일 매수/매도 UI */
 .order-panel {
-	display: flex;
-	justify-content: space-between;
-	gap: 10px;
-	margin-top: 10px;
-	padding: 10px;
-	background-color: #1E2026;
-	border: 1px solid #333;
-	border-radius: 12px;
-	width: 100%;
+       display: flex;
+       flex-wrap: wrap; /* 💡 작은 화면에서 자동 줄바꿈 */
+       justify-content: space-between;
+       gap: 10px;
+       margin-top: 10px;
+       padding: 10px;
+       background-color: #1E2026;
+       border: 1px solid #333;
+       border-radius: 12px;
+       width: 100%;
+       box-sizing: border-box;
 }
 
 .order-box {
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	gap: 12px;
-	height: 100%; /* 💡 비율 자동 대응 */
+       display: flex;
+       flex-direction: column;
+       justify-content: space-between;
+       gap: 12px;
+       height: 100%; /* 💡 비율 자동 대응 */
+       flex: 1 1 300px; /* 💡 기본 폭 300px, 남는 공간 균등 분배 */
+       min-width: 0;
 }
 
 .order-box>* {
@@ -50,11 +54,6 @@
 
 .order-box.sell .order-submit-btn {
 	background-color: #ff4d4f;
-}
-
-.order-box {
-	flex: 1 1 0;
-	min-width: 300px;
 }
 
 .mode-toggle {
