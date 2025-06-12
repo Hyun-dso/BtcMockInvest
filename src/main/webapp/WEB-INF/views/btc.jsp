@@ -79,65 +79,63 @@
 	<div class="main-container">
 		<!-- 왼쪽: 커뮤니티 채팅 영역 -->
 		<div class="chat-area">
-			<div style="position: relative; width: 100%; height: 100%;">
-				<div id="communityChatPanel"
-					style="position: absolute; left: 0; top: 50px; width: 100%; height: calc(100% - 50px); background: #fff; border: 1px solid #ccc; box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); transform: translateX(0); overflow-y: auto; padding: 15px;">
-					<h3>커뮤니티채팅</h3>
-					<div class="post"
-						style="border: 1px solid #ddd; margin-bottom: 15px; padding: 10px;">
-						<p>
-							<strong>작성자:</strong> user123
-						</p>
-						<p>
-							<strong>제목:</strong> 오늘의 BTC 전망
-						</p>
-						<p>BTC가 오늘 상승 흐름을 타고 있습니다. 여러분의 생각은?</p>
-						<button class="like-btn">좋아요 ♥</button>
-						<span>3</span>
-						<p class="toggle-comments" style="color: blue; cursor: pointer;">댓글
-							보기</p>
-						<div class="comments"
-							style="display: none; margin-top: 10px; padding-left: 10px;">
-							<div class="comment-item"
-								style="border-top: 1px solid #eee; padding-top: 5px;">
-								<p>
-									<strong>btcfan:</strong> 저도 동의합니다!
-								</p>
-							</div>
-							<div class="comment-item"
-								style="border-top: 1px solid #eee; padding-top: 5px;">
-								<p>
-									<strong>investKing:</strong> 조심해야 할 타이밍 같아요
-								</p>
-							</div>
+			<div id="communityChatPanel" class="community-chat">
+				<h3>커뮤니티채팅</h3>
+				<div class="post"
+					style="border: 1px solid #ddd; margin-bottom: 15px; padding: 10px;">
+					<p>
+						<strong>작성자:</strong> user123
+					</p>
+					<p>
+						<strong>제목:</strong> 오늘의 BTC 전망
+					</p>
+					<p>BTC가 오늘 상승 흐름을 타고 있습니다. 여러분의 생각은?</p>
+					<button class="like-btn">좋아요 ♥</button>
+					<span>3</span>
+					<p class="toggle-comments" style="color: blue; cursor: pointer;">댓글
+						보기</p>
+					<div class="comments"
+						style="display: none; margin-top: 10px; padding-left: 10px;">
+						<div class="comment-item"
+							style="border-top: 1px solid #eee; padding-top: 5px;">
+							<p>
+								<strong>btcfan:</strong> 저도 동의합니다!
+							</p>
+						</div>
+						<div class="comment-item"
+							style="border-top: 1px solid #eee; padding-top: 5px;">
+							<p>
+								<strong>investKing:</strong> 조심해야 할 타이밍 같아요
+							</p>
 						</div>
 					</div>
+				</div>
 
-					<div class="post"
-						style="border: 1px solid #ddd; margin-bottom: 15px; padding: 10px;">
-						<p>
-							<strong>작성자:</strong> traderKim
-						</p>
-						<p>
-							<strong>제목:</strong> 신규 진입 시점인가요?
-						</p>
-						<p>지금 매수 타이밍인지 고민되네요. 조언 부탁드립니다!</p>
-						<button class="like-btn">좋아요 ♥</button>
-						<span>1</span>
-						<p class="toggle-comments" style="color: blue; cursor: pointer;">댓글
-							보기</p>
-						<div class="comments"
-							style="display: none; margin-top: 10px; padding-left: 10px;">
-							<div class="comment-item"
-								style="border-top: 1px solid #eee; padding-top: 5px;">
-								<p>
-									<strong>userA:</strong> 아직은 기다리는게 좋아보여요
-								</p>
-							</div>
+				<div class="post"
+					style="border: 1px solid #ddd; margin-bottom: 15px; padding: 10px;">
+					<p>
+						<strong>작성자:</strong> traderKim
+					</p>
+					<p>
+						<strong>제목:</strong> 신규 진입 시점인가요?
+					</p>
+					<p>지금 매수 타이밍인지 고민되네요. 조언 부탁드립니다!</p>
+					<button class="like-btn">좋아요 ♥</button>
+					<span>1</span>
+					<p class="toggle-comments" style="color: blue; cursor: pointer;">댓글
+						보기</p>
+					<div class="comments"
+						style="display: none; margin-top: 10px; padding-left: 10px;">
+						<div class="comment-item"
+							style="border-top: 1px solid #eee; padding-top: 5px;">
+							<p>
+								<strong>userA:</strong> 아직은 기다리는게 좋아보여요
+							</p>
 						</div>
 					</div>
 				</div>
 			</div>
+			<div class="divider-line"></div>
 			<div class="divider-line"></div>
 			<div id="mini-wallet" class="mini-wallet">
 				<div class="tabs">
@@ -146,35 +144,28 @@
 					<button data-tab="orders">주문내역</button>
 				</div>
 				<div class="tab-content">
-<div class="balance active">
-	<p class="balance-item">
-		<span class="label">평가 금액:</span>
-		<span class="right-group">
-			<span class="value" id="mini-total">0</span>
-			<span class="unit">USDT</span>
-		</span>
-	</p>
-	<p class="balance-item">
-		<span class="label">수익률:</span>
-		<span class="right-group">
-			<span class="value" id="mini-profit">0</span>
-		</span>
-	</p>
-	<p class="balance-item">
-		<span class="label">BTC 보유 수량:</span>
-		<span class="right-group">
-			<span class="value" id="mini-btc">0</span>
-			<span class="unit">BTC</span>
-		</span>
-	</p>
-	<p class="balance-item">
-		<span class="label">주문 가능 금액:</span>
-		<span class="right-group">
-			<span class="value" id="mini-usdt">0</span>
-			<span class="unit">USDT</span>
-		</span>
-	</p>
-</div>
+					<div class="balance active">
+						<p class="balance-item">
+							<span class="label">평가 금액:</span> <span class="right-group">
+								<span class="value" id="mini-total">0</span> <span class="unit">USDT</span>
+							</span>
+						</p>
+						<p class="balance-item">
+							<span class="label">수익률:</span> <span class="right-group">
+								<span class="value" id="mini-profit">0</span>
+							</span>
+						</p>
+						<p class="balance-item">
+							<span class="label">BTC 보유 수량:</span> <span class="right-group">
+								<span class="value" id="mini-btc">0</span> <span class="unit">BTC</span>
+							</span>
+						</p>
+						<p class="balance-item">
+							<span class="label">주문 가능 금액:</span> <span class="right-group">
+								<span class="value" id="mini-usdt">0</span> <span class="unit">USDT</span>
+							</span>
+						</p>
+					</div>
 					<div class="history">
 						<ul id="mini-history"></ul>
 					</div>
