@@ -11,10 +11,11 @@ function appendPost(post) {
 
 	// ✅ innerHTML 백틱(``)으로 감싸야 변수(${}) 적용됨!
 	div.innerHTML = `
-		<div class="post-header">익명 · ${createdAt}</div>
-		<p><strong>제목:</strong> ${post.title}</p>
-		<p>${post.content}</p>
+	  <div class="post-header">${post.username || "익명"} · ${createdAt}</div>
+	  <p><strong>제목:</strong> ${post.title}</p>
+	  <p>${post.content}</p>
 	`;
+
 
 	list.prepend(div);
 }

@@ -13,6 +13,8 @@ public interface UserRepository {
 
 	User findByUsername(@Param("username") String username);
 
+	// ✅ 여기 추가 (userId로 조회)
+		User findById(@Param("id") Long id);
 	// 회원 등록
 	void insert(User user);
 

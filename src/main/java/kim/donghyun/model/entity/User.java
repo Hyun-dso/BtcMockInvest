@@ -1,6 +1,6 @@
 package kim.donghyun.model.entity;
 
-import java.time.LocalDateTime;
+import java.time.LocalDateTime; 
 
 import lombok.Data;
 
