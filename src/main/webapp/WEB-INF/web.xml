@@ -16,6 +16,11 @@
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
 
+	<!-- Remove users from LoginSessionManager when sessions end -->
+	<listener>
+		<listener-class>kim.donghyun.config.SessionCleanupListener</listener-class>
+	</listener>
+
 	<servlet>
 		<servlet-name>dispatcher</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>

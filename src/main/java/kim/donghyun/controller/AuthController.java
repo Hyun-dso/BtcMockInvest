@@ -12,12 +12,16 @@ import kim.donghyun.model.dto.SigninRequest;
 import kim.donghyun.model.dto.SignupRequest;
 import kim.donghyun.model.entity.User;
 import kim.donghyun.service.AuthService;
+import kim.donghyun.util.LoginSessionManager;
 
 @Controller
 public class AuthController {
 
 	@Autowired
 	private AuthService authService;
+
+	@Autowired
+	private LoginSessionManager loginSessionManager;
 
 	@GetMapping("/signup")
 	public String signupForm() {
@@ -47,12 +51,21 @@ public class AuthController {
 			return "signin";
 		}
 
+		if (!loginSessionManager.registerUser(user.getId(), session)) {
+			model.addAttribute("error", "이미 다른 곳에서 로그인되었습니다.");
+			return "signin";
+		}
+
 		session.setAttribute("loginUser", user); // 세션에 사용자 저장
 		return "redirect:/"; // 로그인 성공 시 메인으로 이동
 	}
 
 	@GetMapping("/logout")
 	public String logout(HttpSession session) {
+		User user = (User) session.getAttribute("loginUser");
+		if (user != null) {
+			loginSessionManager.removeUser(user.getId());
+		}
 		session.invalidate(); // 세션 초기화
 		return "redirect:/";
 	}

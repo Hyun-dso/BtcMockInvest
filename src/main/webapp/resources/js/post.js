@@ -1,26 +1,24 @@
 function appendPost(post) {
 	const list = document.getElementById('postList');
-	const div = document.createElement('div');
-	div.className = 'post';
-	if (window.loginUserId && Number(post.userId) === Number(window.loginUserId)) {
-		div.classList.add('mine');
-	} else {
-		div.classList.add('other');
-	}
+	const wrapper = document.createElement('div');
+	const isMine = window.loginUserId && Number(post.userId) === Number(window.loginUserId);
+	wrapper.className = `post-wrapper ${isMine ? 'mine' : 'other'}`;
 
 	// ✅ 서버에서 전달된 시간이 있으면 사용하고, 없으면 현재 시간 사용
 	const createdAt = post.createdAt
 		? new Date(post.createdAt).toLocaleString()
 		: new Date().toLocaleString();
 
-	// ✅ innerHTML 백틱(``)으로 감싸야 변수(${}) 적용됨!
-	div.innerHTML = `
-	        <div class="post-header">${post.username} · ${createdAt}</div>
-	        <p>${post.content}</p>
-	`;
+	wrapper.innerHTML = `
+			        <div class="post-username">${post.username}</div>
+			        <div class="post ${isMine ? 'mine' : 'other'}">
+			                <p>${post.content}</p>
+			                <div class="timestamp">${createdAt}</div>
+			        </div>
+			`;
 
 	const atBottom = list.scrollHeight - list.scrollTop <= list.clientHeight + 10;
-	list.appendChild(div);
+	list.appendChild(wrapper);
 	if (atBottom) {
 		setTimeout(() => {
 			list.scrollTop = list.scrollHeight;
@@ -33,7 +31,7 @@ function loadPosts() {
 		.then(r => r.json())
 		.then(list => {
 			document.getElementById('postList').innerHTML = '';
-			list.forEach(p => appendPost(p));
+			list.reverse().forEach(p => appendPost(p));
 		});
 }
 

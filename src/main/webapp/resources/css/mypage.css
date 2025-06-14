@@ -3,10 +3,59 @@
 body {
     background: linear-gradient(to bottom, #000000, #2c2c2c);
 }
+.mypage-wrapper {
+  display: flex;
+  max-width: 900px;
+  margin: 80px auto;
+}
+
+.sidebar {
+  width: 180px;
+  background: #222;
+  color: white;
+  border-radius: 12px 0 0 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  color: white;
+  text-align: left;
+  padding: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  border-left: 4px solid transparent;
+}
+
+.tab-btn.active {
+  background: #333;
+  border-left: 4px solid #667eea;
+}
 
 .mypage-container {
-	max-width: 400px;  /* ✅ 폭 줄이기 */
+  flex: 1;
+  padding: 24px;
+  background: #fdfdfd;
+  border-radius: 0 12px 12px 0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.tab-content {
+  display: none;
+}
+.tab-content.active {
+  display: block;
+}
+
+.mypage-container {
+	max-width: 80%;  /* ✅ 폭 줄이기 */
+	max-height: 80%;
 	margin: 80px auto;
+	margin-top: 5%;
 	padding: 24px;
 	background: #fdfdfd;
 	border-radius: 12px;

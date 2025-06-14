@@ -12,14 +12,14 @@ body {
 }
 
 .comment-box {
-	margin-bottom: 10px;
-	padding: 10px;
+	margin-bottom: 0; padding : 10px;
 	border-bottom: 1px solid #eee;
+	padding: 10px;
 }
 
 textarea {
-  resize: none;
-  overflow: hidden;
+	resize: none;
+	overflow: hidden;
 }
 
 #postContent {
@@ -34,53 +34,53 @@ textarea {
 .post {
 	position: relative;
 	border-radius: 12px;
-	padding: 12px 14px; 
-	margin-bottom : 10px; 
-	max-width : 70%; 
-	font-size :	14px;
+	padding: 12px 14px;
+	margin-bottom: 0; max-width : 70%; font-size : 14px;
 	line-height: 1.6;
 	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 	transition: all 0.25s ease-in-out;
 	color: #1c1c1c;
 	/* margin-bottom: 10px;
 	max-width: 70%; */
+	font-size: 14px;
+	max-width: 70%;
 	font-size: 14px; /* 글자색은 진회색으로 선명하게 */
 }
 
 /* 내 메시지 */
 .post.mine {
-  background-color: #A8FFF0; /* 기존 색상 유지 */
-  margin-left: auto;
+	background-color: #A8FFF0; /* 기존 색상 유지 */
+	margin-left: auto;
 }
 
 .post.mine::after {
-  content: "";
-  position: absolute;
-  bottom: -10px;
-  right: 20px;
-  width: 0;
-  height: 0;
-  border-left: 8px solid transparent;
-  border-right: 8px solid transparent;
-  border-top: 10px solid #A8FFF0;
+	content: "";
+	position: absolute;
+	bottom: -10px;
+	right: 20px;
+	width: 0;
+	height: 0;
+	border-left: 8px solid transparent;
+	border-right: 8px solid transparent;
+	border-top: 10px solid #A8FFF0;
 }
 
 /* 다른 세션의 메시지 */
 .post.other {
-  background-color: #ffd1dc; /* 분홍색 */
-  margin-right: auto;
+	background-color: #ffd1dc; /* 분홍색 */
+	margin-right: auto;
 }
 
 .post.other::after {
-  content: "";
-  position: absolute;
-  bottom: -10px;
-  left: 20px;
-  width: 0;
-  height: 0;
-  border-left: 8px solid transparent;
-  border-right: 8px solid transparent;
-  border-top: 10px solid #ffd1dc;
+	content: "";
+	position: absolute;
+	bottom: -10px;
+	left: 20px;
+	width: 0;
+	height: 0;
+	border-left: 8px solid transparent;
+	border-right: 8px solid transparent;
+	border-top: 10px solid #ffd1dc;
 }
 
 .post:hover {
@@ -88,24 +88,11 @@ textarea {
 	transform: scale(1.01); /* 살짝 커지는 느낌 */
 }
 
-.post p:first-child {
-	font-weight: bold;
-	font-size: 16px;
-	margin-bottom: 6px;
-	color: #003b46;
-}
-
-.post p:nth-child(2) {
-	font-size: 15px;
-	color: #333;
-	word-break: break-word;
-}
-
-/* 상단 유저 정보 */
-.post-header {
-	font-size: 13px;
-	color: #555;
-	margin-bottom: 6px;
+/* 상단 닉네임 */
+.post-username {
+        font-size: 13px;
+        color: #FFF;
+        margin-bottom: 4px;
 }
 
 /* 말풍선 꼬리 */
@@ -161,9 +148,31 @@ textarea {
 }
 
 #postList {
-	height: 100%;
-	max-height: 400px; /* 또는 원하는 높이 */
-	overflow-y: auto;
-	padding: 10px;
-	box-sizing: border-box;
+        height: 100%;
+        max-height: 400px; /* 또는 원하는 높이 */
+        overflow-y: auto;
+        padding: 10px;
+        box-sizing: border-box;
+}
+
+/* 채팅 메시지 래퍼 */
+.post-wrapper {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 10px;
+}
+
+.post-wrapper.mine {
+        align-items: flex-end;
+}
+
+.post-wrapper.other {
+        align-items: flex-start;
+}
+
+.post .timestamp {
+        margin-top: 4px;
+        font-size: 11px;
+        color: #777;
+        text-align: right;
 }
