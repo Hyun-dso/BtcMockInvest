@@ -40,3 +40,23 @@ document.addEventListener('DOMContentLoaded', function () {
 		});
 	});
 });
+document.addEventListener("DOMContentLoaded", () => {
+  // 🔁 이전에 선택한 탭이 있으면 복원
+  const savedTab = localStorage.getItem("selectedTab");
+  if (savedTab) {
+    document.querySelectorAll(".tab-btn").forEach(btn => {
+      btn.classList.toggle("active", btn.dataset.tab === savedTab);
+    });
+    document.querySelectorAll(".tab-content").forEach(tab => {
+      tab.classList.toggle("active", tab.id === savedTab);
+    });
+  }
+
+  // 📌 탭 버튼 클릭 시 localStorage에 저장
+  document.querySelectorAll(".tab-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const tab = btn.dataset.tab;
+      localStorage.setItem("selectedTab", tab);
+    });
+  });
+});

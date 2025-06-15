@@ -34,5 +34,9 @@
 		SELECT * FROM user WHERE username = #{username}
 	</select>
 
+	<update id="updateLastLoginAt"
+		parameterType="kim.donghyun.model.entity.User">
+		UPDATE user SET last_login_at = NOW() WHERE id = #{id}
+	</update>
 
 </mapper>

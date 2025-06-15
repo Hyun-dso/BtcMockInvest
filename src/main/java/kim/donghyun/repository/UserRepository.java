@@ -16,6 +16,9 @@ public interface UserRepository {
 	// 회원 등록
 	void insert(User user);
 
+	// 마지막 접속 시간 추가
+	void updateLastLoginAt(User user);
+	
 	// (선택) 모든 유저 조회
 	// List<User> findAll();
 }

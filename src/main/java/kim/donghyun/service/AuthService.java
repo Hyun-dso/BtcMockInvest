@@ -64,4 +64,8 @@ public class AuthService {
 
 		return user;
 	}
+	
+	public void updateLastLoginAt(User user) {
+		userRepository.updateLastLoginAt(user); // 또는 JPA면 repository.save(user)
+	}
 }

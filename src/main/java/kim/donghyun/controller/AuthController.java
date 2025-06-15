@@ -1,5 +1,7 @@
 package kim.donghyun.controller;
 
+import java.time.LocalDateTime;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -50,12 +52,12 @@ public class AuthController {
 			model.addAttribute("error", "이메일 또는 비밀번호가 올바르지 않거나 인증되지 않았습니다.");
 			return "signin";
 		}
+		
+        loginSessionManager.registerUser(user.getId(), session);
 
-		if (!loginSessionManager.registerUser(user.getId(), session)) {
-			model.addAttribute("error", "이미 다른 곳에서 로그인되었습니다.");
-			return "signin";
-		}
-
+        user.setLastLoginAt(LocalDateTime.now());
+        authService.updateLastLoginAt(user); // 서비스 통해 업데이트
+        
 		session.setAttribute("loginUser", user); // 세션에 사용자 저장
 		return "redirect:/"; // 로그인 성공 시 메인으로 이동
 	}

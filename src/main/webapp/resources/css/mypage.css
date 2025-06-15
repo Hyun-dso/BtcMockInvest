@@ -1,58 +1,116 @@
 @charset "UTF-8";
 
 body {
-    background: linear-gradient(to bottom, #000000, #2c2c2c);
+	background: linear-gradient(to bottom, #000000, #2c2c2c);
 }
+
 .mypage-wrapper {
-  display: flex;
-  max-width: 900px;
-  margin: 80px auto;
+	display: flex;
+	max-width: 100%;
+	margin: 0 auto;
+	padding: 60px 0;
+}
+
+.profile-box {
+	display: flex;
+	flex-direction: column; /* 세로 정렬! */
+	align-items: center; /* 가운데 정렬 */
+	gap: 10px;
+	margin-bottom: 30px;
+	margin-left: 40%;
+}
+
+.profile-circle {
+	width: 80px;
+	height: 80px;
+	border-radius: 50%;
+	background-color: #333;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: white;
+	font-weight: bold;
+	font-size: 18px;
+}
+
+.profile-info {
+	text-align: center;
+	line-height: 1.6;
+}
+
+.profile-name {
+	font-weight: 700;
+	color: #222;
+}
+
+.profile-email {
+	color: #555;
+	font-size: 14px;
 }
 
 .sidebar {
-  width: 180px;
-  background: #222;
-  color: white;
-  border-radius: 12px 0 0 12px;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+	width: 180px;
+	background: #222;
+	color: white;
+	border-radius: 12px 0 0 12px;
+	padding: 20px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.menu-list {
+	display: flex;
+	flex-direction: column; /* 자식들을 세로로 정렬 */
+	align-items: flex-start; /* 왼쪽 정렬 (필요에 따라 center 등 조정 가능) */
+	gap: 10px; /* 항목 간 간격 조절 */
 }
 
 .tab-btn {
-  background: none;
-  border: none;
-  color: white;
-  text-align: left;
-  padding: 10px;
-  font-weight: bold;
-  cursor: pointer;
-  border-left: 4px solid transparent;
+	background: #FFF;
+	border: none;
+	color: black;
+	text-align: left;
+	padding: 10px;
+	font-weight: bold;
+	cursor: pointer;
+	border-left: 4px solid transparent;
 }
 
 .tab-btn.active {
-  background: #333;
-  border-left: 4px solid #667eea;
+	background: #FFF;
+	border-left: 4px solid #959595;
 }
 
 .mypage-container {
-  flex: 1;
-  padding: 24px;
+  width: 80%;               /* 가로 크기 */
+  min-height: 600px;        /* 최소 높이 지정 */
+  margin: 60px auto;        /* 상단 여백 + 중앙 정렬 */
   background: #fdfdfd;
-  border-radius: 0 12px 12px 0;
+  border-radius: 12px;
+  border: 1px solid #ddd;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  line-height: 1.6;
+}
+
+.left-contianer {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	margin: 0;
+	padding-left: 2%;
 }
 
 .tab-content {
-  display: none;
-}
-.tab-content.active {
-  display: block;
+	display: none;
 }
 
-.mypage-container {
-	max-width: 80%;  /* ✅ 폭 줄이기 */
+.tab-content.active {
+	display: block;
+}
+
+.tab-content-wrapper {
+	max-width: 80%; /* ✅ 폭 줄이기 */
 	max-height: 80%;
 	margin: 80px auto;
 	margin-top: 5%;
@@ -63,7 +121,6 @@ body {
 	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 	line-height: 1.6;
 }
-
 
 h2 {
 	text-align: center;
@@ -84,8 +141,7 @@ h2 {
 	gap: 10px;
 }
 
-input[type="text"],
-input[type="password"] {
+input[type="text"], input[type="password"] {
 	width: 250px;
 	padding: 8px 10px;
 	border: 1px solid #bbb;
@@ -94,8 +150,7 @@ input[type="password"] {
 	transition: border-color 0.2s;
 }
 
-input[type="text"]:focus,
-input[type="password"]:focus {
+input[type="text"]:focus, input[type="password"]:focus {
 	border-color: #7aa7ff;
 	outline: none;
 }
@@ -167,4 +222,19 @@ label {
 	font-size: 13px;
 	margin-top: 6px;
 	margin-left: 2px;
+}
+
+.mid-container {
+	width: 80%;
+	height: 80%;
+}
+
+.page-title {
+  text-align: center;
+  padding: 16px 0;
+  background: #f0f0f0;
+  font-size: 24px;
+  margin: 0;
+  height: 5%;
+  padding-top: 3%;
 }
