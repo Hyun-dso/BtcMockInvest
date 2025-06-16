@@ -1,14 +1,13 @@
-document.addEventListener('DOMContentLoaded', () => {
+function setupTradePagination() {
   const tbody = document.querySelector('.history-container tbody');
   if (!tbody) return;
   const allRows = Array.from(tbody.querySelectorAll('tr'));
   const rows = allRows.filter(tr => !tr.querySelector('.no-data'));
-  const rowsPerPage = 15;
-  if (rows.length <= rowsPerPage) return; // no pagination needed
+  const rowsPerPage = 13;
+  if (rows.length <= rowsPerPage) return;
 
-  const pagination = document.createElement('div');
-  pagination.className = 'pagination';
-  tbody.parentElement.after(pagination);
+  const pagination = document.querySelector('.history-container .pagination');
+  if (!pagination) return;
 
   let currentPage = 1;
   const pageCount = Math.ceil(rows.length / rowsPerPage);
@@ -29,14 +28,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function update() {
     rows.forEach((row, idx) => {
-      if (idx >= (currentPage - 1) * rowsPerPage && idx < currentPage * rowsPerPage) {
-        row.style.display = '';
-      } else {
-        row.style.display = 'none';
-      }
+      row.style.display = (idx >= (currentPage - 1) * rowsPerPage && idx < currentPage * rowsPerPage) ? '' : 'none';
     });
     renderPagination();
   }
 
   update();
+}
+
+// 탭이 '거래내역'으로 전환될 때 실행
+document.addEventListener('DOMContentLoaded', () => {
+  const tabButtons = document.querySelectorAll('.tab-btn');
+  tabButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (btn.dataset.tab === 'history') {
+        setupTradePagination();
+      }
+    });
+  });
 });

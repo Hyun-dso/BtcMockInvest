@@ -113,7 +113,7 @@ textarea {
 }
 
 .chat-area {
-	height: 60%; /* 또는 flex-grow 사용 */
+	height: 70%; /* 또는 flex-grow 사용 */
 	width: 100%;
 }
 

@@ -91,6 +91,7 @@ body {
   border: 1px solid #ddd;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
   line-height: 1.6;
+  height: 90%
 }
 
 .left-contianer {
@@ -112,7 +113,7 @@ body {
 .tab-content-wrapper {
 	max-width: 80%; /* ✅ 폭 줄이기 */
 	max-height: 80%;
-	margin: 80px auto;
+	margin: 0 auto 80px auto;
 	margin-top: 5%;
 	padding: 24px;
 	background: #fdfdfd;

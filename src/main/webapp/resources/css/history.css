@@ -58,20 +58,18 @@ tr:hover {
 }
 
 .pagination {
-    margin-top: 20px;
-    text-align: center;
+  text-align: center;
+  margin-top: 20px;
 }
-
 .pagination button {
-    margin: 0 4px;
-    padding: 6px 12px;
-    border: 1px solid #ccc;
-    background: #fff;
-    cursor: pointer;
+  margin: 0 5px;
+  padding: 5px 10px;
+  cursor: pointer;
 }
-
 .pagination button.active {
-    background: #007bff;
-    color: #fff;
-    border-color: #007bff;
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
 }

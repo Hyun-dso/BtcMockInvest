@@ -11,18 +11,18 @@
 <body>
 
 <main>
-    <div class="video-box">
+    <!-- <div class="video-box">
         <video autoplay muted loop>
             <source src="${pageContext.request.contextPath}/resources/video/background01.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
-    </div>
+    </div> -->
 </main>
 
 <div class="content">
-    <h2>비트코인 모의투자 플랫폼</h2>
+    <h2>비트코인 모의투자</h2>
     <p>
-        실시간 시세, 매수/매도 체험,<br>
+        실시간 시세로 하는 매수/매도<br>
         쉽고 빠르게 시작하세요.
     </p>
 </div>

@@ -125,21 +125,23 @@ body {
 
 /* ✅ 차트 아래 바이낸스 스타일 매수/매도 UI */
 .order-panel {
-        display: flex;
-        justify-content: space-between;
-        gap: 4%;
-        margin-top: 20px;
-        padding: 20px;
-        background-color: #1E2026;
-        border: 1px solid #333;
-        border-radius: 12px;
-        width: 100%;
-        box-sizing: border-box;
-        align-items: flex-start;
-        flex-wrap: wrap;
+	display: flex;
+	justify-content: space-between;
+	gap: 4%;
+	margin-top: 20px;
+	padding: 20px;
+	background-color: #1E2026;
+	border: 1px solid #333;
+	border-radius: 12px;
+	width: 100%;
+	box-sizing: border-box;
+	align-items: flex-start;
+	flex-wrap: wrap;
 }
 
 @media ( max-width : 768px) {
+	
+}
 
 @media ( min-width : 1280px) and (max-width: 1919px) {
 	.chat-area {
@@ -219,16 +221,16 @@ body {
 }
 
 #mini-wallet {
-    background: #1E2026;
-    border: 1px solid #333;
-    padding: 15px;
-    margin-top: 10px; /* 커뮤니티창과 분리되는 여백 */
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+	background: #1E2026;
+	border: 1px solid #333;
+	padding: 15px;
+	margin-top: 10px; /* 커뮤니티창과 분리되는 여백 */
+	box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }
 
 .divider-line {
-    height: 1px;
-    background-color: #444;
-    margin: 20px 0;
-    opacity: 0.6;
+	height: 1px;
+	background-color: #444;
+	margin: 20px 0;
+	opacity: 0.6;
 }

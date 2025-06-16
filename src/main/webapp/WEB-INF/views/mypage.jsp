@@ -93,8 +93,8 @@
 								<input type="number" id="depositAmount"
 									placeholder="금액 (100 ~ 1,000,000 USDT)" />
 								<div class="modal-buttons">
-									<button onclick="submitDeposit()">충전</button>
-									<button onclick="closeDepositModal()">취소</button>
+									<button onclick="submitDeposit()">💸 충전</button>
+									<button onclick="closeDepositModal()">🗑 초기화</button>
 								</div>
 							</div>
 						</div>
@@ -112,7 +112,7 @@
 						</div>
 					</div>
 
-					<div id="history" class="tab-content">
+					<div id="history" class="tab-content history-container">
 						<table>
 							<thead>
 								<tr>

@@ -5,8 +5,7 @@
 <div class="header">
 	<div class="left-section">
 		<a href="${pageContext.request.contextPath}/" class="logo">
-			<img class="coin" src="${pageContext.request.contextPath}/resources/img/coin.png" alt="Coin" />
-			<img class="text" src="${pageContext.request.contextPath}/resources/img/btc-text.png" alt="BTC" />
+			<img class="text" src="${pageContext.request.contextPath}/resources/img/text.png" alt="BTC" />
 		</a>
 		<div class="dropdown">
 			<button class="dropdown-btn">거래하기 ▾</button>
