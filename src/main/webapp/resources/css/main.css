@@ -3,7 +3,8 @@ body, html {
     margin: 0;
     padding: 0;
     font-family: sans-serif;
-    background: linear-gradient(to bottom, #000000, #2c2c2c);
+    /* background: linear-gradient(to bottom, #000000, #2c2c2c); */
+    background-color: #171717;
     color: white;
 }
 

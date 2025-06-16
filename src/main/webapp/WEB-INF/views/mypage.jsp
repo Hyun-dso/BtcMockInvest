@@ -19,6 +19,8 @@
 <script
 	src="${pageContext.request.contextPath}/resources/js/trade-history.js"
 	defer></script>
+<script src="${pageContext.request.contextPath}/resources/js/history.js"
+	defer></script>
 <script src="${pageContext.request.contextPath}/resources/js/wallet.js"
 	defer></script>
 <script>
